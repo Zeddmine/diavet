@@ -87,7 +87,6 @@
 </head>
 <body class="bg-slate-950 text-slate-100 h-full flex flex-col justify-between selection:bg-cyan-400 selection:text-slate-950 relative overflow-x-hidden" x-data="diavetApp()">
 
-    <!-- Arrière-plan lumineux -->
     <div class="absolute -top-40 -left-40 w-96 h-96 bg-blue-600/30 rounded-full blur-3xl pointer-events-none animate-pulse"></div>
     <div class="absolute top-1/2 -right-40 w-96 h-96 bg-emerald-600/30 rounded-full blur-3xl pointer-events-none animate-pulse" style="animation-delay: 2s;"></div>
 
@@ -119,7 +118,6 @@
 
     <main class="max-w-3xl w-full mx-auto px-4 py-8 flex-grow flex flex-col justify-center relative z-10">
         
-        <!-- 0. ANIMATION D'INTRODUCTION AVEC ANIMAUX PARTOUT -->
         <div x-show="step === 'intro_animation'" class="glass-card rounded-3xl shadow-2xl p-8 sm:p-12 text-center transition-all transform duration-700 text-slate-900 relative overflow-hidden">
             <div class="absolute -top-10 -left-10 text-4xl animate-bounce">🐶</div>
             <div class="absolute top-10 right-5 text-4xl animate-bounce" style="animation-delay: 0.3s;">🐱</div>
@@ -145,7 +143,6 @@
             </div>
         </div>
 
-        <!-- 1. ACCUEIL : VOUS VOULEZ CONNAÎTRE LE FUTUR DU MONDE VÉTO ? -->
         <div x-show="step === 'welcome'" class="glass-card rounded-3xl shadow-2xl p-6 sm:p-12 text-center transition-all transform duration-700 text-slate-900">
             <div class="mb-6">
                 <span class="text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full bg-cyan-500/10 text-cyan-700 border border-cyan-500/30 inline-block mb-4 shadow-sm">
@@ -173,7 +170,6 @@
             </div>
         </div>
 
-        <!-- 2. SÉLECTION DU PROFIL (AVEC EFFET PATTES / STÉTHOSCOPE DYNAMIQUES) -->
         <div x-show="step === 'ecosystem_overview'" class="glass-card rounded-3xl shadow-2xl p-6 sm:p-10 text-left transition-all text-slate-900">
             <div class="text-center mb-8">
                 <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">Sélectionnez votre profil <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-emerald-600">DiaVet Algérie</span> 🇩🇿</h2>
@@ -205,7 +201,6 @@
             </div>
         </div>
 
-        <!-- 3. FORMULAIRE PRÉ-INFOS DÉTAILLÉ (ÂGE, RACE, WILAYA, STRUCTURE...) -->
         <div x-show="step === 'preinfo'" class="glass-card rounded-3xl shadow-2xl p-6 sm:p-10 transition-all text-slate-900">
             <div class="flex items-center space-x-2 mb-4">
                 <span class="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-lg" :class="profile === 'owner' ? 'bg-cyan-100 text-cyan-800' : 'bg-emerald-100 text-emerald-800'">
@@ -314,7 +309,6 @@
             </div>
         </div>
 
-        <!-- 4. QUESTIONNAIRE (20 QUESTIONS AVEC EFFETS MAGIQUES DYNAMIQUES) -->
         <div x-show="step === 'quiz'" class="glass-card rounded-3xl shadow-2xl p-6 sm:p-10 transition-all relative text-slate-900">
             <div class="w-full bg-slate-200 h-3 rounded-full mb-6 overflow-hidden shadow-inner">
                 <div class="h-full transition-all duration-500 rounded-full bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-500" :style="`width: ${((currentIndex + 1) / currentQuestions.length) * 100}%`"></div>
@@ -365,7 +359,6 @@
             </div>
         </div>
 
-        <!-- 5. ÉCRAN DE SUSPENSE AVEC MUSIQUE DE BATTEMENT DE CŒUR -->
         <div x-show="step === 'suspense'" class="glass-card rounded-3xl shadow-2xl p-8 sm:p-12 text-center animate-fade-in relative overflow-hidden text-slate-900">
             <div class="absolute inset-0 spotlight-beam pointer-events-none"></div>
             
@@ -382,7 +375,6 @@
             </button>
         </div>
 
-        <!-- 6. TRANSITION SCÈNE DE SPECTACLE & DESCRIPTION ULTRA DÉTAILLÉE -->
         <div x-show="step === 'concept_transition'" class="glass-card rounded-3xl shadow-2xl p-6 sm:p-10 text-center animate-fade-in relative overflow-hidden text-slate-900">
             <div class="absolute inset-0 spotlight-beam pointer-events-none"></div>
 
@@ -408,7 +400,7 @@
                     <ul class="space-y-2 text-xs text-slate-700">
                         <li>📱 <strong>Carnet de santé numérique :</strong> Historique vaccinal complet (rage, etc.), vermifuges, traitements et certificats accessibles partout sans papier.</li>
                         <li>⏰ <strong>Rappels intelligents :</strong> Notifications automatiques et alertes personnalisées pour ne plus jamais rater un vaccin ou un rappel antiparasitaire.</li>
-                        <li>📍 <strong>Urgences 24h/24 :</strong> Géolocalisation en temps réel des cliniques vétérinaires de garde ouvertes dans votre wilaya en cas d'imprévu.</li>
+                        <li>📍 <strong>Urgences 24h/24 :</strong> Géolocalisation en temps réel des cliniques de garde ouvertes dans votre wilaya en cas d'imprévu.</li>
                         <li>💳 <strong>Paiements locaux :</strong> Règlement simple et sécurisé des consultations et produits via les cartes interbancaires CIB et Edahabia.</li>
                         <li>💬 <strong>Télé-conseil :</strong> Échanges directs et sécurisés avec des vétérinaires partenaires pour poser des questions bénignes sans stress.</li>
                         <li>🏠 <strong>Espace Adoption & Marketplace :</strong> Réseau d'adoption responsable et accès aux accessoires animaliers vérifiés en Algérie.</li>
@@ -441,7 +433,6 @@
             </button>
         </div>
 
-        <!-- 7. SUGGESTION -->
         <div x-show="step === 'suggestion'" class="glass-card rounded-3xl shadow-2xl p-6 sm:p-10 text-center animate-fade-in text-slate-900">
             <h2 class="text-2xl font-extrabold text-slate-900 mb-2">Une idée pour améliorer DiaVet ?</h2>
             <p class="text-slate-600 mb-6 text-sm">Vos suggestions sont précieuses pour le lancement officiel.</p>
@@ -451,7 +442,6 @@
             <button @click="step = 'result'" class="px-8 py-3.5 bg-gradient-to-r from-blue-600 to-emerald-600 text-white font-bold rounded-2xl shadow-xl">Voir mon bilan final ➔</button>
         </div>
 
-        <!-- 8. RÉSULTATS -->
         <div x-show="step === 'result'" class="glass-card rounded-3xl shadow-2xl p-6 sm:p-10 text-center animate-fade-in text-slate-900">
             <div class="w-24 h-24 bg-gradient-to-tr from-cyan-400 to-emerald-500 rounded-3xl mx-auto flex items-center justify-center text-5xl mb-6 shadow-xl shadow-emerald-500/30 animate-float">🏆</div>
             <h2 class="text-3xl font-extrabold text-slate-900 mb-2">Merci pour votre contribution !</h2>
@@ -468,7 +458,6 @@
         <p>© 2026 DiaVet Algérie 🇩🇿 — L'innovation au service de la santé animale.</p>
     </footer>
 
-    <!-- SYNTHÈSE AUDIO DU SUSPENSE -->
     <script>
         function playSuspenseHeartbeat() {
             try {
@@ -567,7 +556,7 @@
 
                 triggerMagicEffect(event) {
                     const rect = event.currentTarget.getBoundingClientRect();
-                    const emojis = ['🐾', '🐶', '🐱', '✨', '🩺', '💉'];
+                    const emojis = this.profile === 'owner' ? ['🐾', '🐶', '🐱', '✨', '🦜', '🐰'] : ['🩺', '💉', '🐾', '✨', '💊', '📋'];
                     for (let i = 0; i < 4; i++) {
                         const paw = document.createElement('div');
                         paw.className = 'paw-effect';
