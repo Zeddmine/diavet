@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DiaVet Algérie - L'écosystème numérique vétérinaire</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        diavetBlue: '#0052cc',
+                        diavetLightBlue: '#00c6ff',
+                        diavetGreen: '#10b981',
+                        diavetDarkGreen: '#059669',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 25px 50px -12px rgba(0, 82, 204, 0.25);
+        }
+        @keyframes pawPop {
+            0% { transform: scale(0) rotate(-20deg); opacity: 0; }
+            50% { transform: scale(1.4) rotate(15deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0deg); opacity: 0; }
+        }
+        .paw-effect {
+            position: absolute;
+            pointer-events: none;
+            animation: pawPop 0.8s ease-out forwards;
+            font-size: 1.8rem;
+            z-index: 50;
+        }
+        @keyframes floatAnim {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-float {
+            animation: floatAnim 4s ease-in-out infinite;
+        }
+        @keyframes stageSpotlight {
+            0% { transform: scale(0.1) translateY(60px) rotate(-15deg); opacity: 0; filter: brightness(3); }
+            50% { transform: scale(1.15) translateY(-10px) rotate(4deg); opacity: 1; filter: brightness(1.6); }
+            100% { transform: scale(1) translateY(0px) rotate(0deg); opacity: 1; filter: brightness(1); }
+        }
+        .animate-stage-spotlight {
+            animation: stageSpotlight 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes beamGlow {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.85; transform: scale(1.08); }
+        }
+        .spotlight-beam {
+            background: radial-gradient(circle, rgba(0,198,255,0.45) 0%, rgba(16,185,129,0.25) 45%, transparent 75%);
+            animation: beamGlow 3s ease-in-out infinite;
+        }
+        @keyframes magicPulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 198, 255, 0.8); }
+            70% { box-shadow: 0 0 0 30px rgba(0, 198, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 198, 255, 0); }
+        }
+        .magic-button-pulse {
+            animation: magicPulse 2s infinite;
+        }
+        @keyframes dramaticPulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; text-shadow: 0 0 20px rgba(0,198,255,0.8); }
+        }
+        .dramatic-text {
+            animation: dramaticPulse 1.5s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 h-full flex flex-col justify-between selection:bg-cyan-400 selection:text-slate-950 relative overflow-x-hidden" x-data="diavetApp()">
+
+    <!-- Arrière-plan lumineux -->
+    <div class="absolute -top-40 -left-40 w-96 h-96 bg-blue-600/30 rounded-full blur-3xl pointer-events-none animate-pulse"></div>
+    <div class="absolute top-1/2 -right-40 w-96 h-96 bg-emerald-600/30 rounded-full blur-3xl pointer-events-none animate-pulse" style="animation-delay: 2s;"></div>
+
+    <header class="bg-slate-950/80 backdrop-blur-md border-b border-slate-800/80 sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3 cursor-pointer group" @click="resetQuiz">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 via-cyan-400 to-emerald-500 p-0.5 shadow-lg shadow-cyan-500/30 flex items-center justify-center group-hover:scale-105 transition duration-300 overflow-hidden bg-white">
+                    <div class="w-full h-full bg-slate-900 rounded-[14px] flex items-center justify-center text-cyan-400 font-bold text-xl">🐾</div>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-white text-xl tracking-tight flex items-center space-x-1">
+                        <span>Dia</span><span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-emerald-400">Vet</span>
+                        <span class="text-xs ml-2 px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">Algérie 🇩🇿</span>
+                    </h1>
+                    <p class="text-xs text-slate-400">Écosystème numérique vétérinaire</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-3">
+                <span class="text-xs font-semibold px-3.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-cyan-400 shadow-inner" x-show="step === 'quiz'">
+                    Étape <span x-text="currentIndex + 1"></span> / <span x-text="currentQuestions.length"></span>
+                </span>
+                <span class="text-xs font-semibold px-3.5 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400" x-show="step === 'suspense' || step === 'concept_transition' || step === 'suggestion' || step === 'result'">
+                    Expérience Magique ✨
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-3xl w-full mx-auto px-4 py-8 flex-grow flex flex-col justify-center relative z-10">
+        
+        <!-- 0. ANIMATION D'INTRODUCTION AVEC ANIMAUX PARTOUT -->
+        <div x-show="step === 'intro_animation'" class="glass-card rounded-3xl shadow-2xl p-8 sm:p-12 text-center transition-all transform duration-700 text-slate-900 relative overflow-hidden">
+            <div class="absolute -top-10 -left-10 text-4xl animate-bounce">🐶</div>
+            <div class="absolute top-10 right-5 text-4xl animate-bounce" style="animation-delay: 0.3s;">🐱</div>
+            <div class="absolute bottom-5 left-10 text-4xl animate-bounce" style="animation-delay: 0.6s;">🐮</div>
+            <div class="absolute bottom-10 right-10 text-4xl animate-bounce" style="animation-delay: 0.9s;">🦜</div>
+
+            <div class="mb-6">
+                <span class="text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full bg-cyan-500/10 text-cyan-700 border border-cyan-500/30 inline-block mb-4 shadow-sm">
+                    ✨ Bienvenue dans l'univers DiaVet 🇩🇿
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mb-4">
+                    La révolution de la santé animale arrive en Algérie
+                </h2>
+                <p class="text-slate-600 text-sm sm:text-base max-w-lg mx-auto leading-relaxed">
+                    Connexion instantanée entre propriétaires attentionnés et professionnels vétérinaires passionnés.
+                </p>
+            </div>
+
+            <div class="my-8">
+                <button @click="step = 'welcome'" @click.stop="triggerMagicEffect($event)" class="px-10 py-5 bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-500 hover:scale-105 text-white font-black text-lg rounded-2xl shadow-2xl shadow-cyan-500/50 transition transform">
+                    🚀 Entrer dans l'expérience interactive
+                </button>
+            </div>
+        </div>
+
+        <!-- 1. ACCUEIL : VOUS VOULEZ CONNAÎTRE LE FUTUR DU MONDE VÉTO ? -->
+        <div x-show="step === 'welcome'" class="glass-card rounded-3xl shadow-2xl p-6 sm:p-12 text-center transition-all transform duration-700 text-slate-900">
+            <div class="mb-6">
+                <span class="text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full bg-cyan-500/10 text-cyan-700 border border-cyan-500/30 inline-block mb-4 shadow-sm">
+                    🚀 Édition Algérie 🇩🇿
+                </span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-3">
+                    Voulez-vous connaître le futur du monde vétérinaire et animal en Algérie ?
+                </h2>
+                <p class="text-slate-600 text-sm sm:text-base max-w-lg mx-auto leading-relaxed">
+                    Découvrez comment la technologie va simplifier la vie de vos animaux et optimiser les cabinets vétérinaires à travers notre étude exclusive.
+                </p>
+            </div>
+
+            <div class="relative inline-block my-6 group cursor-pointer" @click="step = 'ecosystem_overview'">
+                <div class="absolute inset-0 bg-gradient-to-tr from-blue-600 via-cyan-400 to-emerald-500 rounded-3xl blur-xl opacity-75 group-hover:opacity-100 transition duration-500 magic-button-pulse"></div>
+                <div class="w-44 h-44 sm:w-52 sm:h-52 rounded-3xl bg-gradient-to-tr from-blue-600 via-cyan-400 to-emerald-500 p-1.5 shadow-2xl relative z-10 mx-auto transform group-hover:scale-105 transition duration-500 overflow-hidden bg-white flex items-center justify-center text-6xl animate-float">
+                    🐾✨
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <button @click="step = 'ecosystem_overview'" class="px-8 py-4 bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-500 hover:from-blue-700 hover:to-emerald-600 text-white font-extrabold text-base rounded-2xl shadow-xl shadow-cyan-500/30 transition transform hover:-translate-y-1">
+                    ✨ Découvrir l'écosystème DiaVet
+                </button>
+            </div>
+        </div>
+
+        <!-- 2. SÉLECTION DU PROFIL (AVEC EFFET PATTES / STÉTHOSCOPE DYNAMIQUES) -->
+        <div x-show="step === 'ecosystem_overview'" class="glass-card rounded-3xl shadow-2xl p-6 sm:p-10 text-left transition-all text-slate-900">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">Sélectionnez votre profil <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-emerald-600">DiaVet Algérie</span> 🇩🇿</h2>
+                <p class="text-slate-600 text-xs sm:text-sm max-w-xl mx-auto">
+                    Choisissez votre profil pour accéder à votre questionnaire personnalisé de 20 questions essentielles.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+                <button @click="selectProfile('owner', $event)" class="p-6 rounded-2xl border-2 border-slate-200 hover:border-cyan-500 hover:bg-cyan-50/50 text-left transition-all duration-300 group shadow-sm bg-white/95 relative overflow-hidden">
+                    <div class="flex items-center space-x-3 mb-3">
+                        <div class="w-12 h-12 rounded-xl bg-cyan-100 text-cyan-700 flex items-center justify-center text-2xl font-bold shadow-inner">🐕</div>
+                        <h3 class="font-bold text-slate-900 text-lg">Propriétaire d'animal</h3>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Carnet de santé numérique, rappels de vaccins intelligents et géolocalisation des urgences vétérinaires en Algérie.
+                    </p>
+                </button>
+
+                <button @click="selectProfile('vet', $event)" class="p-6 rounded-2xl border-2 border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/50 text-left transition-all duration-300 group shadow-sm bg-white/95 relative overflow-hidden">
+                    <div class="flex items-center space-x-3 mb-3">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-2xl font-bold shadow-inner">🩺</div>
+                        <h3 class="font-bold text-slate-900 text-lg">Vétérinaire / Pro</h3>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Logiciel SaaS de gestion de cabinet, dossiers patients centralisés et gestion de pharmacie.
+                    </p>
+                </button>
+            </div>
+        </div>
+
+        <!-- 3. FORMULAIRE PRÉ-INFOS DÉTAILLÉ (ÂGE, RACE, WILAYA, STRUCTURE...) -->
+        <div x-show="step === 'preinfo'" class="glass-card rounded-3xl shadow-2xl p-6 sm:p-10 transition-all text-slate-900">
+            <div class="flex items-center space-x-2 mb-4">
+                <span class="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-lg" :class="profile === 'owner' ? 'bg-cyan-100 text-cyan-800' : 'bg-emerald-100 text-emerald-800'">
+                    Profil : <span x-text="profile === 'owner' ? 'Propriétaire' : 'Vétérinaire'"></span>
+                </span>
+            </div>
+            
+            <h3 class="text-2xl font-extrabold text-slate-900 mb-2" x-text="profile === 'owner' ? 'Informations détaillées sur votre animal' : 'Informations professionnelles et structurelles'"></h3>
+            <p class="text-sm text-slate-500 mb-8" x-text="profile === 'owner' ? 'Précisez la race, l\'âge et votre wilaya en Algérie.' : 'Précisez votre spécialité et votre type de cabinet.'"></p>
+
+            <template x-if="profile === 'owner'">
+                <div class="space-y-4 mb-8">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Wilaya de résidence 🇩🇿</label>
+                            <select x-model="userData.wilaya" class="w-full p-3.5 rounded-xl border border-slate-200 text-slate-800 text-sm focus:outline-none focus:border-cyan-500 bg-white shadow-inner font-medium">
+                                <option value="">Sélectionnez votre wilaya...</option>
+                                <option value="Alger">16 - Alger</option>
+                                <option value="Oran">31 - Oran</option>
+                                <option value="Constantine">25 - Constantine</option>
+                                <option value="Blida">09 - Blida</option>
+                                <option value="Sétif">19 - Sétif</option>
+                                <option value="Tizi Ouzou">15 - Tizi Ouzou</option>
+                                <option value="Autre">Autre Wilaya</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Type d'animal</label>
+                            <select x-model="userData.animalType" class="w-full p-3.5 rounded-xl border border-slate-200 text-slate-800 text-sm focus:outline-none focus:border-cyan-500 bg-white shadow-inner font-medium">
+                                <option value="">Sélectionnez...</option>
+                                <option value="Chien">Chien 🐕</option>
+                                <option value="Chat">Chat 🐈</option>
+                                <option value="Élevage">Bovins / Élevage 🐄</option>
+                                <option value="NAC">NAC & Autres 🦜</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Race de l'animal</label>
+                            <input type="text" x-model="userData.animalBreed" placeholder="Ex: Berger Allemand, Européen..." class="w-full p-3.5 rounded-xl border border-slate-200 text-slate-800 text-sm focus:outline-none focus:border-cyan-500 bg-white shadow-inner font-medium">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Âge de l'animal</label>
+                            <select x-model="userData.animalAge" class="w-full p-3.5 rounded-xl border border-slate-200 text-slate-800 text-sm focus:outline-none focus:border-cyan-500 bg-white shadow-inner font-medium">
+                                <option value="">Sélectionnez l'âge...</option>
+                                <option value="Moins de 1 an">Moins d'un 1 an (Chiot/Chaton)</option>
+                                <option value="1 à 7 ans">Entre 1 et 7 ans (Adulte)</option>
+                                <option value="Plus de 7 ans">Plus de 7 ans (Senior)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <template x-if="profile === 'vet'">
+                <div class="space-y-4 mb-8">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Wilaya d'exercice 🇩🇿</label>
+                            <select x-model="userData.wilaya" class="w-full p-3.5 rounded-xl border border-slate-200 text-slate-800 text-sm focus:outline-none focus:border-emerald-500 bg-white shadow-inner font-medium">
+                                <option value="">Sélectionnez votre wilaya...</option>
+                                <option value="Alger">16 - Alger</option>
+                                <option value="Oran">31 - Oran</option>
+                                <option value="Constantine">25 - Constantine</option>
+                                <option value="Blida">09 - Blida</option>
+                                <option value="Autre">Autre Wilaya</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Type de structure</label>
+                            <select x-model="userData.structure" class="w-full p-3.5 rounded-xl border border-slate-200 text-slate-800 text-sm focus:outline-none focus:border-emerald-500 bg-white shadow-inner font-medium">
+                                <option value="">Sélectionnez...</option>
+                                <option value="Cabinet individuel">Cabinet individuel</option>
+                                <option value="Clinique vétérinaire">Clinique vétérinaire</option>
+                                <option value="Pratique rurale">Pratique rurale / Ambulante</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Spécialité principale</label>
+                            <select x-model="userData.specialty" class="w-full p-3.5 rounded-xl border border-slate-200 text-slate-800 text-sm focus:outline-none focus:border-emerald-500 bg-white shadow-inner font-medium">
+                                <option value="">Sélectionnez...</option>
+                                <option value="Animaux de compagnie">Animaux de compagnie</option>
+                                <option value="Animaux de rente">Animaux de rente / Élevage</option>
+                                <option value="Mixte">Pratique mixte</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Expérience</label>
+                            <select x-model="userData.experience" class="w-full p-3.5 rounded-xl border border-slate-200 text-slate-800 text-sm focus:outline-none focus:border-emerald-500 bg-white shadow-inner font-medium">
+                                <option value="">Sélectionnez...</option>
+                                <option value="Moins de 3 ans">Moins de 3 ans</option>
+                                <option value="3 à 10 ans">Entre 3 et 10 ans</option>
+                                <option value="Plus de 10 ans">Plus de 10 ans</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <div class="flex justify-between items-center pt-6 border-t border-slate-200">
+                <button @click="step = 'ecosystem_overview'" class="text-sm text-slate-500 hover:text-slate-800 font-semibold px-4 py-2 rounded-xl hover:bg-slate-100 transition">⬅ Retour</button>
+                <button @click="startQuizQuestions" @click.stop="triggerMagicEffect($event)" class="px-8 py-4 font-bold text-white rounded-2xl shadow-lg transition" :class="profile === 'owner' ? 'bg-cyan-600 hover:bg-cyan-700' : 'bg-emerald-600 hover:bg-emerald-700'" :disabled="!isPreInfoValid">Lancer le questionnaire (20 Questions) ➔</button>
+            </div>
+        </div>
+
+        <!-- 4. QUESTIONNAIRE (20 QUESTIONS AVEC EFFETS MAGIQUES DYNAMIQUES) -->
+        <div x-show="step === 'quiz'" class="glass-card rounded-3xl shadow-2xl p-6 sm:p-10 transition-all relative text-slate-900">
+            <div class="w-full bg-slate-200 h-3 rounded-full mb-6 overflow-hidden shadow-inner">
+                <div class="h-full transition-all duration-500 rounded-full bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-500" :style="`width: ${((currentIndex + 1) / currentQuestions.length) * 100}%`"></div>
+            </div>
+
+            <div class="mb-6">
+                <span class="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-lg" :class="profile === 'owner' ? 'bg-cyan-100 text-cyan-800' : 'bg-emerald-100 text-emerald-800'">
+                    Question <span x-text="currentIndex + 1"></span> / <span x-text="currentQuestions.length"></span>
+                </span>
+                <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-3 leading-snug" x-text="currentQuestions[currentIndex].question"></h3>
+            </div>
+
+            <div class="space-y-3 mb-6">
+                <template x-for="(option, index) in currentQuestions[currentIndex].options" :key="index">
+                    <button @click="selectOption($event, index)" class="w-full text-left p-4 sm:p-5 rounded-2xl border-2 transition-all flex items-center justify-between group relative overflow-hidden"
+                        :class="{
+                            'border-slate-200 hover:border-cyan-400 bg-white/90 shadow-sm': selectedOption === null,
+                            'border-cyan-500 bg-cyan-50/90 text-cyan-950 shadow-md': selectedOption === index && !showFeedback,
+                            'border-emerald-500 bg-emerald-50 text-emerald-950': showFeedback && index === currentQuestions[currentIndex].correctIndex,
+                            'border-rose-300 bg-rose-50 text-rose-950': showFeedback && selectedOption === index && index !== currentQuestions[currentIndex].correctIndex,
+                            'border-slate-200 opacity-50': showFeedback && index !== currentQuestions[currentIndex].correctIndex && selectedOption !== index
+                        }">
+                        <div class="flex items-center space-x-3.5 z-10">
+                            <span class="w-8 h-8 rounded-xl bg-slate-100 text-slate-700 font-bold text-xs flex items-center justify-center shadow-inner" x-text="String.fromCharCode(65 + index)"></span>
+                            <span class="text-sm sm:text-base font-semibold text-slate-800" x-text="option"></span>
+                        </div>
+                    </button>
+                </template>
+            </div>
+
+            <div x-show="showFeedback" class="mb-6 p-4 sm:p-5 rounded-2xl text-sm border shadow-sm" :class="isCorrect ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-cyan-50 border-cyan-200 text-cyan-900'">
+                <div class="flex items-start space-x-3">
+                    <span class="text-2xl" x-text="isCorrect ? '🎉' : '💡'"></span>
+                    <div>
+                        <span class="font-bold block text-base mb-1" x-text="isCorrect ? 'Excellente réponse !' : 'Bonne perspective !'"></span>
+                        <p class="text-slate-700 leading-relaxed" x-text="currentQuestions[currentIndex].explanation"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center pt-4 border-t border-slate-200">
+                <button @click="skipQuestion" x-show="!showFeedback" class="text-sm text-slate-500 hover:text-slate-800 font-semibold px-4 py-2 rounded-xl">Passer ➔</button>
+                <div x-show="!showFeedback"></div>
+                <button @click="confirmAnswer" x-show="selectedOption !== null && !showFeedback" class="px-8 py-3.5 text-white font-bold rounded-2xl shadow-lg bg-cyan-600 hover:bg-cyan-700">Valider</button>
+                <button @click="nextQuestion" x-show="showFeedback" class="px-8 py-3.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-2xl shadow-xl ml-auto">
+                    <span x-text="currentIndex < currentQuestions.length - 1 ? 'Question suivante' : 'Entrer dans la scène magique ✨'"></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- 5. ÉCRAN DE SUSPENSE AVEC MUSIQUE DE BATTEMENT DE CŒUR -->
+        <div x-show="step === 'suspense'" class="glass-card rounded-3xl shadow-2xl p-8 sm:p-12 text-center animate-fade-in relative overflow-hidden text-slate-900">
+            <div class="absolute inset-0 spotlight-beam pointer-events-none"></div>
+            
+            <div class="text-6xl mb-6 animate-bounce">🥁💓</div>
+            <h2 class="text-3xl sm:text-5xl font-black text-slate-900 mb-4 dramatic-text tracking-wider">
+                ARE YOU READY ?
+            </h2>
+            <p class="text-slate-600 text-base sm:text-lg mb-8 max-w-md mx-auto leading-relaxed font-medium">
+                Le moment tant attendu est arrivé. Le rideau s'ouvre sur la solution définitive conçue pour l'Algérie...
+            </p>
+
+            <button @click="triggerRevealTheater" class="px-10 py-5 bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-500 hover:scale-105 text-white font-black text-lg rounded-2xl shadow-2xl shadow-cyan-500/50 transition transform">
+                ✨ DÉVOILER LE RÉSULTAT MAGIQUE
+            </button>
+        </div>
+
+        <!-- 6. TRANSITION SCÈNE DE SPECTACLE & DESCRIPTION ULTRA DÉTAILLÉE -->
+        <div x-show="step === 'concept_transition'" class="glass-card rounded-3xl shadow-2xl p-6 sm:p-10 text-center animate-fade-in relative overflow-hidden text-slate-900">
+            <div class="absolute inset-0 spotlight-beam pointer-events-none"></div>
+
+            <div class="w-32 h-32 bg-gradient-to-tr from-blue-600 via-cyan-400 to-emerald-500 rounded-3xl mx-auto flex items-center justify-center p-1.5 shadow-2xl shadow-cyan-500/60 animate-stage-spotlight mb-6 relative z-10 text-5xl">
+                🎭✨
+            </div>
+
+            <span class="text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full bg-cyan-500/10 text-cyan-700 border border-cyan-500/30 inline-block mb-3 relative z-10">
+                ✨ Plein feux sur DiaVet Algérie 🇩🇿 ✨
+            </span>
+
+            <h2 class="text-3xl font-extrabold text-slate-900 mb-6 relative z-10">Voici l'écosystème complet offert par DiaVet</h2>
+
+            <template x-if="profile === 'owner'">
+                <div class="bg-white/95 p-6 sm:p-8 rounded-2xl border border-cyan-200 shadow-xl mb-8 text-left space-y-4 relative z-10 animate-stage-spotlight">
+                    <div class="flex items-center space-x-3 mb-2">
+                        <div class="w-10 h-10 rounded-xl bg-cyan-100 text-cyan-700 font-bold flex items-center justify-center text-xl">🐕</div>
+                        <h3 class="font-extrabold text-slate-900 text-xl">L'Espace Ultime Propriétaire DiaVet</h3>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                        Conçu pour centraliser tout le parcours de santé de votre animal en Algérie avec une précision absolue :
+                    </p>
+                    <ul class="space-y-2 text-xs text-slate-700">
+                        <li>📱 <strong>Carnet de santé numérique :</strong> Historique vaccinal complet (rage, etc.), vermifuges, traitements et certificats accessibles partout sans papier.</li>
+                        <li>⏰ <strong>Rappels intelligents :</strong> Notifications automatiques et alertes personnalisées pour ne plus jamais rater un vaccin ou un rappel antiparasitaire.</li>
+                        <li>📍 <strong>Urgences 24h/24 :</strong> Géolocalisation en temps réel des cliniques vétérinaires de garde ouvertes dans votre wilaya en cas d'imprévu.</li>
+                        <li>💳 <strong>Paiements locaux :</strong> Règlement simple et sécurisé des consultations et produits via les cartes interbancaires CIB et Edahabia.</li>
+                        <li>💬 <strong>Télé-conseil :</strong> Échanges directs et sécurisés avec des vétérinaires partenaires pour poser des questions bénignes sans stress.</li>
+                        <li>🏠 <strong>Espace Adoption & Marketplace :</strong> Réseau d'adoption responsable et accès aux accessoires animaliers vérifiés en Algérie.</li>
+                    </ul>
+                </div>
+            </template>
+
+            <template x-if="profile === 'vet'">
+                <div class="bg-white/95 p-6 sm:p-8 rounded-2xl border border-emerald-200 shadow-xl mb-8 text-left space-y-4 relative z-10 animate-stage-spotlight">
+                    <div class="flex items-center space-x-3 mb-2">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 font-bold flex items-center justify-center text-xl">🩺</div>
+                        <h3 class="font-extrabold text-slate-900 text-xl">Le Logiciel SaaS Pro Vétérinaire DiaVet</h3>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                        Conçu spécifiquement pour moderniser les cabinets, cliniques et pratiques rurales en Algérie :
+                    </p>
+                    <ul class="space-y-2 text-xs text-slate-700">
+                        <li>🐾 <strong>Dossiers patients unifiés :</strong> Fiches médicales complètes, antécédents, imagerie et suivi de la prophylaxie officielle (rage, brucellose).</li>
+                        <li>📦 <strong>Gestion de pharmacie :</strong> Suivi des stocks de vaccins et médicaments, alertes de péremption et prévention des ruptures.</li>
+                        <li>📅 <strong>Agenda intelligent :</strong> Prise de rendez-vous en ligne synchronisée avec les propriétaires et réduction des appels intempestifs.</li>
+                        <li>💰 <strong>Comptabilité & Facturation :</strong> Suivi des encaissements, factures automatisées et relances d'impayés intégrés.</li>
+                        <li>🤝 <strong>Réseau confraternel :</strong> Espace d'échange sécurisé entre vétérinaires pour discuter des cas cliniques complexes.</li>
+                        <li>☁️ <strong>Sécurité Cloud maximale :</strong> Hébergement et sauvegarde infaillible des données médicales des patients.</li>
+                    </ul>
+                </div>
+            </template>
+
+            <button @click="step = 'suggestion'" class="px-8 py-4 bg-gradient-to-r from-blue-600 to-emerald-600 hover:from-blue-700 hover:to-emerald-700 text-white font-bold rounded-2xl shadow-xl transition relative z-10">
+                Donner mes suggestions ➔
+            </button>
+        </div>
+
+        <!-- 7. SUGGESTION -->
+        <div x-show="step === 'suggestion'" class="glass-card rounded-3xl shadow-2xl p-6 sm:p-10 text-center animate-fade-in text-slate-900">
+            <h2 class="text-2xl font-extrabold text-slate-900 mb-2">Une idée pour améliorer DiaVet ?</h2>
+            <p class="text-slate-600 mb-6 text-sm">Vos suggestions sont précieuses pour le lancement officiel.</p>
+            <div class="mb-6 text-left">
+                <textarea x-model="userSuggestion" rows="4" placeholder="Ex: J'aimerais un module de livraison d'accessoires..." class="w-full p-4 rounded-2xl border border-slate-200 text-slate-800 text-sm focus:outline-none focus:border-cyan-500 bg-white shadow-inner"></textarea>
+            </div>
+            <button @click="step = 'result'" class="px-8 py-3.5 bg-gradient-to-r from-blue-600 to-emerald-600 text-white font-bold rounded-2xl shadow-xl">Voir mon bilan final ➔</button>
+        </div>
+
+        <!-- 8. RÉSULTATS -->
+        <div x-show="step === 'result'" class="glass-card rounded-3xl shadow-2xl p-6 sm:p-10 text-center animate-fade-in text-slate-900">
+            <div class="w-24 h-24 bg-gradient-to-tr from-cyan-400 to-emerald-500 rounded-3xl mx-auto flex items-center justify-center text-5xl mb-6 shadow-xl shadow-emerald-500/30 animate-float">🏆</div>
+            <h2 class="text-3xl font-extrabold text-slate-900 mb-2">Merci pour votre contribution !</h2>
+            <p class="text-slate-600 mb-8 text-sm sm:text-base leading-relaxed">Vos réponses ont été enregistrées avec succès pour le lancement de <strong>DiaVet Algérie</strong>.</p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <button @click="resetQuiz" class="px-6 py-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-2xl transition">Recommencer</button>
+                <button @click="exportResults" class="px-8 py-4 bg-gradient-to-r from-blue-600 to-emerald-600 text-white font-bold rounded-2xl shadow-xl">Télécharger mon Bilan (JSON)</button>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-slate-950 border-t border-slate-800/80 py-6 text-center text-xs text-slate-500 relative z-10">
+        <p>© 2026 DiaVet Algérie 🇩🇿 — L'innovation au service de la santé animale.</p>
+    </footer>
+
+    <!-- SYNTHÈSE AUDIO DU SUSPENSE -->
+    <script>
+        function playSuspenseHeartbeat() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const playBoom = (time, freq) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, time);
+                    osc.frequency.exponentialRampToValueAtTime(30, time + 0.4);
+                    gain.gain.setValueAtTime(0.6, time);
+                    gain.gain.exponentialRampToValueAtTime(0.01, time + 0.4);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(time);
+                    osc.stop(time + 0.4);
+                };
+                const now = audioCtx.currentTime;
+                playBoom(now, 90);
+                playBoom(now + 0.35, 70);
+                playBoom(now + 0.9, 110);
+                playBoom(now + 1.25, 80);
+                playBoom(now + 1.8, 120);
+            } catch(e) {}
+        }
+    </script>
+
+    <script>
+        function diavetApp() {
+            return {
+                step: 'intro_animation',
+                profile: null,
+                userData: { wilaya: '', animalType: '', animalBreed: '', animalAge: '', structure: '', specialty: '', experience: '' },
+                userSuggestion: '',
+                currentIndex: 0,
+                selectedOption: null,
+                showFeedback: false,
+                isCorrect: false,
+                score: 0,
+
+                ownerQuestions: [
+                    { question: "Quel canal de communication préférez-vous pour recevoir les rappels de vaccins de votre animal en Algérie ?", options: ["WhatsApp ou SMS", "Notifications automatiques sur l'application DiaVet", "Carnet papier traditionnel", "Appels téléphoniques"], correctIndex: 1, explanation: "L'application DiaVet centralise tous vos rappels automatiquement pour ne jamais rater un vaccin." },
+                    { question: "Que cherchez-vous en priorité en cas d'urgence vétérinaire un jour férié ?", options: ["Une clinique de garde ouverte géolocalisée en temps réel", "Un groupe Facebook public", "Attendre l'ouverture", "Un numéro unique injoignable"], correctIndex: 0, explanation: "La géolocalisation des cliniques de garde 24h/24 est indispensable en urgence." },
+                    { question: "Que pensez-vous d'un carnet de santé numérique dans votre poche sur smartphone ?", options: ["Très pratique pour voyager et consulter l'historique", "Inutile", "Dangereux", "Trop compliqué"], correctIndex: 0, explanation: "Le carnet numérique garantit un suivi médical permanent et sans perte." },
+                    { question: "Quel service additionnel faciliterait le plus votre quotidien de propriétaire ?", options: ["La prise de rendez-vous en ligne instantanée 24h/24", "Des publicités", "La météo", "Un jeu vidéo"], correctIndex: 0, explanation: "La prise de rendez-vous en ligne évite l'attente téléphonique." },
+                    { question: "Quelle est l'importance des conseils de prévention personnalisés selon l'âge et la race en Algérie ?", options: ["Superficiel", "Très important pour prévenir les parasites saisonniers", "Utile uniquement pour les chiens de race", "Inutile"], correctIndex: 1, explanation: "Des conseils ciblés réduisent considérablement les risques sanitaires." },
+                    { question: "Quel mode de paiement préféreriez-vous sur l'application ?", options: ["Espèces uniquement", "Paiement sécurisé en ligne (Edahabia / CIB)", "Troc", "Virement complexe"], correctIndex: 1, explanation: "L'intégration des solutions locales CIB/Edahabia modernise les paiements." },
+                    { question: "Aimeriez-vous consulter l'historique des ordonnances depuis votre smartphone ?", options: ["Oui, indispensable pour éviter les doublons", "Non", "Jamais", "Aucun intérêt"], correctIndex: 0, explanation: "Retrouver l'historique évite les erreurs médicamenteuses." },
+                    { question: "Seriez-vous intéressé par un service de télé-conseil pour les questions bénignes ?", options: ["Oui, pour éviter de stresser l'animal inutilement", "Non", "Aucun intérêt", "Autre"], correctIndex: 0, explanation: "Le télé-conseil désengorge les cabinets pour les questions simples." },
+                    { question: "Comment jugez-vous l'ergonomie d'une application mobile dédiée ?", options: ["Ultra-rapide et intuitive en moins de 3 clics", "Peu importe", "Lente", "Aucun avis"], correctIndex: 0, explanation: "Une interface fluide garantit une adoption immédiate." },
+                    { question: "Recommanderiez-vous DiaVet à vos proches en Algérie ?", options: ["Oui, sans hésitation", "Non", "Seulement si payant", "Je ne sais pas"], correctIndex: 0, explanation: "L'utilité réelle est le pilier du succès." },
+                    { question: "Quel type d'alerte météo vous serait utile ?", options: ["Alerte canicule et vagues de chaleur pour les animaux", "Aucune", "Météo générale", "Sport"], correctIndex: 0, explanation: "Anticiper la météo protège les animaux de la déshydratation." },
+                    { question: "Souhaitez-vous un espace d'annonces pour accessoires ?", options: ["Oui, pour trouver du matériel localement", "Non", "Indifférent", "Jamais"], correctIndex: 0, explanation: "Facilite l'accès aux accessoires de qualité." },
+                    { question: "Le carnet numérique doit-il fonctionner hors-ligne ?", options: ["Oui, indispensable en zone blanche sans réseau", "Non", "Indifférent", "Impossible"], correctIndex: 0, explanation: "Le mode hors-ligne assure un accès permanent." },
+                    { question: "Combien de temps passez-vous à chercher un bon vétérinaire ?", options: ["Beaucoup de temps", "Peu de temps", "Jamais", "Pas concerné"], correctIndex: 0, explanation: "DiaVet répertorie tous les pros qualifiés." },
+                    { question: "Êtes-vous favorable au partage sécurisé avec un nouveau véto ?", options: ["Oui, pour garder l'historique complet", "Non", "Dangereux", "Inutile"], correctIndex: 0, explanation: "Facilite la continuité des soins." },
+                    { question: "Un système de parrainage vous intéresserait-il ?", options: ["Oui, pour gagner des avantages", "Non", "Indifférent", "Autre"], correctIndex: 0, explanation: "Encourage la communauté." },
+                    { question: "Préférez-vous un mode sombre (dark mode) sur l'application ?", options: ["Oui, très confortable pour les yeux la nuit", "Non", "Indifférent", "Je déteste"], correctIndex: 0, explanation: "Le mode sombre est très apprécié en soirée." },
+                    { question: "Quelle importance accordez-vous à la protection des données ?", options: ["Absolue et prioritaire", "Faible", "Aucune", "Je m'en fiche"], correctIndex: 0, explanation: "La sécurité des données est notre priorité." },
+                    { question: "Aimeriez-vous des notifications de rappel pour les vermifuges ?", options: ["Oui, tous les 3 mois", "Non", "Indifférent", "Jamais"], correctIndex: 0, explanation: "Essentiel pour la santé parasitaire." },
+                    { question: "Soutenez-vous le lancement de DiaVet en Algérie ?", options: ["Totalement oui !", "Non", "Peut-être", "Sans avis"], correctIndex: 0, explanation: "Merci pour votre soutien précieux." }
+                ],
+
+                vetQuestions: [
+                    { question: "Quel est le plus grand défi dans la gestion de votre cabinet en Algérie ?", options: ["L'absence de dossiers patients numériques unifiés", "Le manque de clients", "L'électricité", "Aucun défi"], correctIndex: 0, explanation: "Un logiciel unifié simplifie la continuité des soins." },
+                    { question: "Quel module logiciel est le plus critique pour votre rentabilité ?", options: ["Le suivi des stocks de vaccins et des péremptions", "Un jeu vidéo", "Un convertisseur", "La météo"], correctIndex: 0, explanation: "Un bon contrôle des stocks évite les pertes pharmaceutiques." },
+                    { question: "Comment gérez-vous les rappels clients actuellement ?", options: ["Appels manuels chronophages", "Système automatisé DiaVet", "Aucun rappel", "Courrier"], correctIndex: 1, explanation: "L'automatisation réduit les oublis." },
+                    { question: "Quelle contrainte sanitaire majeure en Algérie doit être facilitée ?", options: ["La gestion stricte de la prophylaxie (rage, brucellose)", "L'exportation", "Aucune", "Autre"], correctIndex: 0, explanation: "Le respect des protocoles officiels est une obligation." },
+                    { question: "Quel modèle économique privilégiez-vous ?", options: ["Abonnement SaaS mensuel/annuel flexible avec support local", "Achat unique cher", "Gratuité totale", "Publicités"], correctIndex: 0, explanation: "Un SaaS flexible garantit des mises à jour constantes." },
+                    { question: "Quelle importance accordez-vous au suivi des factures impayées ?", options: ["Cruciale pour la viabilité financière", "Secondaire", "Inutile", "Pas de facture"], correctIndex: 0, explanation: "Sécurise la trésorerie du cabinet." },
+                    { question: "Aimeriez-vous un agenda synchronisé en temps réel ?", options: ["Oui, pour éliminer les appels intempestifs", "Non", "Indifférent", "Pas d'agenda"], correctIndex: 0, explanation: "Fluidifie l'accueil." },
+                    { question: "Quelle fonctionnalité d'inter-compagnonnage attendez-vous ?", options: ["Réseau d'échange sécurisé entre confrères", "Jeux", "Forum public", "Aucun"], correctIndex: 0, explanation: "Renforce la collaboration confraternelle." },
+                    { question: "Comment jugez-vous la sécurité des données dans le cloud ?", options: ["Indispensable qu'elles soient ultra-sécurisées", "Sans importance", "Dangereux", "Papier"], correctIndex: 0, explanation: "La sécurité est un gage de confiance." },
+                    { question: "Seriez-vous prêt à tester la version beta ?", options: ["Oui, avec grand enthousiasme", "Non", "Seulement si payé", "Ne sais pas"], correctIndex: 0, explanation: "L'implication des pionniers garantit le succès." },
+                    { question: "Un module de télémédecine vétérinaire vous serait-il utile ?", options: ["Oui, pour filtrer les urgences", "Non", "Indifférent", "Impossible"], correctIndex: 0, explanation: "Optimise le temps de consultation." },
+                    { question: "La gestion des ordonnances électroniques est-elle un plus ?", options: ["Oui, gain de temps énorme", "Non", "Indifférent", "Inutile"], correctIndex: 0, explanation: "Sécurise et accélère la prescription." },
+                    { question: "Aimeriez-vous exporter vos bilans comptables facilement ?", options: ["Oui, pour le comptable", "Non", "Indifférent", "Jamais"], correctIndex: 0, explanation: "Simplifie la gestion fiscale." },
+                    { question: "La prise de notes vocales par IA vous intéresserait-elle ?", options: ["Oui, pour dicter les comptes-rendus en consultation", "Non", "Indifférent", "Inutile"], correctIndex: 0, explanation: "Gain de temps exceptionnel en consultation." },
+                    { question: "Un annuaire des fournisseurs de matériel médical en Algérie ?", options: ["Oui, très pratique", "Non", "Indifférent", "Inutile"], correctIndex: 0, explanation: "Centralise les commandes." },
+                    { question: "La gestion multi-utilisateurs (vététis + assistants) ?", options: ["Indispensable pour une clinique", "Inutile", "Indifférent", "Autre"], correctIndex: 0, explanation: "Permet d'attribuer les rôles." },
+                    { question: "Un accès mobile pour les urgences en déplacement ?", options: ["Oui, parfait pour la pratique rurale", "Non", "Indifférent", "Jamais"], correctIndex: 0, explanation: "Idéal pour les vétérinaires de terrain." },
+                    { question: "Des statistiques sur l'activité de votre cabinet ?", options: ["Oui, pour piloter la croissance", "Non", "Indifférent", "Inutile"], correctIndex: 0, explanation: "Tableaux de bord clairs." },
+                    { question: "Un support technique basé en Algérie et réactif ?", options: ["Absolument indispensable", "Secondaire", "Inutile", "Autre"], correctIndex: 0, explanation: "Garantit une sérénité totale." },
+                    { question: "Recommanderiez-vous DiaVet à vos confrères ?", options: ["Oui, sans hésiter", "Non", "Peut-être", "Sans avis"], correctIndex: 0, explanation: "Ensemble pour la modernisation vétérinaire." }
+                ],
+
+                get currentQuestions() {
+                    return this.profile === 'owner' ? this.ownerQuestions : this.vetQuestions;
+                },
+
+                get isPreInfoValid() {
+                    if (this.profile === 'owner') return this.userData.wilaya !== '' && this.userData.animalType !== '' && this.userData.animalAge !== '';
+                    if (this.profile === 'vet') return this.userData.wilaya !== '' && this.userData.structure !== '' && this.userData.specialty !== '';
+                    return false;
+                },
+
+                triggerMagicEffect(event) {
+                    const rect = event.currentTarget.getBoundingClientRect();
+                    const emojis = ['🐾', '🐶', '🐱', '✨', '🩺', '💉'];
+                    for (let i = 0; i < 4; i++) {
+                        const paw = document.createElement('div');
+                        paw.className = 'paw-effect';
+                        paw.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+                        paw.style.left = (event.clientX - rect.left + (Math.random() * 60 - 30)) + 'px';
+                        paw.style.top = (event.clientY - rect.top + (Math.random() * 60 - 30)) + 'px';
+                        event.currentTarget.appendChild(paw);
+                        setTimeout(() => paw.remove(), 800);
+                    }
+                },
+
+                selectProfile(p, event) {
+                    this.profile = p;
+                    this.triggerMagicEffect(event);
+                    this.step = 'preinfo';
+                },
+
+                startQuizQuestions() {
+                    if (!this.isPreInfoValid) return;
+                    this.step = 'quiz';
+                    this.currentIndex = 0;
+                    this.selectedOption = null;
+                    this.showFeedback = false;
+                    this.score = 0;
+                },
+
+                selectOption(event, index) {
+                    if (!this.showFeedback) {
+                        this.selectedOption = index;
+                        this.triggerMagicEffect(event);
+                    }
+                },
+
+                confirmAnswer() {
+                    if (this.selectedOption === null) return;
+                    this.showFeedback = true;
+                    this.isCorrect = (this.selectedOption === this.currentQuestions[this.currentIndex].correctIndex);
+                    if (this.isCorrect) this.score++;
+                },
+
+                skipQuestion() { this.nextQuestion(); },
+
+                nextQuestion() {
+                    this.showFeedback = false;
+                    this.selectedOption = null;
+                    if (this.currentIndex < this.currentQuestions.length - 1) {
+                        this.currentIndex++;
+                    } else {
+                        playSuspenseHeartbeat();
+                        this.step = 'suspense';
+                    }
+                },
+
+                triggerRevealTheater() {
+                    this.step = 'concept_transition';
+                },
+
+                resetQuiz() {
+                    this.step = 'intro_animation';
+                    this.profile = null;
+                    this.userData = { wilaya: '', animalType: '', animalBreed: '', animalAge: '', structure: '', specialty: '', experience: '' };
+                    this.userSuggestion = '';
+                    this.currentIndex = 0;
+                    this.selectedOption = null;
+                    this.showFeedback = false;
+                    this.isCorrect = false;
+                    this.score = 0;
+                },
+
+                exportResults() {
+                    const data = {
+                        appName: "DiaVet Algérie",
+                        profile: this.profile,
+                        details: this.userData,
+                        score: this.score,
+                        timestamp: new Date().toISOString()
+                    };
+                    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `bilan_diavet_${this.profile}.json`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
