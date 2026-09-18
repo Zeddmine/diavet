@@ -1,0 +1,2554 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
+  <title>DiaVet - Premier Écosystème Numérique Vétérinaire en Algérie</title>
+  <meta name="description" content="Une seule plateforme pour une meilleure santé animale en Algérie. Application pour les propriétaires et logiciel pour les vétérinaires." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg-base: #070e17;
+      --bg-surface: rgba(13, 26, 44, 0.88);
+      --bg-surface-elevated: rgba(19, 36, 61, 0.95);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-accent-blue: rgba(0, 198, 255, 0.35);
+      --border-accent-teal: rgba(16, 185, 129, 0.35);
+      --border-gold: rgba(245, 158, 11, 0.4);
+      --primary: #00c6ff;
+      --primary-gradient: linear-gradient(135deg, #0072ff 0%, #00d2ff 100%);
+      --vet-teal: #10b981;
+      --vet-gradient: linear-gradient(135deg, #059669 0%, #10b981 100%);
+      --gold-gradient: linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #d97706 100%);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-sub: #cbd5e1;
+      --input-bg: rgba(255, 255, 255, 0.04);
+      --input-border: rgba(255, 255, 255, 0.15);
+      --shadow-elevation: 0 20px 50px rgba(0, 0, 0, 0.5);
+      --nav-bg: rgba(7, 14, 23, 0.92);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    [data-theme="light"] {
+      --bg-base: #f1f5f9;
+      --bg-surface: rgba(255, 255, 255, 0.92);
+      --bg-surface-elevated: #ffffff;
+      --border-subtle: rgba(0, 0, 0, 0.08);
+      --border-accent-blue: rgba(0, 114, 255, 0.35);
+      --border-accent-teal: rgba(16, 185, 129, 0.35);
+      --border-gold: rgba(217, 119, 6, 0.4);
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-sub: #334155;
+      --input-bg: #f8fafc;
+      --input-border: rgba(0, 0, 0, 0.15);
+      --shadow-elevation: 0 16px 40px rgba(0, 0, 0, 0.08);
+      --nav-bg: rgba(255, 255, 255, 0.92);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      line-height: 1.6;
+      overflow-x: hidden;
+      min-height: 100vh;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      background-image: 
+        linear-gradient(180deg, rgba(7, 14, 23, 0.82) 0%, rgba(7, 14, 23, 0.94) 100%),
+        url('https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=2000&q=80');
+      background-size: cover;
+      background-position: center top;
+      background-attachment: fixed;
+      position: relative;
+    }
+
+    [data-theme="light"] body {
+      background-image: 
+        linear-gradient(180deg, rgba(241, 245, 249, 0.92) 0%, rgba(241, 245, 249, 0.98) 100%),
+        url('https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=2000&q=80');
+    }
+
+    html[dir="rtl"] {
+      font-family: 'Cairo', 'Plus Jakarta Sans', sans-serif;
+    }
+
+    /* --- ANIMATED AMBIENT BACKGROUND (ORBS & PARTICLES) --- */
+    .ambient-glow-wrap {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+    .ambient-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.32;
+      animation: orbDrift 20s ease-in-out infinite alternate;
+    }
+    .orb-1 {
+      width: 450px; height: 450px;
+      background: radial-gradient(circle, #00c6ff 0%, transparent 70%);
+      top: -80px; left: -100px;
+      animation-duration: 18s;
+    }
+    .orb-2 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, #10b981 0%, transparent 70%);
+      bottom: 5%; right: -120px;
+      animation-duration: 22s;
+      animation-delay: -6s;
+    }
+    .orb-3 {
+      width: 380px; height: 380px;
+      background: radial-gradient(circle, #f59e0b 0%, transparent 70%);
+      top: 42%; left: 35%;
+      animation-duration: 26s;
+      animation-delay: -12s;
+      opacity: 0.18;
+    }
+    @keyframes orbDrift {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(60px, 40px) scale(1.12); }
+      100% { transform: translate(-50px, 70px) scale(0.92); }
+    }
+
+    .ambient-particle {
+      position: absolute;
+      font-size: 20px;
+      opacity: 0;
+      animation: floatParticle 16s linear infinite;
+      user-select: none;
+    }
+    .p-1 { left: 8%; bottom: -40px; animation-delay: 0s; animation-duration: 17s; color: rgba(0, 198, 255, 0.4); }
+    .p-2 { left: 35%; bottom: -40px; animation-delay: 4s; animation-duration: 21s; font-size: 24px; color: rgba(16, 185, 129, 0.35); }
+    .p-3 { left: 68%; bottom: -40px; animation-delay: 8s; animation-duration: 19s; color: rgba(0, 198, 255, 0.35); }
+    .p-4 { left: 88%; bottom: -40px; animation-delay: 12s; animation-duration: 23s; font-size: 24px; color: rgba(245, 158, 11, 0.35); }
+
+    @keyframes floatParticle {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.55; }
+      90% { opacity: 0.55; }
+      100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
+    }
+
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: var(--nav-bg);
+      border-bottom: 1px solid var(--border-subtle);
+      transition: var(--transition);
+    }
+
+    .nav-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 76px;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      list-style: none;
+    }
+
+    .nav-menu a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14.5px;
+      font-weight: 500;
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .nav-menu a:hover, .nav-menu a.active {
+      color: var(--text-main);
+      font-weight: 700;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(16, 185, 129, 0.14);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #34d399;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background-color: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #10b981;
+      animation: pulseAnim 2s infinite;
+    }
+
+    @keyframes pulseAnim {
+      0% { transform: scale(0.95); opacity: 0.7; }
+      50% { transform: scale(1.3); opacity: 1; }
+      100% { transform: scale(0.95); opacity: 0.7; }
+    }
+
+    .lang-pill {
+      display: flex;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 999px;
+      padding: 3px;
+    }
+
+    .lang-item {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 11px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .lang-item.active {
+      background: var(--primary);
+      color: #070e17;
+    }
+
+    .theme-toggle-btn {
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      color: var(--text-sub);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 16px;
+    }
+
+    .theme-toggle-btn:hover {
+      border-color: var(--primary);
+      transform: rotate(15deg);
+    }
+
+    /* Hero Section */
+    .hero-section {
+      padding: 36px 0 24px;
+    }
+
+    .hero-card {
+      position: relative;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      border: 1px solid var(--border-accent-blue);
+      box-shadow: var(--shadow-elevation);
+      background-color: #0b1524;
+      min-height: 520px;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .hero-bg-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 25%;
+      z-index: 0;
+      filter: brightness(0.85) contrast(1.05);
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(7, 14, 23, 0.2) 0%, rgba(7, 14, 23, 0.75) 50%, rgba(7, 14, 23, 0.98) 100%),
+                  radial-gradient(circle at 20% 40%, rgba(0, 114, 255, 0.35) 0%, transparent 60%);
+      z-index: 1;
+    }
+
+    [data-theme="light"] .hero-overlay {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.85) 60%, #ffffff 100%),
+                  radial-gradient(circle at 20% 40%, rgba(0, 114, 255, 0.2) 0%, transparent 60%);
+    }
+
+    .hero-body {
+      position: relative;
+      z-index: 2;
+      padding: 48px;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 30px;
+    }
+
+    .hero-info-left {
+      max-width: 680px;
+    }
+
+    .hero-brand-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    .hero-brand-name {
+      font-size: 48px;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -1px;
+      line-height: 1;
+    }
+
+    .hero-brand-name span {
+      color: #00d2ff;
+    }
+
+    .hero-tagline {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 8px;
+      letter-spacing: -0.3px;
+    }
+
+    .hero-subtext {
+      font-size: 16.5px;
+      color: var(--text-sub);
+      margin-bottom: 18px;
+    }
+
+    .hero-handwriting {
+      font-family: 'Caveat', cursive;
+      font-size: 34px;
+      color: #38bdf8;
+      text-shadow: 0 0 16px rgba(56, 189, 248, 0.6);
+      display: inline-block;
+      margin-bottom: 16px;
+      transform: rotate(-2deg);
+    }
+
+    html[dir="rtl"] .hero-handwriting {
+      font-family: 'Cairo', sans-serif;
+      font-weight: 800;
+      font-size: 26px;
+      transform: none;
+    }
+
+    .hero-buttons-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .vip-badge-btn {
+      background: var(--gold-gradient);
+      color: #070e17 !important;
+      font-weight: 800 !important;
+      box-shadow: 0 8px 24px rgba(245, 158, 11, 0.4);
+    }
+
+    .vip-badge-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(245, 158, 11, 0.6);
+    }
+
+    /* Dual Cards Section */
+    .dual-cards-section {
+      padding: 20px 0 40px;
+    }
+
+    .dual-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .universe-card {
+      background: var(--bg-surface);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      border: 1px solid var(--border-accent-blue);
+      box-shadow: var(--shadow-elevation);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .universe-card:hover { transform: translateY(-5px); }
+    .universe-card.owner { border-color: var(--border-accent-blue); }
+    .universe-card.owner:hover { border-color: var(--primary); box-shadow: 0 20px 50px rgba(0, 114, 255, 0.25); }
+    .universe-card.vet { border-color: var(--border-accent-teal); }
+    .universe-card.vet:hover { border-color: var(--vet-teal); box-shadow: 0 20px 50px rgba(16, 185, 129, 0.25); }
+
+    .card-photo-header { position: relative; height: 240px; overflow: hidden; }
+    .card-photo-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+    .universe-card:hover .card-photo-img { transform: scale(1.06); }
+    .card-photo-gradient { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(7, 14, 23, 0.1) 0%, var(--bg-surface) 100%); }
+
+    .card-badge-floating {
+      position: absolute; top: 18px; left: 20px;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 16px; border-radius: 999px; font-size: 13px; font-weight: 700;
+      backdrop-filter: blur(10px); z-index: 2;
+    }
+    html[dir="rtl"] .card-badge-floating { left: auto; right: 20px; }
+    .owner .card-badge-floating { background: rgba(0, 198, 255, 0.2); border: 1px solid rgba(0, 198, 255, 0.5); color: #38bdf8; }
+    .vet .card-badge-floating { background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.5); color: #34d399; }
+
+    .card-inner-body { padding: 24px 28px 28px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; }
+    .card-title { font-size: 26px; font-weight: 800; color: var(--text-main); margin-bottom: 8px; line-height: 1.25; }
+    .card-desc { font-size: 14.5px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.55; }
+
+    .card-btn {
+      width: fit-content; padding: 12px 28px; border-radius: 999px;
+      font-size: 15px; font-weight: 700; display: inline-flex; align-items: center; gap: 8px;
+      cursor: pointer; border: none; transition: var(--transition); text-decoration: none;
+    }
+    .owner .card-btn { background: var(--primary-gradient); color: #fff; box-shadow: 0 8px 20px rgba(0, 114, 255, 0.35); }
+    .vet .card-btn { background: var(--vet-gradient); color: #fff; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.35); }
+
+    /* Ecosystem Breakdown (12 Pillars) */
+    .about-diavet-section { padding: 40px 0; }
+    .section-header { text-align: center; margin-bottom: 36px; }
+    .section-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(0, 198, 255, 0.12); border: 1px solid rgba(0, 198, 255, 0.3);
+      padding: 6px 16px; border-radius: 999px; font-size: 13px; font-weight: 700;
+      color: var(--primary); margin-bottom: 12px;
+    }
+    .section-title { font-size: 32px; font-weight: 800; color: var(--text-main); margin-bottom: 10px; }
+    .section-desc { font-size: 16px; color: var(--text-muted); max-width: 680px; margin: 0 auto; }
+
+    .ecosystem-breakdown-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+    .eco-card {
+      background: var(--bg-surface); border-radius: var(--radius-xl);
+      padding: 36px; border: 1px solid var(--border-subtle); box-shadow: var(--shadow-elevation);
+    }
+    .eco-card.owner-side { border-top: 4px solid var(--primary); }
+    .eco-card.vet-side { border-top: 4px solid var(--vet-teal); }
+    .eco-card-title { font-size: 22px; font-weight: 800; color: var(--text-main); margin-bottom: 6px; display: flex; align-items: center; gap: 10px; }
+    .eco-card-sub { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
+    .eco-features-list { display: flex; flex-direction: column; gap: 16px; }
+    .eco-feature-item { display: flex; align-items: flex-start; gap: 14px; }
+    .eco-feature-icon {
+      width: 36px; height: 36px; border-radius: 10px; background: var(--input-bg);
+      border: 1px solid var(--border-subtle); display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0; margin-top: 2px;
+    }
+    .owner-side .eco-feature-icon svg { fill: var(--primary); }
+    .vet-side .eco-feature-icon svg { fill: var(--vet-teal); }
+    .eco-feature-heading { font-size: 15px; font-weight: 700; color: var(--text-main); margin-bottom: 2px; }
+    .eco-feature-text { font-size: 13.5px; color: var(--text-muted); line-height: 1.5; }
+
+    /* Middle Row: Two Worlds & 4 Value Pillars */
+    .middle-section { padding: 20px 0 40px; }
+    .middle-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 24px; }
+    .highlight-card {
+      background: var(--bg-surface); border: 1px solid var(--border-accent-blue);
+      border-radius: var(--radius-xl); padding: 34px; box-shadow: var(--shadow-elevation);
+      display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .highlight-card h3 { font-size: 24px; font-weight: 800; color: var(--text-main); margin-bottom: 12px; }
+    .highlight-card p { font-size: 15px; color: var(--text-muted); line-height: 1.6; margin-bottom: 24px; }
+
+    .pillars-4-card {
+      background: var(--bg-surface); border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl); padding: 30px; box-shadow: var(--shadow-elevation);
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .pillars-4-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .p-item {
+      background: var(--input-bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-md);
+      padding: 20px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px;
+      transition: var(--transition);
+    }
+    .p-item:hover { border-color: var(--primary); transform: translateY(-2px); }
+    .p-icon-circle {
+      width: 46px; height: 46px; border-radius: 12px; background: rgba(0, 210, 255, 0.12);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .p-icon-circle svg { fill: var(--primary); }
+    .p-name { font-size: 14px; font-weight: 700; color: var(--text-main); }
+
+    /* Bottom Panorama Banner */
+    .panorama-section { padding: 20px 0 60px; }
+    .panorama-banner {
+      position: relative; border-radius: var(--radius-xl); overflow: hidden;
+      border: 1px solid var(--border-subtle); min-height: 260px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 40px 48px; box-shadow: var(--shadow-elevation);
+    }
+    .panorama-bg-img {
+      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+      object-position: center 60%; z-index: 0; filter: brightness(0.68) contrast(1.15);
+    }
+    .panorama-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(90deg, rgba(7, 14, 23, 0.88) 0%, rgba(7, 14, 23, 0.45) 50%, rgba(7, 14, 23, 0.9) 100%);
+      z-index: 1;
+    }
+    .panorama-quote-text {
+      position: relative; z-index: 2; font-family: 'Caveat', cursive; font-size: 42px;
+      color: #38bdf8; text-shadow: 0 0 25px rgba(56, 189, 248, 0.6); max-width: 520px; line-height: 1.2;
+    }
+    html[dir="rtl"] .panorama-quote-text {
+      font-family: 'Cairo', sans-serif; font-size: 28px; font-weight: 800;
+    }
+    .panorama-card-right {
+      position: relative; z-index: 2; background: var(--bg-surface); border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md); padding: 20px 24px; backdrop-filter: blur(14px);
+      max-width: 440px; display: flex; align-items: center; gap: 16px;
+    }
+    .panorama-card-right p { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+
+    /* Modal Dialog Styling */
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(3, 7, 13, 0.92);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      z-index: 1000; display: none; align-items: center; justify-content: center;
+      padding: 20px; opacity: 0; transition: opacity 0.3s ease;
+    }
+    .modal-backdrop.active { display: flex; opacity: 1; }
+
+    .modal-dialog {
+      width: 100%; max-width: 780px; background: var(--bg-surface-elevated);
+      border: 1px solid var(--border-accent-blue); border-radius: var(--radius-xl);
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.85); overflow: hidden;
+      display: flex; flex-direction: column; max-height: 90vh;
+      animation: modalIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes modalIn {
+      from { transform: translateY(20px) scale(0.97); }
+      to { transform: translateY(0) scale(1); }
+    }
+
+    .modal-top-bar {
+      padding: 16px 28px; border-bottom: 1px solid var(--border-subtle);
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(0, 0, 0, 0.15);
+    }
+    .modal-step-badge {
+      font-size: 13px; font-weight: 700; color: var(--primary);
+      background: rgba(0, 198, 255, 0.12); padding: 5px 16px;
+      border-radius: 999px; border: 1px solid rgba(0, 198, 255, 0.25);
+    }
+    .modal-close {
+      background: transparent; border: none; color: var(--text-muted);
+      font-size: 24px; cursor: pointer; width: 34px; height: 34px;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      transition: var(--transition);
+    }
+    .modal-close:hover { background: var(--input-bg); color: var(--text-main); }
+    .modal-body-scroll { padding: 28px 36px; overflow-y: auto; flex: 1; -webkit-overflow-scrolling: touch; }
+    .modal-bottom-actions {
+      padding: 18px 36px; border-top: 1px solid var(--border-subtle);
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(0, 0, 0, 0.15);
+    }
+
+    /* Form Fields & UI */
+    .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; text-align: left; }
+    html[dir="rtl"] .form-group { text-align: right; }
+    .form-label { font-size: 13.5px; font-weight: 700; color: var(--text-main); }
+    .form-control {
+      width: 100%; background: var(--input-bg); border: 1px solid var(--input-border);
+      border-radius: var(--radius-md); padding: 13px 16px; color: var(--text-main);
+      font-family: inherit; font-size: 14.5px; outline: none; transition: var(--transition);
+    }
+    .form-control:focus {
+      border-color: var(--primary); background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 12px rgba(0, 198, 255, 0.25);
+    }
+
+    /* Species Cards with Photos */
+    .species-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0 24px; }
+    .species-card {
+      background: var(--input-bg); border: 1px solid var(--input-border);
+      border-radius: var(--radius-md); padding: 10px; cursor: pointer; text-align: center;
+      transition: var(--transition); display: flex; flex-direction: column; align-items: center; gap: 8px;
+    }
+    .species-card:hover { border-color: var(--primary); background: rgba(255, 255, 255, 0.08); transform: translateY(-2px); }
+    .species-card.selected {
+      border-color: var(--primary); background: rgba(0, 198, 255, 0.16);
+      box-shadow: 0 0 16px rgba(0, 198, 255, 0.3);
+    }
+    .species-img { width: 68px; height: 68px; border-radius: 12px; object-fit: cover; }
+    .species-title { font-size: 13.5px; font-weight: 700; color: var(--text-main); }
+
+    /* Pill Radios (NO DEFAULT PRE-SELECTION) */
+    .pill-radio-group { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+    .pill-radio-item {
+      background: var(--input-bg); border: 1px solid var(--input-border);
+      padding: 10px 18px; border-radius: 999px; font-size: 13.5px; font-weight: 600;
+      color: var(--text-main); cursor: pointer; transition: var(--transition);
+    }
+    .pill-radio-item:hover { border-color: var(--primary); }
+    .pill-radio-item.selected { background: var(--primary-gradient); color: #fff; border-color: transparent; }
+    .vet-mode .pill-radio-item.selected { background: var(--vet-gradient); color: #fff; }
+
+    /* VIP Card Box */
+    .vip-card-box {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(217, 119, 6, 0.05) 100%);
+      border: 1px solid var(--border-gold);
+      border-radius: var(--radius-lg);
+      padding: 24px; margin: 20px 0; text-align: left;
+    }
+    html[dir="rtl"] .vip-card-box { text-align: right; }
+    .vip-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .vip-icon {
+      width: 44px; height: 44px; border-radius: 12px; background: var(--gold-gradient);
+      display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+    }
+    .vip-title { font-size: 19px; font-weight: 800; color: #fbbf24; }
+    .vip-perks-list { display: flex; flex-direction: column; gap: 8px; margin: 14px 0; font-size: 14px; color: var(--text-sub); }
+
+    /* Choose Profile Grid */
+    .choose-profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+    .choose-profile-card {
+      background: var(--input-bg); border: 1px solid var(--input-border);
+      border-radius: var(--radius-lg); padding: 28px 20px; text-align: center;
+      cursor: pointer; transition: var(--transition); display: flex; flex-direction: column; align-items: center;
+    }
+    .choose-profile-card:hover { transform: translateY(-4px); }
+    .choose-profile-card.owner:hover { border-color: var(--primary); }
+    .choose-profile-card.vet:hover { border-color: var(--vet-teal); }
+    .profile-card-icon {
+      width: 58px; height: 58px; border-radius: 16px; display: flex; align-items: center; justify-content: center;
+      font-size: 28px; margin-bottom: 14px;
+    }
+    .profile-card-title { font-size: 18px; font-weight: 800; color: var(--text-main); margin-bottom: 6px; }
+    .profile-card-desc { font-size: 13.5px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.4; }
+    .profile-card-badge { padding: 4px 12px; border-radius: 999px; font-size: 11.5px; font-weight: 800; }
+
+    /* Dedicated Stérilisation Group Card */
+    .sterilize-box-card {
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      margin-top: 14px;
+    }
+
+    /* Responsive Queries */
+    @media (max-width: 900px) {
+      .dual-cards-grid, .middle-grid, .ecosystem-breakdown-grid, .form-grid-2 {
+        grid-template-columns: 1fr !important;
+      }
+      .species-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 10px !important; }
+      .panorama-banner { flex-direction: column !important; text-align: center !important; gap: 24px !important; padding: 32px 20px !important; }
+      .panorama-quote-text { font-size: 30px !important; max-width: 100% !important; }
+      .choose-profile-grid { grid-template-columns: 1fr !important; }
+    }
+
+    @media (max-width: 640px) {
+      .container { padding: 0 14px !important; }
+      .nav-menu, .status-pill { display: none !important; }
+      .nav-wrapper { height: 64px !important; }
+      .hero-body { padding: 24px 16px !important; }
+      .hero-brand-name { font-size: 32px !important; }
+      .hero-tagline { font-size: 20px !important; line-height: 1.3 !important; }
+      .hero-subtext { font-size: 14px !important; margin-bottom: 14px !important; }
+      .hero-handwriting { font-size: 24px !important; }
+      .hero-buttons-row { flex-direction: column !important; width: 100% !important; gap: 10px !important; }
+      .hero-buttons-row .card-btn { width: 100% !important; justify-content: center !important; padding: 14px 20px !important; font-size: 14.5px !important; }
+      .card-inner-body { padding: 20px 16px !important; }
+      .card-btn { width: 100% !important; justify-content: center !important; }
+      .eco-card { padding: 22px 16px !important; }
+      .pillars-4-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
+      .species-grid { grid-template-columns: repeat(2, 1fr) !important; }
+
+      /* Fullscreen Modal on mobile */
+      .modal-backdrop { padding: 0 !important; }
+      .modal-dialog {
+        width: 100% !important; max-width: 100% !important;
+        height: 100% !important; max-height: 100vh !important;
+        border-radius: 0 !important; border: none !important; margin: 0 !important;
+      }
+      .modal-top-bar { padding: 14px 16px !important; padding-top: max(14px, env(safe-area-inset-top)) !important; }
+      .modal-body-scroll { padding: 18px 16px 30px !important; }
+      .modal-bottom-actions { padding: 14px 16px !important; padding-bottom: max(16px, env(safe-area-inset-bottom)) !important; }
+      input.form-control, select.form-control, textarea.form-control { font-size: 16px !important; }
+      .pill-radio-item { flex: 1 1 calc(50% - 10px) !important; text-align: center !important; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Ambient Animated Glowing Background -->
+  <div class="ambient-glow-wrap" aria-hidden="true">
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
+    <div class="ambient-particle p-1">🐾</div>
+    <div class="ambient-particle p-2">✚</div>
+    <div class="ambient-particle p-3">🐾</div>
+    <div class="ambient-particle p-4">✚</div>
+  </div>
+
+  <!-- Top Sticky Header -->
+  <header>
+    <div class="container">
+      <div class="nav-wrapper">
+        
+        <!-- Official DiaVet SVG Logo (Secret 5-Tap for Admin) -->
+        <div class="logo-container" onclick="handleLogoSecretTap()" title="DiaVet">
+          <div style="width:42px; height:42px; max-width:42px; flex-shrink:0;">
+            <svg class="diavet-emblem-svg" viewBox="0 0 400 400" width="42" height="42" style="width:42px; height:42px; display:block;">
+              <defs>
+                <linearGradient id="dvMainD_Head" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#0284c7" />
+                  <stop offset="35%" stop-color="#0284c7" />
+                  <stop offset="70%" stop-color="#0369a1" />
+                  <stop offset="100%" stop-color="#082f49" />
+                </linearGradient>
+                <linearGradient id="dvCurveBevel_Head" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#38bdf8" />
+                  <stop offset="40%" stop-color="#0284c7" />
+                  <stop offset="100%" stop-color="#0369a1" />
+                </linearGradient>
+                <linearGradient id="dvCross_Head" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#38bdf8" />
+                  <stop offset="100%" stop-color="#06b6d4" />
+                </linearGradient>
+              </defs>
+              <path d="M 85 40 L 210 40 C 310 40, 365 95, 365 200 C 365 305, 310 360, 210 360 L 85 360 Z" fill="url(#dvMainD_Head)" />
+              <path d="M 210 40 C 310 40, 365 95, 365 200 C 365 305, 310 360, 210 360 C 285 360, 335 310, 335 200 C 335 90, 285 40, 210 40 Z" fill="url(#dvCurveBevel_Head)" />
+              <path d="M 85 40 L 190 40 C 170 80, 145 140, 145 210 C 145 280, 170 325, 190 360 L 85 360 Z" fill="#082356" />
+              <!-- Dog -->
+              <path d="M 90 180 C 100 130, 125 90, 165 80 C 185 75, 202 82, 218 95 C 228 92, 242 96, 252 105 C 262 115, 272 125, 275 135 C 275 142, 268 148, 255 148 C 242 148, 232 158, 222 175 C 212 190, 195 205, 180 215" fill="#0c3276" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round" />
+              <path d="M 175 85 C 150 90, 130 120, 130 155 C 130 178, 150 188, 165 182 C 175 178, 180 145, 180 110 Z" fill="#07204c" stroke="#ffffff" stroke-width="4" />
+              <!-- Cat -->
+              <path d="M 90 340 C 110 320, 130 285, 130 250 C 130 235, 140 220, 155 220 C 165 220, 175 230, 190 230 C 200 230, 210 218, 220 210 C 227 205, 235 215, 233 225 L 240 240 C 250 245, 255 255, 250 265 C 243 275, 233 290, 220 315 C 205 345, 180 360, 145 360" fill="#0e3a8c" stroke="#ffffff" stroke-width="4.5" stroke-linecap="round" />
+              <path d="M 205 220 L 220 190 L 230 218 Z" fill="#08255e" stroke="#ffffff" stroke-width="3.5" />
+              <!-- Cross -->
+              <rect x="270" y="155" width="22" height="58" rx="6" fill="url(#dvCross_Head)" stroke="#ffffff" stroke-width="2.5" />
+              <rect x="252" y="173" width="58" height="22" rx="6" fill="url(#dvCross_Head)" stroke="#ffffff" stroke-width="2.5" />
+            </svg>
+          </div>
+          <div style="display:flex; flex-direction:column; line-height:1;">
+            <div style="font-family:'Poppins','Montserrat',sans-serif; font-size:24px; font-weight:800; letter-spacing:-0.5px;">
+              <span style="color:var(--text-main);">Dia</span><span style="color:#00d2ff;">Vet</span>
+            </div>
+            <span style="font-size:10px; font-weight:700; letter-spacing:0.8px; text-transform:uppercase; color:var(--text-muted);" data-i18n="logo_sub">Algérie · Santé Animale</span>
+          </div>
+        </div>
+
+        <ul class="nav-menu">
+          <li><a href="#accueil" class="active" data-i18n="nav_home">Accueil</a></li>
+          <li><a href="#tout-savoir" data-i18n="nav_about">Tout sur DiaVet</a></li>
+          <li><a href="#fonctionnalites" data-i18n="nav_features">Espaces & Piliers</a></li>
+          <li><a onclick="openModal('choose')" data-i18n="nav_forms">Enquêtes & VIP</a></li>
+          <li><a href="#contact" data-i18n="nav_contact">Contact</a></li>
+        </ul>
+
+        <div class="nav-right">
+          <div class="status-pill">
+            <span class="status-dot"></span>
+            <span data-i18n="badge_cities">Alger · Oran · 58 Wilayas</span>
+          </div>
+
+          <!-- Language Switcher -->
+          <div class="lang-pill">
+            <button class="lang-item active" onclick="switchLanguage('fr')">FR</button>
+            <button class="lang-item" onclick="switchLanguage('en')">EN</button>
+            <button class="lang-item" onclick="switchLanguage('ar')">AR</button>
+          </div>
+
+          <!-- Dark / Light Theme Toggle -->
+          <div class="theme-toggle-btn" id="themeToggle" onclick="toggleTheme()" title="Thème">
+            🌙
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Hero Section -->
+    <section class="hero-section" id="accueil">
+      <div class="hero-card">
+        <img class="hero-bg-img" src="https://images.unsplash.com/photo-1548767797-d8c844163c4c?auto=format&fit=crop&w=1600&q=80" alt="Chien et chat DiaVet à Alger" />
+        <div class="hero-overlay"></div>
+
+        <div class="hero-body">
+          <div class="hero-info-left">
+            <div class="hero-brand-row">
+              <div class="hero-brand-name">Dia<span>Vet</span></div>
+            </div>
+
+            <div class="hero-tagline" data-i18n="hero_tagline">
+              L'écosystème numérique vétérinaire
+            </div>
+
+            <div class="hero-subtext" data-i18n="hero_subtext">
+              Une seule plateforme, pour une meilleure santé animale en Algérie.
+            </div>
+
+            <div style="margin-bottom: 14px;">
+              <span class="hero-handwriting" data-i18n="quote_hero">Parce qu'ils méritent le meilleur ♡</span>
+            </div>
+
+            <div class="hero-buttons-row">
+              <button class="card-btn" style="background: var(--primary-gradient); color: #fff;" onclick="openModal('owner')">
+                <span data-i18n="btn_form_owner">Fiche & Enquête Propriétaire 🐾</span>
+              </button>
+              <button class="card-btn" style="background: var(--vet-gradient); color: #fff;" onclick="openModal('vet')">
+                <span data-i18n="btn_form_vet">Fiche & Enquête Vétérinaire 🩺</span>
+              </button>
+              <button class="card-btn vip-badge-btn" onclick="openModal('choose')">
+                <span data-i18n="btn_vip_hero">⭐ Essayer DiaVet en VIP</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: Detailed Description of DiaVet (12 Pillars adapted for Algeria) -->
+    <section class="about-diavet-section" id="tout-savoir">
+      <div class="section-header">
+        <div class="section-badge" data-i18n="platform_badge">
+          ✨ Tout ce que contient DiaVet
+        </div>
+        <h2 class="section-title" data-i18n="eco_title">Une plateforme complète, deux univers connectés</h2>
+        <p class="section-desc" data-i18n="eco_desc">
+          DiaVet connecte en temps réel les cliniques vétérinaires et les familles d'animaux partout en Algérie.
+        </p>
+      </div>
+
+      <div class="ecosystem-breakdown-grid">
+        <!-- Propriétaire -->
+        <div class="eco-card owner-side">
+          <div class="eco-card-title">
+            <span>🐾</span> <span data-i18n="owner_card_title">Espace Propriétaire d'Animal</span>
+          </div>
+          <div class="eco-card-sub" data-i18n="eco_owner_sub">L'application mobile tout-en-un pour votre compagnon en Algérie</div>
+
+          <div class="eco-features-list">
+            <div class="eco-feature-item">
+              <div class="eco-feature-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+              </div>
+              <div>
+                <div class="eco-feature-heading" data-i18n="f_carnet_h">Carnet de santé numérique certifié</div>
+                <div class="eco-feature-text" data-i18n="f_carnet_t">Historique des vaccins, antiparasitaires et alertes SMS automatiques pour ne jamais oublier un rappel.</div>
+              </div>
+            </div>
+
+            <div class="eco-feature-item">
+              <div class="eco-feature-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10z"/></svg>
+              </div>
+              <div>
+                <div class="eco-feature-heading" data-i18n="f_rdv_h">Prise de RDV en ligne 24/7</div>
+                <div class="eco-feature-text" data-i18n="f_rdv_t">Choisissez votre clinique de quartier et votre praticien avec confirmation instantanée par SMS / WhatsApp.</div>
+              </div>
+            </div>
+
+            <div class="eco-feature-item">
+              <div class="eco-feature-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+              </div>
+              <div>
+                <div class="eco-feature-heading" data-i18n="f_urg_h">Réseau d'urgences géolocalisé en temps réel</div>
+                <div class="eco-feature-text" data-i18n="f_urg_t">Trouvez immédiatement les cabinets ouverts et les vétérinaires joignables la nuit et les vendredis à Alger et environs.</div>
+              </div>
+            </div>
+
+            <div class="eco-feature-item">
+              <div class="eco-feature-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+              </div>
+              <div>
+                <div class="eco-feature-heading" data-i18n="f_mkt_h">Marketplace & Alimentation certifiée</div>
+                <div class="eco-feature-text" data-i18n="f_mkt_t">Aliments thérapeutiques, croquettes premium et accessoires recommandés par les professionnels.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vétérinaire (Real Algerian Practice - NO OVERNIGHT HOSPITALIZATION) -->
+        <div class="eco-card vet-side">
+          <div class="eco-card-title">
+            <span>🩺</span> <span data-i18n="vet_card_title">Espace Vétérinaire & Clinique</span>
+          </div>
+          <div class="eco-card-sub" data-i18n="eco_vet_sub">Le logiciel de gestion moderne adapté aux réalités des cabinets algériens</div>
+
+          <div class="eco-features-list">
+            <div class="eco-feature-item">
+              <div class="eco-feature-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+              </div>
+              <div>
+                <div class="eco-feature-heading" data-i18n="f_dossier_h">Dossier médical patient numérique</div>
+                <div class="eco-feature-text" data-i18n="f_dossier_t">Consultations, antécédents, imagerie écho/radio et courbes de poids synchronisés en quelques clics.</div>
+              </div>
+            </div>
+
+            <div class="eco-feature-item">
+              <div class="eco-feature-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20"><path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg>
+              </div>
+              <div>
+                <div class="eco-feature-heading" data-i18n="f_agenda_h">Agenda intelligent anti no-show</div>
+                <div class="eco-feature-text" data-i18n="f_agenda_t">Réduction drastique des rendez-vous manqués grâce aux rappels automatiques par SMS et WhatsApp.</div>
+              </div>
+            </div>
+
+            <div class="eco-feature-item">
+              <div class="eco-feature-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 3h12v2H6zm0 16h12v2H6zm6-14c-3.86 0-7 3.14-7 7s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm0 12c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
+              </div>
+              <div>
+                <div class="eco-feature-heading" data-i18n="f_ordo_h">Générateur d'ordonnances & posologies</div>
+                <div class="eco-feature-text" data-i18n="f_ordo_t">Calcul automatique des doses selon le poids de l'animal et impression directe avec votre cachet et logo.</div>
+              </div>
+            </div>
+
+            <div class="eco-feature-item">
+              <div class="eco-feature-icon">
+                <svg viewBox="0 0 24 24" width="20" height="20"><path d="M4 6h16v10H4zm14 12H6v2h12z"/></svg>
+              </div>
+              <div>
+                <div class="eco-feature-heading" data-i18n="f_pay_h">Facturation, devis & BaridiMob</div>
+                <div class="eco-feature-text" data-i18n="f_pay_t">Gestion des encaissements multiples adaptés à l'Algérie : espèces, virements postaux BaridiMob et cartes CIB.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dual Cards Section -->
+    <section class="dual-cards-section" id="fonctionnalites">
+      <div class="dual-cards-grid">
+        <!-- Owner Card -->
+        <div class="universe-card owner">
+          <div class="card-photo-header">
+            <img class="card-photo-img" src="https://images.unsplash.com/photo-1533738363-b7f9aef128ce?auto=format&fit=crop&w=800&q=80" alt="Chien fidèle DiaVet" />
+            <div class="card-photo-gradient"></div>
+            <div class="card-badge-floating" data-i18n="card_badge_owner">Pour les Propriétaires 🐾</div>
+          </div>
+          <div class="card-inner-body">
+            <div>
+              <h3 class="card-title" data-i18n="owner_card_title">Espace Propriétaire d'Animal</h3>
+              <p class="card-desc" data-i18n="owner_card_desc">
+                Suivez la santé de votre animal en toute sérénité. Carnet vaccinal numérique, prise de rendez-vous en ligne immédiate et localisation des urgences de garde en Algérie.
+              </p>
+            </div>
+            <button class="card-btn" onclick="openModal('owner')">
+              <span data-i18n="btn_form_owner">Accéder à l'Espace Propriétaire</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Vet Card -->
+        <div class="universe-card vet">
+          <div class="card-photo-header">
+            <img class="card-photo-img" src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=800&q=80" alt="Clinique vétérinaire DiaVet" />
+            <div class="card-photo-gradient"></div>
+            <div class="card-badge-floating" data-i18n="card_badge_vet">Pour les Vétérinaires 🩺</div>
+          </div>
+          <div class="card-inner-body">
+            <div>
+              <h3 class="card-title" data-i18n="vet_card_title">Espace Vétérinaire & Clinique</h3>
+              <p class="card-desc" data-i18n="vet_card_desc">
+                Modernisez votre pratique avec notre logiciel clinique complet. Dossiers médicaux partagés, imagerie, réduction des no-shows et facturation adaptée à l'Algérie.
+              </p>
+            </div>
+            <button class="card-btn" onclick="openModal('vet')">
+              <span data-i18n="btn_form_vet">Accéder à l'Espace Clinique</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 Value Pillars -->
+    <section class="middle-section" id="a-propos">
+      <div class="middle-grid">
+        <div class="highlight-card">
+          <div>
+            <h3 data-i18n="mid_title">Deux univers réunis pour une santé animale meilleure</h3>
+            <p data-i18n="mid_desc">
+              DiaVet est la première passerelle numérique pensée pour répondre aux défis quotidiens des praticiens et des propriétaires d'animaux en Algérie.
+            </p>
+          </div>
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+            <button class="card-btn" style="background:var(--primary-gradient); color:#fff;" onclick="openModal('choose')">
+              <span data-i18n="btn_vip_hero">Découvrir le programme VIP ⭐</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="pillars-4-card">
+          <div class="pillars-4-grid">
+            <div class="p-item">
+              <div class="p-icon-circle">
+                <svg viewBox="0 0 24 24" width="24" height="24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14h-2v-3H8v-2h3V8h2v3h3v2h-3v3z"/></svg>
+              </div>
+              <div class="p-name" data-i18n="pil_1">Urgences géolocalisées 24/7</div>
+            </div>
+            <div class="p-item">
+              <div class="p-icon-circle">
+                <svg viewBox="0 0 24 24" width="24" height="24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
+              </div>
+              <div class="p-name" data-i18n="pil_2">Dossier médical partagé</div>
+            </div>
+            <div class="p-item">
+              <div class="p-icon-circle">
+                <svg viewBox="0 0 24 24" width="24" height="24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+              </div>
+              <div class="p-name" data-i18n="pil_3">Module anti no-show</div>
+            </div>
+            <div class="p-item">
+              <div class="p-icon-circle">
+                <svg viewBox="0 0 24 24" width="24" height="24"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg>
+              </div>
+              <div class="p-name" data-i18n="pil_4">Paiement BaridiMob</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom Panorama Banner -->
+    <section class="panorama-section">
+      <div class="panorama-banner">
+        <img class="panorama-bg-img" src="https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=1600&q=80" alt="Baie d'Alger au coucher de soleil" />
+        <div class="panorama-overlay"></div>
+
+        <div class="panorama-quote-text" data-i18n="pano_quote">
+          « Au cœur de la baie d'Alger... Ensemble pour une santé animale d'excellence. »
+        </div>
+
+        <div class="panorama-card-right">
+          <p data-i18n="pano_desc">
+            Rejoignez dès aujourd'hui les cliniques partenaires et les propriétaires d'animaux pionniers inscrits au programme de lancement en Algérie.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer id="contact" style="background:var(--nav-bg); border-top:1px solid var(--border-subtle); padding:40px 0; text-align:center; position:relative; z-index:1;">
+    <div class="container">
+      <div style="display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:12px;">
+        <span style="font-size:22px; font-weight:800; color:var(--text-main);">Dia<span style="color:#00c6ff;">Vet</span></span>
+      </div>
+      <p style="font-size:13.5px; color:var(--text-muted); margin-bottom:12px;" data-i18n="footer_copy">
+        © 2026 DiaVet Algérie · Premier écosystème numérique de santé animale. Tous droits réservés.
+      </p>
+    </div>
+  </footer>
+
+  <!-- MODAL QUESTIONNAIRE & VIP -->
+  <div class="modal-backdrop" id="formModal">
+    <div class="modal-dialog" id="modalDialog">
+      <div class="modal-top-bar">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div class="modal-step-badge" id="modalBadge">Questionnaire & Offre VIP</div>
+        </div>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+
+      <div class="modal-body-scroll" id="modalBody"></div>
+
+      <div class="modal-bottom-actions" id="modalActions">
+        <button class="card-btn" id="btnPrev" style="background:var(--input-bg); border:1px solid var(--input-border); color:var(--text-main); display:none;" onclick="prevStep()">
+          <span id="prevBtnText">← Retour</span>
+        </button>
+        <button class="card-btn" id="btnNext" style="background:var(--primary-gradient); color:#fff; margin-left:auto;" onclick="nextStep()">
+          <span id="nextBtnText">Suivant →</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN PORTAL (100% PRIVATE & INVISIBLE TO VISITORS) -->
+  <div class="modal-backdrop" id="adminModal" style="z-index: 10000;">
+    <div class="modal-dialog" style="max-width: 650px;">
+      <div class="modal-top-bar">
+        <div class="modal-step-badge" style="color:#10b981; border-color:#10b981; background:rgba(16,185,129,0.15);">Portail Administrateur Privé</div>
+        <button class="modal-close" onclick="closeAdmin()">&times;</button>
+      </div>
+      <div class="modal-body-scroll" id="adminBody">
+        <div id="adminPinBox" style="text-align:center; padding:30px 10px;">
+          <h3 style="margin-bottom:10px; font-size:20px; font-weight:800;">Accès Équipe DiaVet</h3>
+          <p style="color:var(--text-muted); font-size:13.5px; margin-bottom:16px;">Entrez votre code secret administrateur (Défaut : 2026) :</p>
+          <input type="password" id="pinInput" class="form-control" placeholder="Code PIN" style="text-align:center; max-width:220px; margin:0 auto 14px;" onkeydown="if(event.key==='Enter') authAdmin()" />
+          <button class="card-btn" style="background:var(--primary-gradient); color:#fff; margin:0 auto;" onclick="authAdmin()">Déverrouiller 🔓</button>
+        </div>
+        <div id="adminContent" style="display:none; padding:10px 0;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <h4 style="font-size:16px; font-weight:800;">Total Inscrits : <span id="dbTotal" style="color:var(--primary);">0</span></h4>
+            <button class="card-btn" style="background:var(--primary-gradient); color:#fff; padding:8px 14px; font-size:12.5px;" onclick="exportCSV()">📥 Exporter Excel (.CSV)</button>
+          </div>
+          <div id="dbList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ==========================================
+    // COMPREHENSIVE i18n TRANSLATIONS (FR, EN, AR)
+    // ==========================================
+    const i18n = {
+      fr: {
+        logo_sub: "Algérie · Santé Animale",
+        nav_home: "Accueil", nav_about: "Tout sur DiaVet", nav_features: "Espaces & Piliers",
+        nav_forms: "Enquêtes & VIP", nav_contact: "Contact",
+        badge_cities: "Alger · Oran · 58 Wilayas",
+        hero_tagline: "L'écosystème numérique vétérinaire",
+        hero_subtext: "Une seule plateforme, pour une meilleure santé animale en Algérie.",
+        quote_hero: "Parce qu'ils méritent le meilleur ♡",
+        btn_form_owner: "Fiche & Enquête Propriétaire 🐾",
+        btn_form_vet: "Fiche & Enquête Vétérinaire 🩺",
+        btn_vip_hero: "⭐ Essayer DiaVet en VIP",
+        platform_badge: "✨ Tout ce que contient DiaVet",
+        eco_title: "Une plateforme complète, deux univers connectés",
+        eco_desc: "DiaVet connecte en temps réel les cliniques vétérinaires et les familles d'animaux partout en Algérie.",
+        owner_card_title: "Espace Propriétaire d'Animal",
+        eco_owner_sub: "L'application mobile tout-en-un pour votre compagnon en Algérie",
+        f_carnet_h: "Carnet de santé numérique certifié",
+        f_carnet_t: "Historique des vaccins, antiparasitaires et alertes SMS automatiques pour ne jamais oublier un rappel.",
+        f_rdv_h: "Prise de RDV en ligne 24/7",
+        f_rdv_t: "Choisissez votre clinique de quartier et votre praticien avec confirmation instantanée par SMS / WhatsApp.",
+        f_urg_h: "Réseau d'urgences géolocalisé en temps réel",
+        f_urg_t: "Trouvez immédiatement les cabinets ouverts et les vétérinaires joignables la nuit et les vendredis à Alger et environs.",
+        f_mkt_h: "Marketplace & Alimentation certifiée",
+        f_mkt_t: "Aliments thérapeutiques, croquettes premium et accessoires recommandés par les professionnels.",
+        vet_card_title: "Espace Vétérinaire & Clinique",
+        eco_vet_sub: "Le logiciel de gestion moderne adapté aux réalités des cabinets algériens",
+        f_dossier_h: "Dossier médical patient numérique",
+        f_dossier_t: "Consultations, antécédents, imagerie écho/radio et courbes de poids synchronisés en quelques clics.",
+        f_agenda_h: "Agenda intelligent anti no-show",
+        f_agenda_t: "Réduction drastique des rendez-vous manqués grâce aux rappels automatiques par SMS et WhatsApp.",
+        f_ordo_h: "Générateur d'ordonnances & posologies",
+        f_ordo_t: "Calcul automatique des doses selon le poids de l'animal et impression directe avec votre cachet et logo.",
+        f_pay_h: "Facturation, devis & BaridiMob",
+        f_pay_t: "Gestion des encaissements multiples adaptés à l'Algérie : espèces, virements postaux BaridiMob et cartes CIB.",
+        card_badge_owner: "Pour les Propriétaires 🐾",
+        card_badge_vet: "Pour les Vétérinaires 🩺",
+        owner_card_desc: "Suivez la santé de votre animal en toute sérénité. Carnet vaccinal numérique, prise de rendez-vous en ligne immédiate et localisation des urgences de garde en Algérie.",
+        vet_card_desc: "Modernisez votre pratique avec notre logiciel clinique complet. Dossiers médicaux partagés, imagerie, réduction des no-shows et facturation adaptée à l'Algérie.",
+        mid_title: "Deux univers réunis pour une santé animale meilleure",
+        mid_desc: "DiaVet est la première passerelle numérique pensée pour répondre aux défis quotidiens des praticiens et des propriétaires d'animaux en Algérie.",
+        pil_1: "Urgences géolocalisées 24/7", pil_2: "Dossier médical partagé", pil_3: "Module anti no-show", pil_4: "Paiement BaridiMob",
+        pano_quote: "« Au cœur de la baie d'Alger... Ensemble pour une santé animale d'excellence. »",
+        pano_desc: "Rejoignez dès aujourd'hui les cliniques partenaires et les propriétaires d'animaux pionniers inscrits au programme de lancement en Algérie.",
+        footer_copy: "© 2026 DiaVet Algérie · Premier écosystème numérique de santé animale. Tous droits réservés.",
+        
+        btn_next: "Suivant →", btn_back: "← Retour", btn_finish: "Réclamer mon Pass VIP ⭐", btn_close: "Fermer",
+        choose_title: "Choisissez votre univers",
+        choose_sub: "Sélectionnez votre profil pour personnaliser le questionnaire et réserver vos privilèges fondateurs.",
+        owner_badge_offer: "⭐ 3 mois VIP 100% offerts",
+        vet_badge_offer: "💎 6 mois logiciel clinique offerts",
+
+        // Owner form strings
+        o_step1_badge: "Propriétaire · Étape 1/5 : Coordonnées",
+        o_step1_title: "Vos coordonnées en Algérie 📍",
+        o_step1_sub: "Renseignez vos informations pour rattacher votre carnet de santé.",
+        lbl_fullname: "Nom complet *", ph_fullname: "ex: Amine Benali",
+        lbl_phone: "Numéro de téléphone (SMS / WhatsApp) *", ph_phone: "05 / 06 / 07...",
+        lbl_email: "Adresse e-mail (facultatif)", ph_email: "votre.email@gmail.com",
+        lbl_wilaya: "Wilaya de résidence *",
+        lbl_commune: "Commune ou Quartier", ph_commune: "ex: Hydra, Kouba, Chéraga, Bab Ezzouar...",
+
+        o_step2_badge: "Propriétaire · Étape 2/5 : Fiche de l'animal",
+        o_step2_title: "Fiche de votre compagnon 🐾",
+        o_step2_sub: "Sélectionnez l'espèce et renseignez ses caractéristiques médicales de base.",
+        sp_dog: "Chien 🐶", sp_cat: "Chat 🐱", sp_bird: "Oiseau 🦜", sp_rodent: "Rongeur 🐹", sp_reptile: "Reptile 🦎", sp_other: "Autre 🐾",
+        lbl_petname: "Nom de l'animal *", ph_petname: "ex: Max, Luna, Rex, Mimi...",
+        lbl_breed: "Race de l'animal", ph_breed: "ex: Berger Allemand, Husky, Persan...",
+        lbl_gender: "Sexe de l'animal :",
+        g_male: "Mâle ♂", g_female: "Femelle ♀",
+        lbl_sterilize: "Statut de stérilisation (Case dédiée) :",
+        st_yes: "Oui, stérilisé(e) ✂️", st_no: "Non, pas stérilisé(e)", st_dk: "Je ne sais pas / À prévoir",
+        lbl_age_weight: "Âge et Poids estimé", ph_age: "Âge (ex: 2 ans)", ph_weight: "Poids (ex: 12 kg)",
+        lbl_ident: "Mode d'identification :",
+        id_chip: "Puce électronique (Microchip) 🏷️", id_tattoo: "Tatouage officiel ✍️", id_collar: "Collier avec médaille 🔔", id_none: "Aucune identification ❌",
+
+        o_step3_badge: "Propriétaire · Étape 3/5 : Habitudes & Soins",
+        o_step3_title: "Habitudes, Déplacements & Alimentation 🚗",
+        o_step3_sub: "Comment prenez-vous soin de votre animal au quotidien en Algérie ?",
+        lbl_visitfreq: "Fréquence moyenne des consultations par an :",
+        vf_more4: "+ de 4 fois / an 🏥", vf_2to4: "2 à 4 fois / an 🩺", vf_1: "1 fois / an (Rappels vaccins) 💉", vf_urg: "Uniquement en urgence 🚨",
+        lbl_transport: "Moyen de transport pour aller chez le vétérinaire :",
+        tr_car: "Voiture personnelle 🚗", tr_taxi: "Taxi / VTC avec accord chauffeur (Yassir/Heetch) 🚕", tr_walk: "À pied dans le quartier 🚶", tr_transit: "Transports en commun 🚌",
+        lbl_food: "Où achetez-vous l'alimentation et les soins ?",
+        fd_petshop: "Animalerie locale 🏬", fd_vet: "En clinique vétérinaire 🩺", fd_market: "Supermarché / Épicerie 🛒", fd_fb: "Groupes Facebook / Ouedkniss 🌐",
+        lbl_dist: "Distance jusqu'à votre clinique :",
+        dst_lt2: "< 2 km", dst_2to5: "2 à 5 km", dst_5to15: "5 à 15 km", dst_gt15: "+ de 15 km",
+
+        o_step4_badge: "Propriétaire · Étape 4/5 : Budget & Urgences",
+        o_step4_title: "Budget, Urgences & Modes de Règlement 💳",
+        o_step4_sub: "Ces données nous permettent d'adapter les partenariats en Algérie.",
+        lbl_budget: "Budget moyen mensuel (Alimentation + Soins) :",
+        bg_lt3: "< 3 000 DZD", bg_3to7: "3 000 à 7 000 DZD", bg_7to15: "7 000 à 15 000 DZD", bg_gt15: "+ 15 000 DZD",
+        lbl_vaccine: "Statut vaccinal actuel :",
+        vc_up: "Vaccins à jour ✅", vc_late: "En retard ⚠️", vc_never: "Jamais vacciné ❌",
+        lbl_nighturg: "Avez-vous déjà vécu une urgence de nuit ou un vendredi ?",
+        nu_hard: "Oui, c'était très angoissant de trouver un cabinet ouvert 🚨", nu_found: "Oui, j'ai trouvé après plusieurs appels 📞", nu_never: "Non, jamais heureusement 🙏",
+        lbl_paypref: "Moyen de règlement préféré :",
+        pay_cash: "Espèces (Cash) 💵", pay_bmob: "BaridiMob (QR Code / Virement) 📱", pay_cib: "Carte CIB / Edahabia 💳",
+
+        o_step5_badge: "Propriétaire · Étape 5/5 : Diagnostic & Offre VIP",
+        o_step5_title: "Votre avis libre & Programme Fondateur 🎟️",
+        o_step5_sub: "Aidez-nous à bâtir l'outil idéal pour l'Algérie et réservez votre accès VIP.",
+        lbl_missing_o: "Selon vous, que manque-t-il le plus pour la santé animale en Algérie ?",
+        ph_missing_o: "Ex: Urgences de nuit introuvables, perte récurrente du carnet papier, vaccins importés difficiles à trouver...",
+        vip_box_title_o: "Pass Membre Fondateur VIP DiaVet",
+        vip_box_sub_o: "Réservé aux 500 premiers propriétaires inscrits en Algérie",
+        vip_p1_o: "⭐ 3 mois d'accès VIP 100% offerts dès le lancement",
+        vip_p2_o: "📲 Carnet de santé numérique certifié & alertes SMS automatiques",
+        vip_p3_o: "🚨 Accès prioritaire au réseau d'urgences de garde 24/7",
+        vip_p4_o: "🎁 Remises exclusives sur l'alimentation et les soins partenaires",
+        lbl_channel_o: "Où souhaitez-vous recevoir votre lien d'activation VIP ?",
+        ch_sms: "Par WhatsApp / SMS 📱", ch_email: "Par E-mail ✉️",
+        ph_contact_input_o: "Votre contact...",
+
+        // Vet form strings (Algerian clinical realities)
+        v_step1_badge: "Vétérinaire · Étape 1/5 : Structure",
+        v_step1_title: "Votre profil & Cabinet vétérinaire 🩺",
+        v_step1_sub: "Renseignez les coordonnées de votre établissement en Algérie.",
+        lbl_vet_name: "Nom et prénom du praticien *", ph_vet_name: "Dr. ...",
+        lbl_clinic_name: "Nom de la structure / Clinique *", ph_clinic_name: "ex: Cabinet Vétérinaire El-Djazair",
+        lbl_vet_phone: "Numéro professionnel (SMS / WhatsApp) *",
+        lbl_vet_email: "Adresse e-mail professionnelle",
+
+        v_step2_badge: "Vétérinaire · Étape 2/5 : Plateau Technique",
+        v_step2_title: "Structure & Activités Réelles en Algérie 🏥",
+        v_step2_sub: "Précisez l'organisation et le plateau technique de votre cabinet.",
+        lbl_practice: "Type d'exercice :",
+        pr_indiv: "Cabinet libéral individuel 🏢", pr_clinic: "Clinique pluridisciplinaire 🏥", pr_itin: "Praticien itinérant / Soins à domicile 🚙",
+        lbl_spec: "Spécialité dominante :",
+        sp_canine: "Canine & Féline 🐶🐱", sp_mixte: "Mixte (Urbain & Rente) 🌾", sp_rurale: "Rurale (Bovins / Ovins) 🐄", sp_nac: "NAC & Exotique 🦜",
+        lbl_exp: "Années d'exercice clinique :",
+        exp_lt3: "< 3 ans", exp_3to7: "3 à 7 ans", exp_7to15: "7 à 15 ans", exp_gt15: "+ 15 ans",
+        lbl_team: "Taille de l'équipe soignante :",
+        tm_solo: "Praticien seul", tm_2to3: "2 à 3 personnes", tm_gt3: "4 personnes et plus",
+        lbl_services_algeria: "Prestations proposées au cabinet (Réalité Algérie) :",
+        srv_consult: "Consultations générales & Vaccins 💉",
+        srv_surg: "Chirurgie générale & Stérilisations 🔬",
+        srv_imagerie: "Échographie / Radiologie 🩻",
+        srv_lab: "Analyses rapides (Biochimie, tests Parvo/Carré) 🧪",
+        srv_daycare: "Mise en observation de jour & Perfusion 💧",
+        srv_home: "Visites et soins à domicile 🚙",
+        srv_pharm: "Pharmacie & Vente d'aliments diététiques 💊",
+
+        v_step3_badge: "Vétérinaire · Étape 3/5 : Gestion Quotidienne",
+        v_step3_title: "Organisation du cabinet & Outils actuels 💻",
+        v_step3_sub: "Comment gérez-vous vos consultations et votre pharmacie aujourd'hui ?",
+        lbl_consult_vol: "Volume moyen de consultations quotidiennes :",
+        cv_lt10: "< 10 / jour", cv_10to25: "10 à 25 / jour", cv_25to40: "25 à 40 / jour", cv_gt40: "+ 40 / jour",
+        lbl_stock: "Gestion des stocks de vaccins et consommables :",
+        stk_book: "Cahier manuscrit physique 📓", stk_excel: "Fichier Excel sur PC 💻", stk_visual: "Contrôle visuel direct 👀", stk_software: "Logiciel spécialisé 📦",
+        lbl_clientcomm: "Canal principal avec votre patientèle :",
+        comm_phone: "Appels téléphoniques directs 📞", comm_wa: "WhatsApp / Viber pro 📱", comm_fb: "Page Facebook / Instagram 💬",
+        lbl_timewaster: "Tâche administrative la plus chronophage :",
+        tw_vacc: "Rappels manuels de vaccins par téléphone ⏰", tw_paper: "Recherche des dossiers papier égarés 📂", tw_ordo: "Rédaction manuelle des ordonnances ✍️", tw_noshow: "Gestion des rendez-vous manqués et impayés ⚠️",
+
+        v_step4_badge: "Vétérinaire · Étape 4/5 : Honoraires & No-Show",
+        v_step4_title: "Honoraires, Rendez-vous manqués & Règlement 💰",
+        v_step4_sub: "Quantifions les défis économiques et la digitalisation des cliniques.",
+        lbl_fee: "Tarif moyen d'une consultation générale :",
+        fee_5to10: "500 à 1 000 DZD", fee_10to20: "1 000 à 2 000 DZD", fee_20to35: "2 000 à 3 500 DZD", fee_gt35: "+ 3 500 DZD",
+        lbl_noshow: "Taux estimé de rendez-vous manqués (No-show) :",
+        ns_lt5: "< 5% (Patients ponctuels)", ns_5to15: "5% à 15% de no-show", ns_15to30: "15% à 30% (Perte d'exploitation)", ns_gt30: "+ 30% d'absences",
+        lbl_teleconsult: "Intérêt pour un suivi post-opératoire rémunéré sur DiaVet :",
+        tc_fav: "Très favorable avec honoraires fixés par mon cabinet 🌟", tc_cond: "Intéressé sous conditions strictes ⚖️", tc_no: "Défavorable (présentiel uniquement) 🚫",
+
+        v_step5_badge: "Vétérinaire · Étape 5/5 : Diagnostic & Programme Fondateur",
+        v_step5_title: "Votre diagnostic & Programme Praticien VIP 💎",
+        v_step5_sub: "Exprimez vos besoins prioritaires et réservez les 6 mois offerts.",
+        lbl_missing_v: "Selon vous, que manque-t-il le plus aux logiciels vétérinaires en Algérie ?",
+        ph_missing_v: "Ex: Manque de rappels automatiques SMS/WhatsApp, ruptures de stocks de vaccins, logiciels étrangers trop chers...",
+        vip_box_title_v: "Programme Partenaire Praticien Fondateur VIP",
+        vip_box_sub_v: "Offre d'amorçage réservée aux 100 premiers cabinets pilotes en Algérie",
+        vip_p1_v: "💎 6 mois d'abonnement logiciel 100% offerts pour toute la clinique",
+        vip_p2_v: "🚀 Formation et installation gratuites de votre clinique",
+        vip_p3_v: "⭐ Visibilité prioritaire en tête d'annuaire national en Algérie",
+        vip_p4_v: "📲 Module anti no-show SMS/WhatsApp inclus dès le premier jour",
+
+        conf_congrats: "Félicitations",
+        conf_owner_sub: "Votre place VIP est confirmée. Le lien d'activation vous sera transmis sur votre contact.",
+        conf_vet_sub: "Votre structure est enregistrée au programme pilote national.",
+        badge_saved_db: "✓ Enregistré en Base de Données"
+      },
+
+      en: {
+        logo_sub: "Algeria · Animal Health",
+        nav_home: "Home", nav_about: "About DiaVet", nav_features: "Features & Pillars",
+        nav_forms: "Surveys & VIP", nav_contact: "Contact",
+        badge_cities: "Algiers · Oran · 58 Wilayas",
+        hero_tagline: "The Digital Veterinary Ecosystem",
+        hero_subtext: "One single platform for better animal health across Algeria.",
+        quote_hero: "Because they deserve the very best ♡",
+        btn_form_owner: "Pet Owner Survey 🐾",
+        btn_form_vet: "Veterinarian Survey 🩺",
+        btn_vip_hero: "⭐ Try DiaVet as a VIP",
+        platform_badge: "✨ Everything Inside DiaVet",
+        eco_title: "One complete platform, two connected worlds",
+        eco_desc: "DiaVet connects veterinary clinics and pet families in real time across Algeria.",
+        owner_card_title: "Pet Owner Space",
+        eco_owner_sub: "The all-in-one mobile app for your companion in Algeria",
+        f_carnet_h: "Certified Digital Health Record",
+        f_carnet_t: "Complete vaccine history, deworming tracking and automatic SMS reminders.",
+        f_rdv_h: "24/7 Instant Online Booking",
+        f_rdv_t: "Select your neighborhood clinic and veterinarian with instant SMS confirmation.",
+        f_urg_h: "Real-Time Geolocated Emergency Network",
+        f_urg_t: "Instantly find open clinics and on-duty veterinarians on nights and Fridays.",
+        f_mkt_h: "Certified Nutrition & Care Marketplace",
+        f_mkt_t: "Therapeutic pet food, premium kibble, and accessories recommended by vets.",
+        vet_card_title: "Veterinary Clinic Space",
+        eco_vet_sub: "Modern practice software tailored for Algerian clinical realities",
+        f_dossier_h: "Digital Patient Medical Records",
+        f_dossier_t: "Consultations, medical history, ultrasound/X-ray imaging, and weight curves.",
+        f_agenda_h: "Smart Anti-No-Show Calendar",
+        f_agenda_t: "Drastically reduce missed appointments with automated WhatsApp/SMS reminders.",
+        f_ordo_h: "Prescription & Dosage Generator",
+        f_ordo_t: "Automatic dosage calculation based on animal weight with clinic logo print.",
+        f_pay_h: "Invoicing, Quotes & BaridiMob",
+        f_pay_t: "Multi-payment management tailored to Algeria: Cash, BaridiMob, and CIB cards.",
+        card_badge_owner: "For Pet Owners 🐾",
+        card_badge_vet: "For Veterinarians 🩺",
+        owner_card_desc: "Care for your pet with complete peace of mind. Digital vaccine records, instant booking, and on-duty emergency tracking.",
+        vet_card_desc: "Modernize your clinic with our complete software. Shared medical records, imaging, no-show reduction, and Algerian billing.",
+        mid_title: "Two worlds united for superior animal healthcare",
+        mid_desc: "DiaVet is the first digital bridge specifically crafted for the daily challenges of veterinarians and pet owners in Algeria.",
+        pil_1: "24/7 Geolocated Emergencies", pil_2: "Shared Medical Records", pil_3: "Anti-No-Show Engine", pil_4: "BaridiMob Integration",
+        pano_quote: "“In the heart of Algiers Bay... Together for excellence in animal health.”",
+        pano_desc: "Join partner clinics and pioneering pet owners enrolled in the Algeria launch program today.",
+        footer_copy: "© 2026 DiaVet Algeria · First digital animal healthcare ecosystem. All rights reserved.",
+        
+        btn_next: "Next →", btn_back: "← Back", btn_finish: "Claim VIP Pass ⭐", btn_close: "Close",
+        choose_title: "Choose your profile",
+        choose_sub: "Select your profile to customize questions and claim your founder benefits.",
+        owner_badge_offer: "⭐ 3 Months Free VIP Access",
+        vet_badge_offer: "💎 6 Months Free Clinic Software",
+
+        o_step1_badge: "Pet Owner · Step 1/5: Contact Info",
+        o_step1_title: "Your Details in Algeria 📍",
+        o_step1_sub: "Enter your information to connect your health record and receive your VIP Pass.",
+        lbl_fullname: "Full Name *", ph_fullname: "e.g. Amine Benali",
+        lbl_phone: "Phone Number (SMS / WhatsApp) *", ph_phone: "05 / 06 / 07...",
+        lbl_email: "Email Address (Optional)", ph_email: "your.email@gmail.com",
+        lbl_wilaya: "Wilaya of Residence *",
+        lbl_commune: "Commune / Neighborhood", ph_commune: "e.g. Hydra, Kouba, Cheraga, Bab Ezzouar...",
+
+        o_step2_badge: "Pet Owner · Step 2/5: Pet Profile",
+        o_step2_title: "Your Pet's Profile 🐾",
+        o_step2_sub: "Select species and provide baseline medical information.",
+        sp_dog: "Dog 🐶", sp_cat: "Cat 🐱", sp_bird: "Bird 🦜", sp_rodent: "Rodent 🐹", sp_reptile: "Reptile 🦎", sp_other: "Other 🐾",
+        lbl_petname: "Pet's Name *", ph_petname: "e.g. Max, Luna, Rex, Mimi...",
+        lbl_breed: "Pet Breed", ph_breed: "e.g. German Shepherd, Persian...",
+        lbl_gender: "Pet Gender:",
+        g_male: "Male ♂", g_female: "Female ♀",
+        lbl_sterilize: "Sterilization Status (Dedicated Box):",
+        st_yes: "Yes, sterilized ✂️", st_no: "No, not sterilized", st_dk: "I don't know / Planned",
+        lbl_age_weight: "Estimated Age & Weight", ph_age: "Age (e.g. 2 yrs)", ph_weight: "Weight (e.g. 12 kg)",
+        lbl_ident: "Pet Identification:",
+        id_chip: "Microchip 🏷️", id_tattoo: "Official Tattoo ✍️", id_collar: "Collar Tag 🔔", id_none: "None ❌",
+
+        o_step3_badge: "Pet Owner · Step 3/5: Habits & Care",
+        o_step3_title: "Care, Travel & Nutrition 🚗",
+        o_step3_sub: "How do you manage your pet's healthcare routine in Algeria?",
+        lbl_visitfreq: "Average vet visits per year:",
+        vf_more4: "4+ times / yr 🏥", vf_2to4: "2 to 4 times / yr 🩺", vf_1: "Once a year (Vaccines) 💉", vf_urg: "Emergencies only 🚨",
+        lbl_transport: "Transportation method to the vet clinic:",
+        tr_car: "Personal car 🚗", tr_taxi: "Taxi / Yassir / Heetch 🚕", tr_walk: "Walking in neighborhood 🚶", tr_transit: "Public transit 🚌",
+        lbl_food: "Where do you buy pet food & care products?",
+        fd_petshop: "Local pet shop 🏬", fd_vet: "At the vet clinic 🩺", fd_market: "Supermarket 🛒", fd_fb: "Facebook groups / Ouedkniss 🌐",
+        lbl_dist: "Distance to your usual clinic:",
+        dst_lt2: "< 2 km", dst_2to5: "2 to 5 km", dst_5to15: "5 to 15 km", dst_gt15: "15+ km",
+
+        o_step4_badge: "Pet Owner · Step 4/5: Budget & Emergencies",
+        o_step4_title: "Budget, Emergencies & Payment 💳",
+        o_step4_sub: "This data helps us calibrate prices and partnerships in Algeria.",
+        lbl_budget: "Average monthly pet budget (Food + Care):",
+        bg_lt3: "< 3,000 DZD", bg_3to7: "3,000 to 7,000 DZD", bg_7to15: "7,000 to 15,000 DZD", bg_gt15: "+ 15,000 DZD",
+        lbl_vaccine: "Current vaccination status:",
+        vc_up: "Up to date ✅", vc_late: "Overdue ⚠️", vc_never: "Never vaccinated ❌",
+        lbl_nighturg: "Have you ever faced a night or Friday emergency?",
+        nu_hard: "Yes, it was very distressing to find an open clinic 🚨", nu_found: "Yes, found after multiple phone calls 📞", nu_never: "No, never luckily 🙏",
+        lbl_paypref: "Preferred payment method in Algeria:",
+        pay_cash: "Cash 💵", pay_bmob: "BaridiMob (QR Code / Transfer) 📱", pay_cib: "CIB / Edahabia Card 💳",
+
+        o_step5_badge: "Pet Owner · Step 5/5: Feedback & VIP Offer",
+        o_step5_title: "Your Honest Feedback & Founder VIP 🎟️",
+        o_step5_sub: "Help us build the ideal platform for Algeria and claim your VIP Pass.",
+        lbl_missing_o: "In your opinion, what is missing most for animal health in Algeria?",
+        ph_missing_o: "e.g. Night emergency clinics, lost paper records, shortages of imported vaccines...",
+        vip_box_title_o: "DiaVet VIP Founder Member Pass",
+        vip_box_sub_o: "Reserved for the first 500 registered pet owners in Algeria",
+        vip_p1_o: "⭐ 3 Months 100% Free VIP Access from launch",
+        vip_p2_o: "📲 Certified Digital Health Record & SMS alerts",
+        vip_p3_o: "🚨 Priority access to 24/7 on-duty emergency clinics",
+        vip_p4_o: "🎁 Exclusive partner discounts on pet food and care",
+        lbl_channel_o: "Where should we send your VIP activation link?",
+        ch_sms: "Via WhatsApp / SMS 📱", ch_email: "Via Email ✉️",
+        ph_contact_input_o: "Your contact info...",
+
+        // Vet Form (Algeria Reality)
+        v_step1_badge: "Veterinarian · Step 1/5: Practice Info",
+        v_step1_title: "Practitioner Profile & Clinic 🩺",
+        v_step1_sub: "Enter your practice details for the Algeria pilot program.",
+        lbl_vet_name: "Practitioner Full Name *", ph_vet_name: "Dr. ...",
+        lbl_clinic_name: "Clinic or Practice Name *", ph_clinic_name: "e.g. El-Djazair Veterinary Clinic",
+        lbl_vet_phone: "Professional Phone (SMS / WhatsApp) *",
+        lbl_vet_email: "Professional Email Address",
+
+        v_step2_badge: "Veterinarian · Step 2/5: Facilities & Services",
+        v_step2_title: "Practice & Real Services in Algeria 🏥",
+        v_step2_sub: "Describe your clinical setup and services offered.",
+        lbl_practice: "Practice structure:",
+        pr_indiv: "Solo private practice 🏢", pr_clinic: "Multi-vet clinic 🏥", pr_itin: "Mobile / Home visits 🚙",
+        lbl_spec: "Dominant specialty:",
+        sp_canine: "Small Animal (Dogs & Cats) 🐶🐱", sp_mixte: "Mixed Practice 🌾", sp_rurale: "Livestock & Rural 🐄", sp_nac: "Exotic & Birds 🦜",
+        lbl_exp: "Years of clinical practice:",
+        exp_lt3: "< 3 years", exp_3to7: "3 to 7 years", exp_7to15: "7 to 15 years", exp_gt15: "+ 15 years",
+        lbl_team: "Team size:",
+        tm_solo: "Solo practitioner", tm_2to3: "2 to 3 staff", tm_gt3: "4+ staff",
+        lbl_services_algeria: "Services offered (Algeria Reality):",
+        srv_consult: "General Consultations & Vaccines 💉",
+        srv_surg: "General Surgery & Spaying/Neutering 🔬",
+        srv_imagerie: "Ultrasound / Digital X-Ray 🩻",
+        srv_lab: "Rapid Blood Tests (Parvo/Distemper kits) 🧪",
+        srv_daycare: "Daytime Observation & IV Therapy 💧",
+        srv_home: "Home Visits & Consultations 🚙",
+        srv_pharm: "Veterinary Pharmacy & Dietetic Food 💊",
+
+        v_step3_badge: "Veterinarian · Step 3/5: Daily Operations",
+        v_step3_title: "Clinic Operations & Current Tools 💻",
+        v_step3_sub: "How do you track consultations and vaccines today?",
+        lbl_consult_vol: "Daily consultation volume:",
+        cv_lt10: "< 10 / day", cv_10to25: "10 to 25 / day", cv_25to40: "25 to 40 / day", cv_gt40: "+ 40 / day",
+        lbl_stock: "Vaccine & pharmacy stock tracking:",
+        stk_book: "Physical logbook 📓", stk_excel: "Excel spreadsheet 💻", stk_visual: "Visual check 👀", stk_software: "Specialized software 📦",
+        lbl_clientcomm: "Primary communication channel with clients:",
+        comm_phone: "Direct phone calls 📞", comm_wa: "Professional WhatsApp / Viber 📱", comm_fb: "Clinic Facebook / Instagram 💬",
+        lbl_timewaster: "Most time-consuming administrative burden:",
+        tw_vacc: "Manual vaccine phone reminders ⏰", tw_paper: "Searching for misplaced paper files 📂", tw_ordo: "Handwriting prescriptions & dosages ✍️", tw_noshow: "Managing missed appointments & unpaid fees ⚠️",
+
+        v_step4_badge: "Veterinarian · Step 4/5: Fees & No-Show",
+        v_step4_title: "Fees, Missed Appointments & Payment 💰",
+        v_step4_sub: "Quantifying practice challenges and digital adoption.",
+        lbl_fee: "Average consultation fee:",
+        fee_5to10: "500 to 1,000 DZD", fee_10to20: "1,000 to 2,000 DZD", fee_20to35: "2,000 to 3,500 DZD", fee_gt35: "+ 3,500 DZD",
+        lbl_noshow: "Estimated no-show rate:",
+        ns_lt5: "< 5% (Punctual)", ns_5to15: "5% to 15% no-show", ns_15to30: "15% to 30% (Revenue loss)", ns_gt30: "+ 30% no-show",
+        lbl_teleconsult: "Interest in paid digital follow-up consultations on DiaVet:",
+        tc_fav: "Very interested with custom fee 🌟", tc_cond: "Interested under strict guidelines ⚖️", tc_no: "Not interested (in-person only) 🚫",
+
+        v_step5_badge: "Veterinarian · Step 5/5: Software Diagnostic & VIP",
+        v_step5_title: "Your Clinical Feedback & Founder VIP 💎",
+        v_step5_sub: "Share your priority needs and claim 6 free months for your clinic.",
+        lbl_missing_v: "In your opinion, what is missing most in veterinary software in Algeria?",
+        ph_missing_v: "e.g. Lack of automated WhatsApp reminders, drug shortages tracking, foreign software too expensive...",
+        vip_box_title_v: "Founder Practitioner VIP Partner Program",
+        vip_box_sub_v: "Early-stage offer reserved for the first 100 pilot clinics in Algeria",
+        vip_p1_v: "💎 6 Months 100% Free Practice Software",
+        vip_p2_v: "🚀 Free clinic setup & staff training",
+        vip_p3_v: "⭐ Priority top-listing on the national directory",
+        vip_p4_v: "📲 SMS/WhatsApp anti-no-show module included from day 1",
+
+        conf_congrats: "Congratulations",
+        conf_owner_sub: "Your VIP pass is confirmed. Your activation link will be sent to your contact.",
+        conf_vet_sub: "Your clinic has been registered in the national pilot program.",
+        badge_saved_db: "✓ Saved in Database"
+      },
+
+      ar: {
+        logo_sub: "الجزائر · صحة الحيوان",
+        nav_home: "الرئيسية", nav_about: "عن ديافيت", nav_features: "الأركان والميزات",
+        nav_forms: "الاستبيانات وVIP", nav_contact: "اتصل بنا",
+        badge_cities: "الجزائر · وهران · 58 ولاية",
+        hero_tagline: "المنظومة الرقمية البيطرية",
+        hero_subtext: "منصة واحدة متكاملة لصحة حيوانية أفضل في الجزائر.",
+        quote_hero: "لأنهم يستحقون الأفضل دائماً ♡",
+        btn_form_owner: "استبيان أصحاب الحيوانات 🐾",
+        btn_form_vet: "استبيان الأطباء البيطريين 🩺",
+        btn_vip_hero: "⭐ تجربة ديافيت كعضو VIP",
+        platform_badge: "✨ كل ما تحتويه ديافيت",
+        eco_title: "منصة شاملة، عالمان متصلان في الوقت الحقيقي",
+        eco_desc: "تربط ديافيت بين العيادات البيطرية وأصحاب الحيوانات في جميع أنحاء الجزائر في الوقت الفعلي.",
+        owner_card_title: "فضاء أصحاب الحيوانات",
+        eco_owner_sub: "التطبيق الذكي الشامل لرعاية رفيقك في الجزائر",
+        f_carnet_h: "دفتر صحي رقمي معتمد",
+        f_carnet_t: "سجل متكامل للقاحات ومضادات الطفيليات مع تنبيهات تلقائية عبر الرسائل النصية والواتساب.",
+        f_rdv_h: "حجز المواعيد إلكترونياً 24/7",
+        f_rdv_t: "اختر العيادة الأقرب إليك وطبيبك المفضل مع تأكيد فوري عبر الواتساب والرسائل القصيرة.",
+        f_urg_h: "شبكة طوارئ بيطرية محددة جغرافياً",
+        f_urg_t: "اعثر فوراً على العيادات المداومة والمفتوحة ليلاً وأيام الجمعة والعطل الرسمية في الجزائر.",
+        f_mkt_h: "سوق معتمد للأغذية والرعاية",
+        f_mkt_t: "أغذية علاجية، دراي فود ممتاز ومستلزمات موصى بها من قِبل الأطباء البيطريين.",
+        vet_card_title: "فضاء العيادات والأطباء البيطريين",
+        eco_vet_sub: "برمجية إدارة العيادات الحديثة المصممة خصيصاً للواقع الجزائري",
+        f_dossier_h: "الملف الطبي الرقمي للمريض",
+        f_dossier_t: "متابعة الفحوصات، السوابق المرضية، صور الأشعة والموجات فوق الصوتية بنقرة واحدة.",
+        f_agenda_h: "جدول مواعيد ذكي لمكافحة الغياب",
+        f_agenda_t: "تقليص المواعيد المهدورة بفضل التذكير الآلي للمربين عبر الواتساب والرسائل النصية.",
+        f_ordo_h: "منشئ الوصفات الطبية وحساب الجرعات",
+        f_ordo_t: "حساب تلقائي دقيق للجرعات وفق وزن الحيوان مع طباعة فورية بالختم والشعار الرسمي.",
+        f_pay_h: "الفواتير، التقديرات والدفع ببريدي موب",
+        f_pay_t: "إدارة وسائل الدفع المتعددة في الجزائر: نقداً، تحويلات بريدي موب والبطاقات الذهبية CIB.",
+        card_badge_owner: "لأصحاب الحيوانات 🐾",
+        card_badge_vet: "للأطباء البيطريين 🩺",
+        owner_card_desc: "تابع صحة رفيقك باطمئنان تام. دفتر صحي إلكتروني، حجز مواعيد فوري، وطوارئ بيطرية مداومة في الجزائر.",
+        vet_card_desc: "طور عيادتك مع برنامجنا البيطري المتكامل. ملفات رقمية مشتركة، صور إشعاعية، والحد من تخلف الزبائن.",
+        mid_title: "عالمان يلتقيان من أجل صحة ورعاية بيطرية مثالية",
+        mid_desc: "ديافيت هي أول منصة جزائرية صُممت لمواجهة التحديات اليومية للأطباء البيطريين ومربي الحيوانات.",
+        pil_1: "طوارئ مداومة 24/7", pil_2: "ملف طبي رقمي مشترك", pil_3: "نظام مكافحة الغياب", pil_4: "دفع آمن ببريدي موب",
+        pano_quote: "«في قلب خليج الجزائر... معاً من أجل صحة بيطرية رائدة.»",
+        pano_desc: "انضم اليوم إلى نخبة العيادات والمربين الأوائل المسجلين في برنامج الإطلاق الرسمي بالجزائر.",
+        footer_copy: "© 2026 ديافيت الجزائر · أول منظومة رقمية للصحة الحيوانية. جميع الحقوق محفوظة.",
+        
+        btn_next: "التالي ←", btn_back: "رجوع →", btn_finish: "احصل على بطاقة VIP ⭐", btn_close: "إغلاق",
+        choose_title: "اختر فئتك",
+        choose_sub: "حدد مجالك لتخصيص الاستبيان والحصول على مزايا الأعضاء المؤسسين.",
+        owner_badge_offer: "⭐ 3 أشهر اشتراك VIP مجاناً",
+        vet_badge_offer: "💎 6 أشهر مجانية لبرنامج العيادة",
+
+        o_step1_badge: "المربي · الخطوة 1/5: معلومات الاتصال",
+        o_step1_title: "معلومات الاتصال الخاصة بك في الجزائر 📍",
+        o_step1_sub: "يرجى ملء البيانات لربط حسابك والحصول على تذكرة VIP الخاصة بك.",
+        lbl_fullname: "الاسم الكامل *", ph_fullname: "مثال: أمين بن علي",
+        lbl_phone: "رقم الهاتف (واتساب / رسائل قصيرة) *", ph_phone: "05 / 06 / 07...",
+        lbl_email: "البريد الإلكتروني (اختياري)", ph_email: "votre.email@gmail.com",
+        lbl_wilaya: "ولاية الإقامة *",
+        lbl_commune: "البلدية أو الحي", ph_commune: "مثال: حيدرة، القبة، الشراقة، باب الزوار...",
+
+        o_step2_badge: "المربي · الخطوة 2/5: بطاقة الحيوان",
+        o_step2_title: "بطاقة تعريف رفيقك 🐾",
+        o_step2_sub: "اختر نوع الحيوان وسجل خصائصه الطبية.",
+        sp_dog: "كلب 🐶", sp_cat: "قط 🐱", sp_bird: "طائر 🦜", sp_rodent: "قوارض 🐹", sp_reptile: "زواحف 🦎", sp_other: "حيوان آخر 🐾",
+        lbl_petname: "اسم الحيوان *", ph_petname: "مثال: ماكس، لونا، ريكس، ميمي...",
+        lbl_breed: "السلالة", ph_breed: "مثال: جيرمن شيبرد، شيرازي، سيامي...",
+        lbl_gender: "جنس الحيوان :",
+        g_male: "ذكر ♂", g_female: "أنثى ♀",
+        lbl_sterilize: "حالة التعقيم (خانة مخصصة مستقلة) :",
+        st_yes: "نعم، معقم ✂️", st_no: "لا، غير معقم", st_dk: "لا أعلم / قيد التخطيط",
+        lbl_age_weight: "العمر والوزن التقديري", ph_age: "العمر (مثال: سنتين)", ph_weight: "الوزن (مثال: 12 كلغ)",
+        lbl_ident: "تعريف وتمييز الحيوان :",
+        id_chip: "شريحة إلكترونية (Microchip) 🏷️", id_tattoo: "وشم بيطري رسمي ✍️", id_collar: "طوق مع لوحة معدنية 🔔", id_none: "بدون أي تعريف ❌",
+
+        o_step3_badge: "المربي · الخطوة 3/5: العادات والرعاية",
+        o_step3_title: "العادات، التنقل والتغذية 🚗",
+        o_step3_sub: "كيف تنظم رعاية وفحوصات حيوانك يومياً في الجزائر؟",
+        lbl_visitfreq: "معدل الزيارات للعيادة البيطرية سنوياً:",
+        vf_more4: "أكثر من 4 مرات سنوياً 🏥", vf_2to4: "2 إلى 4 مرات سنوياً 🩺", vf_1: "مرة واحدة (تلقيح سنوي) 💉", vf_urg: "في حالات الطوارئ فقط 🚨",
+        lbl_transport: "وسيلة النقل المستخدمة للذهاب للعيادة:",
+        tr_car: "سيارة خاصة 🚗", tr_taxi: "تاكسي / يسير / هيتش باتفاق السائق 🚕", tr_walk: "سيراً على الأقدام في الحي 🚶", tr_transit: "وسائل النقل العمومي 🚌",
+        lbl_food: "من أين تشتري طعامه ومستلزمات العناية به؟",
+        fd_petshop: "محل بيع مستلزمات الحيوانات 🏬", fd_vet: "مباشرة من العيادة البيطرية 🩺", fd_market: "السوبرماركت / المحلات 🛒", fd_fb: "مجموعات فيسبوك / واد كنيس 🌐",
+        lbl_dist: "المسافة حتى العيادة المعتادة:",
+        dst_lt2: "أقل من 2 كلم", dst_2to5: "2 إلى 5 كلم", dst_5to15: "5 إلى 15 كلم", dst_gt15: "أكثر من 15 كلم",
+
+        o_step4_badge: "المربي · الخطوة 4/5: الميزانية والطوارئ",
+        o_step4_title: "الميزانية، الطوارئ وطرق الدفع 💳",
+        o_step4_sub: "تساعدنا هذه البيانات في ضبط شراكات وأسعار ملائمة في الجزائر.",
+        lbl_budget: "الميزانية الشهرية المخصصة (أكل + رعاية):",
+        bg_lt3: "أقل من 3,000 دج", bg_3to7: "3,000 إلى 7,000 دج", bg_7to15: "7,000 إلى 15,000 دج", bg_gt15: "أكثر من 15,000 دج",
+        lbl_vaccine: "الوضع الحالي للتطعيمات واللقاحات:",
+        vc_up: "اللقاحات محدثة ✅", vc_late: "متأخرة عن موعدها ⚠️", vc_never: "لم يُلقح إطلاقاً ❌",
+        lbl_nighturg: "هل واجهت يوماً حالة طوارئ ليلاً أو يوم جمعة؟",
+        nu_hard: "نعم، وكان أمراً مقلقاً وصعباً لإيجاد عيادة مفتوحة 🚨", nu_found: "نعم، ووجدت بعد اتصالات هاتفية عديدة 📞", nu_never: "لا، لم يحدث بحمد الله 🙏",
+        lbl_paypref: "طريقة الدفع المفضلة لديك في الجزائر:",
+        pay_cash: "نقداً (كاش) 💵", pay_bmob: "بريدي موب (QR Code / تحويل) 📱", pay_cib: "بطاقة ذهبية / CIB 💳",
+
+        o_step5_badge: "المربي · الخطوة 5/5: التشخيص وعرض VIP",
+        o_step5_title: "رأيكم الصريح وبرنامج العضو المؤسس 🎟️",
+        o_step5_sub: "شاركنا تطلعاتك لنبني المنصة المثالية للجزائر وتأكيد بطاقتك.",
+        lbl_missing_o: "برأيك، ما هو النقص الأكبر في قطاع الرعاية الحيوانية بالجزائر؟",
+        ph_missing_o: "مثال: غياب عيادات مداومة ليلاً، ضياع الدفتر الصحي الورقي، نقص اللقاحات المستوردة...",
+        vip_box_title_o: "بطاقة العضو المؤسس VIP ديافيت",
+        vip_box_sub_o: "مخصصة لأول 500 مربي حيوان مسجل في الجزائر",
+        vip_p1_o: "⭐ 3 أشهر اشتراك VIP مجاناً 100% عند الإطلاق",
+        vip_p2_o: "📲 دفتر صحي رقمي معتمد وتذكير آلي بالرسائل",
+        vip_p3_o: "🚨 أولوية الوصول لشبكة الطوارئ المداومة 24/7",
+        vip_p4_o: "🎁 تخفيضات حصرية على أغذية ومستلزمات الحيوانات",
+        lbl_channel_o: "أين ترغب في استلام رابط تفعيل بطاقة VIP؟",
+        ch_sms: "عبر الواتساب / رسالة قصيرة 📱", ch_email: "عبر البريد الإلكتروني ✉️",
+        ph_contact_input_o: "بيانات الاتصال بك...",
+
+        // Vet Form (Algeria Reality)
+        v_step1_badge: "البيطري · الخطوة 1/5: الهوية والعيادة",
+        v_step1_title: "الملف المهني والعيادة البيطرية 🩺",
+        v_step1_sub: "سجل بيانات عيادتك للمشاركة في البرنامج الوطني التجريبي.",
+        lbl_vet_name: "الاسم الكامل للطبيب البيطري *", ph_vet_name: "د. ...",
+        lbl_clinic_name: "اسم العيادة أو المذبح البيطري *", ph_clinic_name: "مثال: عيادة الجزائر البيطرية",
+        lbl_vet_phone: "الهاتف المهني (واتساب / رسائل قصيرة) *",
+        lbl_vet_email: "البريد الإلكتروني المهني",
+
+        v_step2_badge: "البيطري · الخطوة 2/5: التجهيزات والخدمات",
+        v_step2_title: "الهيكل والخدمات الفعلية في الجزائر 🏥",
+        v_step2_sub: "حدد طبيعة نشاطك والتجهيزات المتوفرة في عيادتك.",
+        lbl_practice: "نوع الممارسة البيطرية:",
+        pr_indiv: "عيادة خاصة فردية 🏢", pr_clinic: "عيادة بيطرية جماعية 🏥", pr_itin: "طبيب متنقل / زيارات منزلية 🚙",
+        lbl_spec: "التخصص الغالب في النشاط:",
+        sp_canine: "حيوانات أليفة (كلاب وقطط) 🐶🐱", sp_mixte: "مختلط (حضري ومواشي) 🌾", sp_rurale: "مواشي وريف (أبقار وأغنام) 🐄", sp_nac: "طيور وحيوانات نادرة 🦜",
+        lbl_exp: "سنوات الخبرة في الممارسة الميدانية:",
+        exp_lt3: "أقل من 3 سنوات", exp_3to7: "3 إلى 7 سنوات", exp_7to15: "7 إلى 15 سنة", exp_gt15: "أكثر من 15 سنة",
+        lbl_team: "حجم الفريق المساعد:",
+        tm_solo: "طبيب بمفرده", tm_2to3: "شخصان إلى 3 أشخاص", tm_gt3: "4 أشخاص فما فوق",
+        lbl_services_algeria: "الخدمات المتوفرة في العيادة (الواقع الجزائري):",
+        srv_consult: "فحوصات عامة وتطعيمات 💉",
+        srv_surg: "جراحة عامة وعمليات التعقيم 🔬",
+        srv_imagerie: "تصوير بالأشعة والإيكوغرافي 🩻",
+        srv_lab: "تحاليل سريعة (كواشف البارفو والديستمبر) 🧪",
+        srv_daycare: "وضع تحت المراقبة النهارية والسيروم 💧",
+        srv_home: "زيارات وفحوصات منزلية 🚙",
+        srv_pharm: "صيدلية بيطرية وأغذية حمية علاجية 💊",
+
+        v_step3_badge: "البيطري · الخطوة 3/5: الإدارة اليومية",
+        v_step3_title: "تنظيم العيادة والأدوات المستعملة 💻",
+        v_step3_sub: "كيف تدير الفحوصات ومخزون الأدوية في نشاطك الحالي؟",
+        lbl_consult_vol: "معدل الاستشارات اليومية في العيادة:",
+        cv_lt10: "أقل من 10 يومياً", cv_10to25: "10 إلى 25 يومياً", cv_25to40: "25 إلى 40 يومياً", cv_gt40: "أكثر من 40 استشارة يومياً",
+        lbl_stock: "تسيير مخزون اللقاحات والأدوية:",
+        stk_book: "سجل ورقي يدوي 📓", stk_excel: "ملف إكسيل على الكمبيوتر 💻", stk_visual: "مراقبة بصرية مباشرة بالصيدلية 👀", stk_software: "برنامج بيطري متخصص 📦",
+        lbl_clientcomm: "قناة التواصل الأساسية مع الزبائن:",
+        comm_phone: "مكالمات هاتفية مباشرة 📞", comm_wa: "واتساب / فايبر مهني 📱", comm_fb: "صفحة فيسبوك / إنستغرام 💬",
+        lbl_timewaster: "المهمة الإدارية الأكثر استنزافاً للوقت:",
+        tw_vacc: "التذكير اليدوي بمواعيد اللقاح بالهاتف ⏰", tw_paper: "البحث في الملفات الورقية الضائعة 📂", tw_ordo: "كتابة الوصفات وحساب الجرعات يدوياً ✍️", tw_noshow: "التعامل مع تخلف الزبائن والديون ⚠️",
+
+        v_step4_badge: "البيطري · الخطوة 4/5: الأتعاب والغياب",
+        v_step4_title: "أتعاب الكشف، المواعيد الضائعة والدفع 💰",
+        v_step4_sub: "تقييم التحديات الاقتصادية والرقمنة لدى العيادات الجزائرية.",
+        lbl_fee: "متوسط تسعيرة الاستشارة العامة:",
+        fee_5to10: "500 إلى 1,000 دج", fee_10to20: "1,000 إلى 2,000 دج", fee_20to35: "2,000 إلى 3,500 دج", fee_gt35: "أكثر من 3,500 دج",
+        lbl_noshow: "نسبة المواعيد غير المحترمة (تخلف الزبائن):",
+        ns_lt5: "أقل من 5% (انضباط ممتاز)", ns_5to15: "5% إلى 15% تخلف", ns_15to30: "15% إلى 30% (خسارة دخل معتبرة)", ns_gt30: "أكثر من 30% غياب",
+        lbl_teleconsult: "الاهتمام بالمتابعة والاستشارات الرقمية مدفوعة الأجر عبر ديافيت:",
+        tc_fav: "متحمس جداً مع تحديد تسعيرتي الخاصة 🌟", tc_cond: "مهتم بشروط أخلاقية مهنية دقيقة ⚖️", tc_no: "غير مهتم (فحوصات حضورية فقط) 🚫",
+
+        v_step5_badge: "البيطري · الخطوة 5/5: التشخيص وبرنامج VIP",
+        v_step5_title: "تشخيصك المهني وعرض الطبيب المؤسس 💎",
+        v_step5_sub: "عبر عن احتياجات عيادتك واستفد من 6 أشهر مجانية بالكامل.",
+        lbl_missing_v: "برأيك، ما الذي ينقص البرمجيات البيطرية الحالية في الجزائر؟",
+        ph_missing_v: "مثال: عدم ملاءمة البرامج الأجنبية، غياب رسائل تذكير تلقائية للمربين، صعوبة تسيير نفاد اللقاحات...",
+        vip_box_title_v: "برنامج الشريك البيطري المؤسس VIP",
+        vip_box_sub_v: "عرض تدشين محجوز لأول 100 عيادة رائدة في الجزائر",
+        vip_p1_v: "💎 6 أشهر اشتراك مجاني 100% في برنامج العيادة",
+        vip_p2_v: "🚀 تنصيب وتدريب مجاني شامل لطاقم العيادة",
+        vip_p3_v: "⭐ ظهور أول في دليل الأطباء البيطريين الوطني",
+        vip_p4_v: "📲 نظام آلي لمكافحة الغياب وتذكير الزبائن بالواتساب",
+
+        conf_congrats: "تهانينا",
+        conf_owner_sub: "تم تأكيد بطاقتك VIP بنجاح. سيتم إرسال رابط التفعيل إلى وسيلة الاتصال التي اخترتها.",
+        conf_vet_sub: "تم تسجيل عيادتكم في البرنامج الوطني التجريبي.",
+        badge_saved_db: "✓ تم الحفظ في قاعدة البيانات"
+      }
+    };
+
+    // ==========================================
+    // GLOBAL STATE (ZERO DEFAULT PRE-SELECTION)
+    // ==========================================
+    let currentLang = 'fr';
+    let currentTheme = 'dark';
+    let currentFlow = 'choose';
+    let currentStep = 0;
+
+    // All fields empty initially - user must choose!
+    const ownerData = {
+      fullName: '', phone: '', email: '', wilaya: '', commune: '',
+      petName: '', species: '', breed: '', gender: '', sterilized: '', age: '', weight: '',
+      identification: '', visitFrequency: '', transportMode: '', foodSource: '', distance: '',
+      budget: '', vaccineStatus: '', nightEmergencyExp: '', paymentPreference: '',
+      missingThings: '', receiveChannel: '', vipId: ''
+    };
+
+    const vetData = {
+      fullName: '', clinicName: '', phone: '', email: '', wilaya: '', commune: '',
+      practiceType: '', specialty: '', experienceYears: '', teamSize: '', servicesOffered: [],
+      dailyPatients: '', stockManagement: '', clientCommunication: '', biggestTimeWaster: '',
+      consultationFee: '', noShowRate: '', teleconsultationInterest: '',
+      missingThings: '', receiveChannel: '', vipId: ''
+    };
+
+    // ==========================================
+    // LANGUAGE & THEME CONTROLS
+    // ==========================================
+    function switchLanguage(lang) {
+      currentLang = lang;
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+      document.querySelectorAll('.lang-item').forEach(btn => {
+        btn.classList.toggle('active', btn.innerText.toLowerCase() === lang);
+      });
+
+      const t = i18n[lang];
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t && t[key]) el.innerText = t[key];
+      });
+
+      // Update active modal immediately if open
+      if (document.getElementById('formModal').classList.contains('active')) {
+        renderModal();
+      }
+    }
+
+    function toggleTheme() {
+      currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', currentTheme);
+      document.getElementById('themeToggle').innerText = currentTheme === 'dark' ? '🌙' : '☀️';
+    }
+
+    // ==========================================
+    // MODAL NAVIGATION
+    // ==========================================
+    function openModal(flow) {
+      currentFlow = flow;
+      currentStep = 0;
+      const dialog = document.getElementById('modalDialog');
+      if (flow === 'vet') dialog.classList.add('vet-mode');
+      else dialog.classList.remove('vet-mode');
+      document.getElementById('formModal').classList.add('active');
+      renderModal();
+    }
+
+    function closeModal() {
+      document.getElementById('formModal').classList.remove('active');
+    }
+
+    function prevStep() {
+      if (currentStep > 0) {
+        currentStep--;
+        renderModal();
+      }
+    }
+
+    function nextStep() {
+      const maxSteps = 5;
+      if (currentStep === 4) {
+        const isOwner = currentFlow === 'owner';
+        const randNum = Math.floor(1000 + Math.random() * 9000);
+        const id = (isOwner ? 'DZ-OWN-2026-' : 'DZ-VET-2026-') + randNum;
+        if (isOwner) ownerData.vipId = id; else vetData.vipId = id;
+
+        const subRecord = isOwner ? {
+          ...ownerData,
+          id,
+          timestamp: new Date().toLocaleString('fr-DZ', { timeZone: 'Africa/Algiers' }),
+          profileType: 'owner',
+          status: 'Nouveau'
+        } : {
+          ...vetData,
+          id,
+          timestamp: new Date().toLocaleString('fr-DZ', { timeZone: 'Africa/Algiers' }),
+          profileType: 'vet',
+          status: 'Nouveau'
+        };
+
+        DiaVetDB.save(subRecord);
+        currentStep = 5;
+        renderModal();
+      } else if (currentStep < maxSteps) {
+        currentStep++;
+        renderModal();
+      } else {
+        closeModal();
+      }
+    }
+
+    function toggleVetService(serviceName) {
+      const idx = vetData.servicesOffered.indexOf(serviceName);
+      if (idx > -1) {
+        vetData.servicesOffered.splice(idx, 1);
+      } else {
+        vetData.servicesOffered.push(serviceName);
+      }
+      renderModal();
+    }
+
+    // ==========================================
+    // RENDER MODAL WITH DYNAMIC TRANSLATION
+    // ==========================================
+    function renderModal() {
+      const body = document.getElementById('modalBody');
+      const badge = document.getElementById('modalBadge');
+      const btnPrev = document.getElementById('btnPrev');
+      const btnNext = document.getElementById('btnNext');
+      const prevBtnText = document.getElementById('prevBtnText');
+      const nextBtnText = document.getElementById('nextBtnText');
+      const t = i18n[currentLang];
+
+      prevBtnText.innerText = t.btn_back;
+      btnPrev.style.display = (currentStep > 0 && currentStep < 5) ? 'inline-flex' : 'none';
+      btnNext.style.display = 'inline-flex';
+      nextBtnText.innerText = currentStep === 4 ? t.btn_finish : (currentStep === 5 ? t.btn_close : t.btn_next);
+
+      // Choose Profile
+      if (currentFlow === 'choose') {
+        badge.innerText = t.choose_title;
+        btnPrev.style.display = 'none';
+        btnNext.style.display = 'none';
+        body.innerHTML = `
+          <div style="text-align: center; padding: 10px 0;">
+            <h2 style="font-size: 24px; font-weight: 800; color: var(--text-main); margin-bottom: 8px;">${t.choose_title}</h2>
+            <p style="font-size: 14.5px; color: var(--text-muted); max-width: 520px; margin: 0 auto 20px;">${t.choose_sub}</p>
+
+            <div class="choose-profile-grid">
+              <div class="choose-profile-card owner" onclick="openModal('owner')">
+                <div class="profile-card-icon" style="background: var(--gold-gradient);">🐾</div>
+                <div class="profile-card-title">${t.owner_card_title}</div>
+                <div class="profile-card-desc">${t.owner_card_desc}</div>
+                <div class="profile-card-badge" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3);">
+                  ${t.owner_badge_offer}
+                </div>
+              </div>
+
+              <div class="choose-profile-card vet" onclick="openModal('vet')">
+                <div class="profile-card-icon" style="background: var(--vet-gradient);">🩺</div>
+                <div class="profile-card-title">${t.vet_card_title}</div>
+                <div class="profile-card-desc">${t.vet_card_desc}</div>
+                <div class="profile-card-badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);">
+                  ${t.vet_badge_offer}
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      // Progress bar
+      const progressPct = Math.round(((currentStep + 1) / 5) * 100);
+      const progressBarHTML = currentStep < 5 ? `
+        <div style="margin-bottom: 18px;">
+          <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700; color:var(--text-muted); margin-bottom:5px;">
+            <span>${currentFlow === 'owner' ? t.o_step1_badge.split(':')[0] : t.v_step1_badge.split(':')[0]} (${currentStep + 1}/5)</span>
+            <span style="color:${currentFlow === 'vet' ? '#10b981' : 'var(--primary)'}; font-weight:800;">${progressPct}%</span>
+          </div>
+          <div style="height:6px; background:var(--input-bg); border:1px solid var(--border-subtle); border-radius:3px; overflow:hidden;">
+            <div style="height:100%; width:${progressPct}%; background:${currentFlow === 'vet' ? 'var(--vet-gradient)' : 'var(--primary-gradient)'}; transition:width 0.3s ease;"></div>
+          </div>
+        </div>
+      ` : '';
+
+      // ==========================================
+      // FLOW : OWNER
+      // ==========================================
+      if (currentFlow === 'owner') {
+        if (currentStep === 0) {
+          badge.innerText = t.o_step1_badge;
+          body.innerHTML = `
+            ${progressBarHTML}
+            <h2 style="font-size: 22px; font-weight: 800; color: var(--text-main); margin-bottom: 6px;">${t.o_step1_title}</h2>
+            <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px;">${t.o_step1_sub}</p>
+
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">${t.lbl_fullname}</label>
+                <input type="text" class="form-control" placeholder="${t.ph_fullname}" value="${ownerData.fullName}" oninput="ownerData.fullName = this.value" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">${t.lbl_phone}</label>
+                <input type="tel" class="form-control" placeholder="${t.ph_phone}" value="${ownerData.phone}" oninput="ownerData.phone = this.value" />
+              </div>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">${t.lbl_email}</label>
+                <input type="email" class="form-control" placeholder="${t.ph_email}" value="${ownerData.email}" oninput="ownerData.email = this.value" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">${t.lbl_wilaya}</label>
+                <input type="text" class="form-control" placeholder="ex: 16 - Alger / Oran / Constantine..." value="${ownerData.wilaya}" oninput="ownerData.wilaya = this.value" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">${t.lbl_commune}</label>
+              <input type="text" class="form-control" placeholder="${t.ph_commune}" value="${ownerData.commune}" oninput="ownerData.commune = this.value" />
+            </div>
+          `;
+        } else if (currentStep === 1) {
+          badge.innerText = t.o_step2_badge;
+          body.innerHTML = `
+            ${progressBarHTML}
+            <h2 style="font-size: 22px; font-weight: 800; color: var(--text-main); margin-bottom: 6px;">${t.o_step2_title}</h2>
+            <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 16px;">${t.o_step2_sub}</p>
+
+            <!-- Species Grid (Zero Pre-selection) -->
+            <div class="species-grid">
+              <div class="species-card ${ownerData.species === 'chien' ? 'selected' : ''}" onclick="ownerData.species='chien'; renderModal();">
+                <img class="species-img" src="https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=300&q=80" alt="Chien" />
+                <div class="species-title">${t.sp_dog}</div>
+              </div>
+              <div class="species-card ${ownerData.species === 'chat' ? 'selected' : ''}" onclick="ownerData.species='chat'; renderModal();">
+                <img class="species-img" src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=300&q=80" alt="Chat" />
+                <div class="species-title">${t.sp_cat}</div>
+              </div>
+              <div class="species-card ${ownerData.species === 'oiseau' ? 'selected' : ''}" onclick="ownerData.species='oiseau'; renderModal();">
+                <img class="species-img" src="https://images.unsplash.com/photo-1552728089-57bdde30beb3?auto=format&fit=crop&w=300&q=80" alt="Oiseau" />
+                <div class="species-title">${t.sp_bird}</div>
+              </div>
+              <div class="species-card ${ownerData.species === 'rongeur' ? 'selected' : ''}" onclick="ownerData.species='rongeur'; renderModal();">
+                <img class="species-img" src="https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?auto=format&fit=crop&w=300&q=80" alt="Rongeur" />
+                <div class="species-title">${t.sp_rodent}</div>
+              </div>
+              <div class="species-card ${ownerData.species === 'reptile' ? 'selected' : ''}" onclick="ownerData.species='reptile'; renderModal();">
+                <img class="species-img" src="https://images.unsplash.com/photo-1504450874802-0ba2bcd9b5ae?auto=format&fit=crop&w=300&q=80" alt="Reptile" />
+                <div class="species-title">${t.sp_reptile}</div>
+              </div>
+              <div class="species-card ${ownerData.species === 'autre' ? 'selected' : ''}" onclick="ownerData.species='autre'; renderModal();">
+                <img class="species-img" src="https://images.unsplash.com/photo-1548767797-d8c844163c4c?auto=format&fit=crop&w=300&q=80" alt="Autre" />
+                <div class="species-title">${t.sp_other}</div>
+              </div>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">${t.lbl_petname}</label>
+                <input type="text" class="form-control" placeholder="${t.ph_petname}" value="${ownerData.petName}" oninput="ownerData.petName = this.value" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">${t.lbl_breed}</label>
+                <input type="text" class="form-control" placeholder="${t.ph_breed}" value="${ownerData.breed}" oninput="ownerData.breed = this.value" />
+              </div>
+            </div>
+
+            <!-- Sexe Separated -->
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">${t.lbl_gender}</label>
+                <div class="pill-radio-group">
+                  <div class="pill-radio-item ${ownerData.gender === 'male' ? 'selected' : ''}" onclick="ownerData.gender='male'; renderModal();">${t.g_male}</div>
+                  <div class="pill-radio-item ${ownerData.gender === 'female' ? 'selected' : ''}" onclick="ownerData.gender='female'; renderModal();">${t.g_female}</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">${t.lbl_age_weight}</label>
+                <div style="display:flex; gap:8px;">
+                  <input type="text" class="form-control" placeholder="${t.ph_age}" value="${ownerData.age}" oninput="ownerData.age = this.value" />
+                  <input type="text" class="form-control" placeholder="${t.ph_weight}" value="${ownerData.weight}" oninput="ownerData.weight = this.value" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Stérilisation in DEDICATED SEPARATE CARD -->
+            <div class="sterilize-box-card">
+              <label class="form-label" style="color:var(--primary);">${t.lbl_sterilize}</label>
+              <div class="pill-radio-group">
+                <div class="pill-radio-item ${ownerData.sterilized === 'yes' ? 'selected' : ''}" onclick="ownerData.sterilized='yes'; renderModal();">${t.st_yes}</div>
+                <div class="pill-radio-item ${ownerData.sterilized === 'no' ? 'selected' : ''}" onclick="ownerData.sterilized='no'; renderModal();">${t.st_no}</div>
+                <div class="pill-radio-item ${ownerData.sterilized === 'unknown' ? 'selected' : ''}" onclick="ownerData.sterilized='unknown'; renderModal();">${t.st_dk}</div>
+              </div>
+            </div>
+
+            <!-- Identification -->
+            <div class="form-group" style="margin-top: 14px;">
+              <label class="form-label">${t.lbl_ident}</label>
+              <div class="pill-radio-group">
+                <div class="pill-radio-item ${ownerData.identification === 'chip' ? 'selected' : ''}" onclick="ownerData.identification='chip'; renderModal();">${t.id_chip}</div>
+                <div class="pill-radio-item ${ownerData.identification === 'tattoo' ? 'selected' : ''}" onclick="ownerData.identification='tattoo'; renderModal();">${t.id_tattoo}</div>
+                <div class="pill-radio-item ${ownerData.identification === 'collar' ? 'selected' : ''}" onclick="ownerData.identification='collar'; renderModal();">${t.id_collar}</div>
+                <div class="pill-radio-item ${ownerData.identification === 'none' ? 'selected' : ''}" onclick="ownerData.identification='none'; renderModal();">${t.id_none}</div>
+              </div>
+            </div>
+          `;
+        } else if (currentStep === 2) {
+          badge.innerText = t.o_step3_badge;
+          body.innerHTML = `
+            ${progressBarHTML}
+            <h2 style="font-size: 22px; font-weight: 800; color: var(--text-main); margin-bottom: 6px;">${t.o_step3_title}</h2>
+            <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 18px;">${t.o_step3_sub}</p>
+
+            <div class="form-group">
+              <label class="form-label">${t.lbl_visitfreq}</label>
+              <div class="pill-radio-group">
+                <div class="pill-radio-item ${ownerData.visitFrequency === '>4' ? 'selected' : ''}" onclick="ownerData.visitFrequency='>4'; renderModal();">${t.vf_more4}</div>
+                <div class="pill-radio-item ${ownerData.visitFrequency === '2-4' ? 'selected' : ''}" onclick="ownerData.visitFrequency='2-4'; renderModal();">${t.vf_2to4}</div>
+                <div class="pill-radio-item ${ownerData.visitFrequency === '1' ? 'selected' : ''}" onclick="ownerData.visitFrequency='1'; renderModal();">${t.vf_1}</div>
+                <div class="pill-radio-item ${ownerData.visitFrequency === 'urg' ? 'selected' : ''}" onclick="ownerData.visitFrequency='urg'; renderModal();">${t.vf_urg}</div>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 14px;">
+              <label class="form-label">${t.lbl_transport}</label>
+              <div class="pill-radio-group">
+                <div class="pill-radio-item ${ownerData.transportMode === 'car' ? 'selected' : ''}" onclick="ownerData.transportMode='car'; renderModal();">${t.tr_car}</div>
+                <div class="pill-radio-item ${ownerData.transportMode === 'taxi' ? 'selected' : ''}" onclick="ownerData.transportMode='taxi'; renderModal();">${t.tr_taxi}</div>
+                <div class="pill-radio-item ${ownerData.transportMode === 'walk' ? 'selected' : ''}" onclick="ownerData.transportMode='walk'; renderModal();">${t.tr_walk}</div>
+                <div class="pill-radio-item ${ownerData.transportMode === 'transit' ? 'selected' : ''}" onclick="ownerData.transportMode='transit'; renderModal();">${t.tr_transit}</div>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 14px;">
+              <label class="form-label">${t.lbl_food}</label>
+              <div class="pill-radio-group">
+                <div class="pill-radio-item ${ownerData.foodSource === 'petshop' ? 'selected' : ''}" onclick="ownerData.foodSource='petshop'; renderModal();">${t.fd_petshop}</div>
+                <div class="pill-radio-item ${ownerData.foodSource === 'vet' ? 'selected' : ''}" onclick="ownerData.foodSource='vet'; renderModal();">${t.fd_vet}</div>
+                <div class="pill-radio-item ${ownerData.foodSource === 'market' ? 'selected' : ''}" onclick="ownerData.foodSource='market'; renderModal();">${t.fd_market}</div>
+                <div class="pill-radio-item ${ownerData.foodSource === 'fb' ? 'selected' : ''}" onclick="ownerData.foodSource='fb'; renderModal();">${t.fd_fb}</div>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 14px;">
+              <label class="form-label">${t.lbl_dist}</label>
+              <div class="pill-radio-group">
+                <div class="pill-radio-item ${ownerData.distance === '<2' ? 'selected' : ''}" onclick="ownerData.distance='<2'; renderModal();">${t.dst_lt2}</div>
+                <div class="pill-radio-item ${ownerData.distance === '2-5' ? 'selected' : ''}" onclick="ownerData.distance='2-5'; renderModal();">${t.dst_2to5}</div>
+                <div class="pill-radio-item ${ownerData.distance === '5-15' ? 'selected' : ''}" onclick="ownerData.distance='5-15'; renderModal();">${t.dst_5to15}</div>
+                <div class="pill-radio-item ${ownerData.distance === '+15' ? 'selected' : ''}" onclick="ownerData.distance='+15'; renderModal();">${t.dst_gt15}</div>
+              </div>
+            </div>
+          `;
+        } else if (currentStep === 3) {
+          badge.innerText = t.o_step4_badge;
+          body.innerHTML = `
+            ${progressBarHTML}
+            <h2 style="font-size: 22px; font-weight: 800; color: var(--text-main); margin-bottom: 6px;">${t.o_step4_title}</h2>
+            <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 18px;">${t.o_step4_sub}</p>
+
+            <div class="form-group">
+              <label class="form-label">${t.lbl_budget}</label>
+              <div class="pill-radio-group">
+                <div class="pill-radio-item ${ownerData.budget === '<3k' ? 'selected' : ''}" onclick="ownerData.budget='<3k'; renderModal();">${t.bg_lt3}</div>
+                <div class="pill-radio-item ${ownerData.budget === '3k-7k' ? 'selected' : ''}" onclick="ownerData.budget='3k-7k'; renderModal();">${t.bg_3to7}</div>
+                <div class="pill-radio-item ${ownerData.budget === '7k-15k' ? 'selected' : ''}" onclick="ownerData.budget='7k-15k'; renderModal();">${t.bg_7to15}</div>
+                <div class="pill-radio-item ${ownerData.budget === '+15k' ? 'selected' : ''}" onclick="ownerData.budget='+15k'; renderModal();">${t.bg_gt15}</div>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 14px;">
+              <label class="form-label">${t.lbl_vaccine}</label>
+              <div class="pill-radio-group">
+                <div class="pill-radio-item ${ownerData.vaccineStatus === 'up' ? 'selected' : ''}" onclick="ownerData.vaccineStatus='up'; renderModal();">${t.vc_up}</div>
+                <div class="pill-radio-item ${ownerData.vaccineStatus === 'late' ? 'selected' : ''}" onclick="ownerData.vaccineStatus='late'; renderModal();">${t.vc_late}</div>
+                <div class="pill-radio-item ${ownerData.vaccineStatus === 'never' ? 'selected' : ''}" onclick="ownerData.vaccineStatus='never'; renderModal();">${t.vc_never}</div>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 14px;">
+              <label class="form-label">${t.lbl_nighturg}</label>
+              <div class="pill-radio-group">
+                <div class="pill-radio-item ${ownerData.nightEmergencyExp === 'hard' ? 'selected' : ''}" onclick="ownerData.nightEmergencyExp='hard'; renderModal();">${t.nu_hard}</div>
+                <div class="pill-radio-item ${ownerData.nightEmergencyExp === 'found' ? 'selected' : ''}" onclick="ownerData.nightEmergencyExp='found'; renderModal();">${t.nu_found}</div>
+                <div class="pill-radio-item ${ownerData.nightEmergencyExp === 'never' ? 'selected' : ''}" onclick="ownerData.nightEmergencyExp='never'; renderModal();">${t.nu_never}</div>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 14px;">
+              <label class="form-label">${t.lbl_paypref}</label>
+              <div class="pill-radio-group">
+                <div class="pill-radio-item ${ownerData.paymentPreference === 'cash' ? 'selected' : ''}" onclick="ownerData.paymentPreference='cash'; renderModal();">${t.pay_cash}</div>
+                <div class="pill-radio-item ${ownerData.paymentPreference === 'baridimob' ? 'selected' : ''}" onclick="ownerData.paymentPreference='baridimob'; renderModal();">${t.pay_bmob}</div>
+                <div class="pill-radio-item ${ownerData.paymentPreference === 'cib' ? 'selected' : ''}" onclick="ownerData.paymentPreference='cib'; renderModal();">${t.pay_cib}</div>
+              </div>
+            </div>
+          `;
+        } else if (currentStep === 4) {
+          badge.innerText = t.o_step5_badge;
+          body.innerHTML = `
+            ${progressBarHTML}
+            <h2 style="font-size: 22px; font-weight: 800; color: var(--text-main); margin-bottom: 6px;">${t.o_step5_title}</h2>
+            <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 18px;">${t.o_step5_sub}</p>
+
+            <div class="form-group">
+              <label class="form-label">${t.lbl_missing_o}</label>
+              <textarea class="form-control" rows="3" placeholder="${t.ph_missing_o}" oninput="ownerData.missingThings = this.value">${ownerData.missingThings}</textarea>
+            </div>
+
+            <div class="vip-card-box">
+              <div class="vip-header">
+                <div class="vip-icon">🎟️</div>
+                <div>
+                  <div class="vip-title">${t.vip_box_title_o}</div>
+                  <div style="font-size:13px; color:var(--text-muted);">${t.vip_box_sub_o}</div>
+                </div>
+              </div>
+
+              <div class="vip-perks-list">
+                <div>${t.vip_p1_o}</div>
+                <div>${t.vip_p2_o}</div>
+                <div>${t.vip_p3_o}</div>
+                <div>${t.vip_p4_o}</div>
+              </div>
+
+              <div style="border-top: 1px dashed rgba(245,158,11,0.4); padding-top: 16px; margin-top: 16px;">
+                <label class="form-label" style="color:#fbbf24;">${t.lbl_channel_o}</label>
+                <div class="pill-radio-group" style="margin-bottom: 12px;">
+                  <div class="pill-radio-item ${ownerData.receiveChannel === 'sms' ? 'selected' : ''}" onclick="ownerData.receiveChannel='sms'; renderModal();">${t.ch_sms}</div>
+                  <div class="pill-radio-item ${ownerData.receiveChannel === 'email' ? 'selected' : ''}" onclick="ownerData.receiveChannel='email'; renderModal();">${t.ch_email}</div>
+                </div>
+
+                <input type="text" class="form-control" placeholder="${t.ph_contact_input_o}" value="${ownerData.receiveChannel === 'sms' ? ownerData.phone : ownerData.email}" oninput="if(ownerData.receiveChannel==='sms') ownerData.phone=this.value; else ownerData.email=this.value;" />
+              </div>
+            </div>
+          `;
+        } else if (currentStep === 5) {
+          badge.innerText = `${t.conf_congrats} !`;
+          const contactDest = ownerData.receiveChannel === 'sms' ? ownerData.phone : ownerData.email;
+          body.innerHTML = `
+            <div style="text-align: center; padding: 20px 0;">
+              <div style="width: 80px; height: 80px; border-radius: 50%; background: var(--gold-gradient); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; box-shadow: 0 0 30px rgba(245,158,11,0.5);">
+                <span style="font-size: 38px;">🎟️</span>
+              </div>
+              <h2 style="font-size: 24px; font-weight: 800; color: #fbbf24; margin-bottom: 8px;">${t.conf_congrats} ${ownerData.fullName || ''} !</h2>
+              <p style="font-size: 15px; color: var(--text-muted); max-width: 500px; margin: 0 auto 20px;">
+                ${t.conf_owner_sub} (<strong>${contactDest || 'WhatsApp / SMS'}</strong>).
+              </p>
+
+              <div style="background: var(--input-bg); border: 1px solid var(--border-gold); border-radius: var(--radius-md); padding: 18px; max-width: 480px; margin: 0 auto; text-align: left; position:relative; overflow:hidden;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                  <div style="font-weight: 800; color: #fbbf24; font-size: 14.5px;">Pass Fondateur · ${ownerData.vipId}</div>
+                  <span style="background:rgba(16,185,129,0.2); color:#10b981; font-size:11px; padding:2px 6px; border-radius:4px; font-weight:700;">${t.badge_saved_db}</span>
+                </div>
+                <div style="font-size: 13.5px; color: var(--text-sub); line-height: 1.6; margin-top:8px;">
+                  • <strong>Animal :</strong> ${ownerData.petName || 'Compagnon'} (${ownerData.species.toUpperCase()})<br>
+                  • <strong>Wilaya :</strong> ${ownerData.wilaya || 'Algérie'}<br>
+                  • <strong>Avantage :</strong> ${t.owner_badge_offer}
+                </div>
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      // ==========================================
+      // FLOW : VET (Algeria Reality - NO OVERNIGHT HOSPITALIZATION)
+      // ==========================================
+      else if (currentFlow === 'vet') {
+        if (currentStep === 0) {
+          badge.innerText = t.v_step1_badge;
+          body.innerHTML = `
+            ${progressBarHTML}
+            <h2 style="font-size: 22px; font-weight: 800; color: var(--text-main); margin-bottom: 6px;">${t.v_step1_title}</h2>
+            <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px;">${t.v_step1_sub}</p>
+
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">${t.lbl_vet_name}</label>
+                <input type="text" class="form-control" placeholder="${t.ph_vet_name}" value="${vetData.fullName}" oninput="vetData.fullName = this.value" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">${t.lbl_clinic_name}</label>
+                <input type="text" class="form-control" placeholder="${t.ph_clinic_name}" value="${vetData.clinicName}" oninput="vetData.clinicName = this.value" />
+              </div>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">${t.lbl_vet_phone}</label>
+                <input type="tel" class="form-control" placeholder="05 / 06 / 07..." value="${vetData.phone}" oninput="vetData.phone = this.value" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">${t.lbl_vet_email}</label>
+                <input type="email" class="form-control" placeholder="contact@clinique.dz" value="${vetData.email}" oninput="vetData.email = this.value" />
+              </div>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">${t.lbl_wilaya}</label>
+                <input type="text" class="form-control" placeholder="ex: 16 - Alger / Blida..." value="${vetData.wilaya}" oninput="vetData.wilaya = this.value" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">${t.lbl_commune}</label>
+                <input type="text" class="form-control" placeholder="ex: Hydra, Kouba..." value="${vetData.commune}" oninput="vetData.commune = this.value" />
+              </div>
+            </div>
+          `;
+        } else if (currentStep === 1) {
+          badge.innerText = t.v_step2_badge;
+          body.innerHTML = `
+            ${progressBarHTML}
+            <h2 style="font-size: 22px; font-weight: 800; color: var(--text-main); margin-bottom: 6px;">${t.v_step2_title}</h2>
+            <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 16px;">${t.v_step2_sub}</p>
+
+            <div class="form-group">
+              <label class="form-label">${t.lbl_practice}</label>
+              <div class="pill-radio-group">
+                <div class="pill-radio-item ${vetData.practiceType === 'indiv' ? 'selected' : ''}" onclick="vetData.practiceType='indiv'; renderModal();">${t.pr_indiv}</div>
+                <div class="pill-radio-item ${vetData.practiceType === 'clinic' ? 'selected' : ''}" onclick="vetData.practiceType='clinic'; renderModal();">${t.pr_clinic}</div>
+                <div class="pill-radio-item ${vetData.practiceType === 'itin' ? 'selected' : ''}" onclick="vetData.practiceType='itin'; renderModal();">${t.pr_itin}</div>
+              </div>
+            </div>
+
+            <div class="form-grid-2" style="margin-top: 14px;">
+              <div class="form-group">
+                <label class="form-label">${t.lbl_spec}</label>
+                <div class="pill-radio-group">
+                  <div class="pill-radio-item ${vetData.specialty === 'canine' ? 'selected' : ''}" onclick="vetData.specialty='canine'; renderModal();">${t.sp_canine}</div>
+                  <div class="pill-radio-item ${vetData.specialty === 'mixte' ? 'selected' : ''}" onclick="vetData.specialty='mixte'; renderModal();">${t.sp_mixte}</div>
+                  <div class="pill-radio-item ${vetData.specialty === 'rurale' ? 'selected' : ''}" onclick="vetData.specialty='rurale'; renderModal();">${t.sp_rurale}</div>
+                  <div class="pill-radio-item ${vetData.specialty === 'nac' ? 'selected' : ''}" onclick="vetData.specialty='nac'; renderModal();">${t.sp_nac}</div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">${t.lbl_exp}</label>
+                <div class="pill-radio-group">
+                  <div class="pill-radio-item ${vetData.experienceYears === '<3' ? 'selected' : ''}" onclick="vetData.experienceYears='<3'; renderModal();">${t.exp_lt3}</div>
+                  <div class="pill-radio-item ${vetData.experienceYears === '3-7' ? 'selected' : ''}" onclick="vetData.experienceYears='3-7'; renderModal();">${t.exp_3to7}</div>
+                  <div class="pill-radio-item ${vetData.experienceYears === '7-15' ? 'selected' : ''}" onclick="vetData.experienceYears='7-15'; renderModal();">${t.exp_7to15}</div>
+                  <div class="pill-radio-item ${vetData.experienceYears === '+15' ? 'selected' : ''}" onclick="vetData.experienceYears='+15'; renderModal();">${t.exp_gt15}</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 14px;">
+              <label class="form-label">${t.lbl_team}</label>
+              <div class="pill-radio-group">
+                <div class="pill-radio-item ${vetData.teamSize === 'solo' ? 'selected' : ''}" onclick="vetData.teamSize='solo'; renderModal();">${t.tm_solo}</div>
+                <div class="pill-radio-item ${vetData.teamSize === '2-3' ? 'selected' : ''}" onclick="vetData.teamSize='2-3'; renderModal();">${t.tm_2to3}</div>
+                <div class="pill-radio-item ${vetData.teamSize === 'gt3' ? 'selected' : ''}" onclick="vetData.teamSize='gt3'; renderModal();">${t.tm_gt3}</div>
+              </div>
+            </div>
+
+            <!-- Real Algerian Clinical Services (NO OVERNIGHT HOSPITALIZATION) -->
+            <div class="form-group" style="margin-top: 14px;">
+              <label class="form-label">${t.lbl_services_algeria}</label>
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                <label style="background:var(--input-bg); border:1px solid var(--border-subtle); border-radius:8px; padding:10px 12px; font-size:13px; display:flex; align-items:center; gap:8px; cursor:pointer;" onclick="toggleVetService('consultations')">
+                  <input type="checkbox" ${vetData.servicesOffered.includes('consultations') ? 'checked' : ''} /> ${t.srv_consult}
+                </label>
+                <label style="background:var(--input-bg); border:1px solid var(--border-subtle); border-radius:8px; padding:10px 12px; font-size:13px; display:flex; align-items:center; gap:8px; cursor:pointer;" onclick="toggleVetService('chirurgie')">
+                  <input type="checkbox" ${vetData.servicesOffered.includes('chirurgie') ? 'checked' : ''} /> ${t.srv_surg}
+                </label>
+                <label style="background:var(--input-bg); border:1px solid var(--border-subtle); border-radius:8px; padding:10px 12px; font-size:13px; display:flex; align-items:center; gap:8px; cursor:pointer;" onclick="toggleVetService('imagerie')">
+                  <input type="checkbox" ${vetData.servicesOffered.includes('imagerie') ? 'checked' : ''} /> ${t.srv_imagerie}
+                </label>
+                <label style="background:var(--input-bg); border:1px solid var(--border-subtle); border-radius:8px; padding:10px 12px; font-size:13px; display:flex; align-items:center; gap:8px; cursor:pointer;" onclick="toggleVetService('labo')">
+                  <input type="checkbox" ${vetData.servicesOffered.includes('labo') ? 'checked' : ''} /> ${t.srv_lab}
+                </label>
+                <label style="background:var(--input-bg); border:1px solid var(--border-subtle); border-radius:8px; padding:10px 12px; font-size:13px; display:flex; align-items:center; gap:8px; cursor:pointer;" onclick="toggleVetService('daycare')">
+                  <input type="checkbox" ${vetData.servicesOffered.includes('daycare') ? 'checked' : ''} /> ${t.srv_daycare}
+                </label>
+                <label style="background:var(--input-bg); border:1px solid var(--border-subtle); border-radius:8px; padding:10px 12px; font-size:13px; display:flex; align-items:center; gap:8px; cursor:pointer;" onclick="toggleVetService('home')">
+                  <input type="checkbox" ${vetData.servicesOffered.includes('home') ? 'checked' : ''} /> ${t.srv_home}
+                </label>
+                <label style="background:var(--input-bg); border:1px solid var(--border-subtle); border-radius:8px; padding:10px 12px; font-size:13px; display:flex; align-items:center; gap:8px; cursor:pointer;" onclick="toggleVetService('pharmacie')">
+                  <input type="checkbox" ${vetData.servicesOffered.includes('pharmacie') ? 'checked' : ''} /> ${t.srv_pharm}
+                </label>
+              </div>
+            </div>
+          `;
+        } else if (currentStep === 2) {
+          badge.innerText = t.v_step3_badge;
+          body.innerHTML = `
+            ${progressBarHTML}
+            <h2 style="font-size: 22px; font-weight: 800; color: var(--text-main); margin-bottom: 6px;">${t.v_step3_title}</h2>
+            <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 18px;">${t.v_step3_sub}</p>
+
+            <div class="form-group">
+              <label class="form-label">${t.lbl_consult_vol}</label>
+              <div class="pill-radio-group">
+                <div class="pill-radio-item ${vetData.dailyPatients === '<10' ? 'selected' : ''}" onclick="vetData.dailyPatients='<10'; renderModal();">${t.cv_lt10}</div>
+                <div class="pill-radio-item ${vetData.dailyPatients === '10-25' ? 'selected' : ''}" onclick="vetData.dailyPatients='10-25'; renderModal();">${t.cv_10to25}</div>
+                <div class="pill-radio-item ${vetData.dailyPatients === '25-40' ? 'selected' : ''}" onclick="vetData.dailyPatients='25-40'; renderModal();">${t.cv_25to40}</div>
+                <div class="pill-radio-item ${vetData.dailyPatients === '+40' ? 'selected' : ''}" onclick="vetData.dailyPatients='+40'; renderModal();">${t.cv_gt40}</div>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 14px;">
+              <label class="form-label">${t.lbl_stock}</label>
+              <div class="pill-radio-group">
+                <div class="pill-radio-item ${vetData.stockManagement === 'book' ? 'selected' : ''}" onclick="vetData.stockManagement='book'; renderModal();">${t.stk_book}</div>
+                <div class="pill-radio-item ${vetData.stockManagement === 'excel' ? 'selected' : ''}" onclick="vetData.stockManagement='excel'; renderModal();">${t.stk_excel}</div>
+                <div class="pill-radio-item ${vetData.stockManagement === 'visual' ? 'selected' : ''}" onclick="vetData.stockManagement='visual'; renderModal();">${t.stk_visual}</div>
+                <div class="pill-radio-item ${vetData.stockManagement === 'software' ? 'selected' : ''}" onclick="vetData.stockManagement='software'; renderModal();">${t.stk_software}</div>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 14px;">
+              <label class="form-label">${t.lbl_clientcomm}</label>
+              <div class="pill-radio-group">
+                <div class="pill-radio-item ${vetData.clientCommunication === 'phone' ? 'selected' : ''}" onclick="vetData.clientCommunication='phone'; renderModal();">${t.comm_phone}</div>
+                <div class="pill-radio-item ${vetData.clientCommunication === 'wa' ? 'selected' : ''}" onclick="vetData.clientCommunication='wa'; renderModal();">${t.comm_wa}</div>
+                <div class="pill-radio-item ${vetData.clientCommunication === 'fb' ? 'selected' : ''}" onclick="vetData.clientCommunication='fb'; renderModal();">${t.comm_fb}</div>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 14px;">
+              <label class="form-label">${t.lbl_timewaster}</label>
+              <div class="pill-radio-group">
+                <div class="pill-radio-item ${vetData.biggestTimeWaster === 'vacc' ? 'selected' : ''}" onclick="vetData.biggestTimeWaster='vacc'; renderModal();">${t.tw_vacc}</div>
+                <div class="pill-radio-item ${vetData.biggestTimeWaster === 'paper' ? 'selected' : ''}" onclick="vetData.biggestTimeWaster='paper'; renderModal();">${t.tw_paper}</div>
+                <div class="pill-radio-item ${vetData.biggestTimeWaster === 'ordo' ? 'selected' : ''}" onclick="vetData.biggestTimeWaster='ordo'; renderModal();">${t.tw_ordo}</div>
+                <div class="pill-radio-item ${vetData.biggestTimeWaster === 'noshow' ? 'selected' : ''}" onclick="vetData.biggestTimeWaster='noshow'; renderModal();">${t.tw_noshow}</div>
+              </div>
+            </div>
+          `;
+        } else if (currentStep === 3) {
+          badge.innerText = t.v_step4_badge;
+          body.innerHTML = `
+            ${progressBarHTML}
+            <h2 style="font-size: 22px; font-weight: 800; color: var(--text-main); margin-bottom: 6px;">${t.v_step4_title}</h2>
+            <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 18px;">${t.v_step4_sub}</p>
+
+            <div class="form-group">
+              <label class="form-label">${t.lbl_fee}</label>
+              <div class="pill-radio-group">
+                <div class="pill-radio-item ${vetData.consultationFee === '5-10' ? 'selected' : ''}" onclick="vetData.consultationFee='5-10'; renderModal();">${t.fee_5to10}</div>
+                <div class="pill-radio-item ${vetData.consultationFee === '10-20' ? 'selected' : ''}" onclick="vetData.consultationFee='10-20'; renderModal();">${t.fee_10to20}</div>
+                <div class="pill-radio-item ${vetData.consultationFee === '20-35' ? 'selected' : ''}" onclick="vetData.consultationFee='20-35'; renderModal();">${t.fee_20to35}</div>
+                <div class="pill-radio-item ${vetData.consultationFee === '+35' ? 'selected' : ''}" onclick="vetData.consultationFee='+35'; renderModal();">${t.fee_gt35}</div>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 14px;">
+              <label class="form-label">${t.lbl_noshow}</label>
+              <div class="pill-radio-group">
+                <div class="pill-radio-item ${vetData.noShowRate === '<5' ? 'selected' : ''}" onclick="vetData.noShowRate='<5'; renderModal();">${t.ns_lt5}</div>
+                <div class="pill-radio-item ${vetData.noShowRate === '5-15' ? 'selected' : ''}" onclick="vetData.noShowRate='5-15'; renderModal();">${t.ns_5to15}</div>
+                <div class="pill-radio-item ${vetData.noShowRate === '15-30' ? 'selected' : ''}" onclick="vetData.noShowRate='15-30'; renderModal();">${t.ns_15to30}</div>
+                <div class="pill-radio-item ${vetData.noShowRate === '+30' ? 'selected' : ''}" onclick="vetData.noShowRate='+30'; renderModal();">${t.ns_gt30}</div>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 14px;">
+              <label class="form-label">${t.lbl_teleconsult}</label>
+              <div class="pill-radio-group">
+                <div class="pill-radio-item ${vetData.teleconsultationInterest === 'fav' ? 'selected' : ''}" onclick="vetData.teleconsultationInterest='fav'; renderModal();">${t.tc_fav}</div>
+                <div class="pill-radio-item ${vetData.teleconsultationInterest === 'cond' ? 'selected' : ''}" onclick="vetData.teleconsultationInterest='cond'; renderModal();">${t.tc_cond}</div>
+                <div class="pill-radio-item ${vetData.teleconsultationInterest === 'no' ? 'selected' : ''}" onclick="vetData.teleconsultationInterest='no'; renderModal();">${t.tc_no}</div>
+              </div>
+            </div>
+          `;
+        } else if (currentStep === 4) {
+          badge.innerText = t.v_step5_badge;
+          body.innerHTML = `
+            ${progressBarHTML}
+            <h2 style="font-size: 22px; font-weight: 800; color: var(--text-main); margin-bottom: 6px;">${t.v_step5_title}</h2>
+            <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 18px;">${t.v_step5_sub}</p>
+
+            <div class="form-group">
+              <label class="form-label">${t.lbl_missing_v}</label>
+              <textarea class="form-control" rows="3" placeholder="${t.ph_missing_v}" oninput="vetData.missingThings = this.value">${vetData.missingThings}</textarea>
+            </div>
+
+            <div class="vip-card-box" style="border-color: #34d399; background: linear-gradient(135deg, rgba(16,185,129,0.15) 0%, rgba(5,150,105,0.05) 100%);">
+              <div class="vip-header">
+                <div class="vip-icon" style="background: var(--vet-gradient);">🩺</div>
+                <div>
+                  <div class="vip-title" style="color: #34d399;">${t.vip_box_title_v}</div>
+                  <div style="font-size:13px; color:var(--text-muted);">${t.vip_box_sub_v}</div>
+                </div>
+              </div>
+
+              <div class="vip-perks-list">
+                <div>${t.vip_p1_v}</div>
+                <div>${t.vip_p2_v}</div>
+                <div>${t.vip_p3_v}</div>
+                <div>${t.vip_p4_v}</div>
+              </div>
+
+              <div style="border-top: 1px dashed rgba(16,185,129,0.4); padding-top: 16px; margin-top: 16px;">
+                <label class="form-label" style="color:#34d399;">${t.lbl_channel_o}</label>
+                <div class="pill-radio-group" style="margin-bottom: 12px;">
+                  <div class="pill-radio-item ${vetData.receiveChannel === 'whatsapp' ? 'selected' : ''}" onclick="vetData.receiveChannel='whatsapp'; renderModal();">${t.ch_sms}</div>
+                  <div class="pill-radio-item ${vetData.receiveChannel === 'email' ? 'selected' : ''}" onclick="vetData.receiveChannel='email'; renderModal();">${t.ch_email}</div>
+                </div>
+
+                <input type="text" class="form-control" placeholder="${t.ph_contact_input_o}" value="${vetData.receiveChannel === 'whatsapp' ? vetData.phone : vetData.email}" oninput="if(vetData.receiveChannel==='whatsapp') vetData.phone=this.value; else vetData.email=this.value;" />
+              </div>
+            </div>
+          `;
+        } else if (currentStep === 5) {
+          badge.innerText = `${t.conf_congrats} !`;
+          const contactDest = vetData.receiveChannel === 'whatsapp' ? vetData.phone : vetData.email;
+          body.innerHTML = `
+            <div style="text-align: center; padding: 20px 0;">
+              <div style="width: 80px; height: 80px; border-radius: 50%; background: var(--vet-gradient); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; box-shadow: 0 0 30px rgba(16,185,129,0.5);">
+                <span style="font-size: 38px;">🩺</span>
+              </div>
+              <h2 style="font-size: 24px; font-weight: 800; color: #34d399; margin-bottom: 8px;">${t.conf_congrats} Dr. ${vetData.fullName || ''} !</h2>
+              <p style="font-size: 15px; color: var(--text-muted); max-width: 500px; margin: 0 auto 20px;">
+                ${t.conf_vet_sub} (<strong>${contactDest || 'WhatsApp / SMS'}</strong>).
+              </p>
+
+              <div style="background: var(--input-bg); border: 1px solid var(--border-accent-teal); border-radius: var(--radius-md); padding: 18px; max-width: 480px; margin: 0 auto; text-align: left; position:relative; overflow:hidden;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                  <div style="font-weight: 800; color: #34d399; font-size: 14.5px;">Pass Praticien Fondateur · ${vetData.vipId}</div>
+                  <span style="background:rgba(16,185,129,0.2); color:#10b981; font-size:11px; padding:2px 6px; border-radius:4px; font-weight:700;">${t.badge_saved_db}</span>
+                </div>
+                <div style="font-size: 13.5px; color: var(--text-sub); line-height: 1.6; margin-top:8px;">
+                  • <strong>Structure :</strong> ${vetData.clinicName || 'Cabinet'} (${vetData.wilaya || 'Algérie'})<br>
+                  • <strong>Avantage :</strong> ${t.vet_badge_offer}
+                </div>
+              </div>
+            </div>
+          `;
+        }
+      }
+    }
+
+    // ==========================================
+    // INVISIBLE & PRIVATE DATABASE ENGINE
+    // ==========================================
+    const DiaVetDB = {
+      storageKey: 'diavet_submissions_algeria_v4',
+
+      getAll() {
+        try {
+          return JSON.parse(localStorage.getItem(this.storageKey)) || [];
+        } catch(e) {
+          return [];
+        }
+      },
+
+      save(item) {
+        const list = this.getAll();
+        list.unshift(item);
+        try {
+          localStorage.setItem(this.storageKey, JSON.stringify(list));
+        } catch(e) {
+          console.error("Storage error:", e);
+        }
+      }
+    };
+
+    // Secret Admin Triggers (100% Invisible to visitors)
+    let logoTaps = 0;
+    let logoTimer = null;
+    function handleLogoSecretTap() {
+      logoTaps++;
+      clearTimeout(logoTimer);
+      if (logoTaps >= 5) {
+        logoTaps = 0;
+        openAdmin();
+      } else {
+        logoTimer = setTimeout(() => { logoTaps = 0; }, 800);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      if (location.hash === '#admin' || location.search.includes('admin')) {
+        openAdmin();
+      }
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+        e.preventDefault();
+        openAdmin();
+      }
+    });
+
+    function openAdmin() {
+      const m = document.getElementById('adminModal');
+      if (m) m.classList.add('active');
+    }
+
+    function closeAdmin() {
+      const m = document.getElementById('adminModal');
+      if (m) m.classList.remove('active');
+    }
+
+    function authAdmin() {
+      const pin = document.getElementById('pinInput')?.value;
+      if (pin === '2026' || pin === '1234' || pin === 'admin') {
+        document.getElementById('adminPinBox').style.display = 'none';
+        document.getElementById('adminContent').style.display = 'block';
+        renderAdmin();
+      } else {
+        alert("Code PIN incorrect. (Défaut : 2026)");
+      }
+    }
+
+    function renderAdmin() {
+      const db = DiaVetDB.getAll();
+      const totalEl = document.getElementById('dbTotal');
+      if (totalEl) totalEl.innerText = db.length;
+      const list = document.getElementById('dbList');
+      if (!list) return;
+
+      if (!db.length) {
+        list.innerHTML = "<p style='color:var(--text-muted); text-align:center; padding:20px;'>Aucune inscription pour le moment.</p>";
+        return;
+      }
+
+      list.innerHTML = db.map(item => `
+        <div style="background:var(--input-bg); border:1px solid var(--border-subtle); border-radius:12px; padding:14px; margin-bottom:10px; font-size:13px;">
+          <div style="display:flex; justify-content:space-between; font-weight:800; color:var(--primary); margin-bottom:4px;">
+            <span>${item.profileType === 'owner' ? '🐾 Propriétaire' : '🩺 Vétérinaire'} · ${item.fullName || 'Sans nom'}</span>
+            <span style="font-size:11px; color:var(--text-muted);">${item.timestamp || ''}</span>
+          </div>
+          <div>📞 <strong>Contact :</strong> ${item.phone || item.email || '-'} (${item.wilaya || 'Algérie'})</div>
+          <div style="font-size:12px; color:var(--text-muted); margin-top:4px;">Réf VIP : <strong>${item.id || '-'}</strong></div>
+          ${item.missingThings ? `<div style="font-size:12px; font-style:italic; margin-top:4px; color:var(--text-sub);">« ${item.missingThings} »</div>` : ''}
+        </div>
+      `).join('');
+    }
+
+    function exportCSV() {
+      const db = DiaVetDB.getAll();
+      if (!db.length) return alert("Base de données vide");
+      let csv = "\uFEFFDate;ID_VIP;Type;Nom;Wilaya;Contact;Avis\n";
+      db.forEach(i => {
+        csv += `"${i.timestamp||''}";"${i.id||''}";"${i.profileType||''}";"${(i.fullName||'').replace(/"/g,'""')}";"${(i.wilaya||'').replace(/"/g,'""')}";"${(i.phone||i.email||'').replace(/"/g,'""')}";"${(i.missingThings||'').replace(/\n/g,' ').replace(/"/g,'""')}"\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `diavet_base_algerie_${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
+    }
+  </script>
+</body>
+</html>
