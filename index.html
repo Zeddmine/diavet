@@ -1,182 +1,1382 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full dark" x-data="diavetApp()" :class="{ 'dark': darkMode }" :dir="lang === 'ar' ? 'rtl' : 'ltr'">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title x-text="t('page_title')">DiaVet Algérie - L'écosystème numérique vétérinaire</title>
 
+    <!-- Web App & PWA Icons (Embedded High-Res SVG Icon for Home Screen & Favicon) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%230052cc'/%3E%3Cstop offset='50%25' stop-color='%2300d2ff'/%3E%3Cstop offset='100%25' stop-color='%2300e676'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='128' fill='%23030e20'/%3E%3Crect x='16' y='16' width='480' height='480' rx='112' fill='none' stroke='url(%23grad)' stroke-width='16'/%3E%3Cpath d='M210 130 C150 130 110 170 110 230 C110 280 135 320 180 340 L180 370 C180 380 190 390 200 390 L220 390 C230 390 240 380 240 370 L240 340 C285 320 310 280 310 230 C310 170 270 130 210 130 Z' fill='none' stroke='%2300d2ff' stroke-width='20'/%3E%3Cpath d='M330 210 A 50 50 0 0 1 380 260 A 50 50 0 0 1 330 310 A 50 50 0 0 1 280 260 A 50 50 0 0 1 330 210 Z' fill='%2300e676' opacity='0.85'/%3E%3Cpath d='M210 170 L210 250 M170 210 L250 210' stroke='%23ffffff' stroke-width='24' stroke-linecap='round'/%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%230052cc'/%3E%3Cstop offset='50%25' stop-color='%2300d2ff'/%3E%3Cstop offset='100%25' stop-color='%2300e676'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='128' fill='%23030e20'/%3E%3Crect x='16' y='16' width='480' height='480' rx='112' fill='none' stroke='url(%23grad)' stroke-width='16'/%3E%3Cpath d='M210 170 L210 250 M170 210 L250 210' stroke='%2300d2ff' stroke-width='24' stroke-linecap='round'/%3E%3C/svg%3E">
+    
+    <meta name="theme-color" content="#020b18">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="DiaVet Algérie">
 
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        diavetBlue: '#0052cc',
+                        diavetCyan: '#00d2ff',
+                        diavetGreen: '#00e676',
+                        diavetDarkBg: '#020b18',
+                        diavetLightBg: '#f0f4f8',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Cairo', 'sans-serif'],
+                        cursive: ['Caveat', 'cursive', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Caveat:wght@600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Base styles with Light and Dark Mode compatibility */
+        body {
+            font-family: 'Inter', 'Cairo', sans-serif;
+            transition: background-color 0.4s ease, color 0.4s ease;
+            overflow-x: hidden;
+        }
 
+        /* Dark Mode Specific Backgrounds */
+        .dark body {
+            background-color: #020b18;
+            color: #f1f5f9;
+        }
 
+        /* Light Mode Specific Backgrounds */
+        html:not(.dark) body {
+            background-color: #f0f4f9;
+            color: #0f172a;
+        }
 
+        /* Ambient Framing Leaves (Matching mockup image_5.png) */
+        .leaf-frame-top-left {
+            position: absolute;
+            top: -20px;
+            left: -30px;
+            width: 280px;
+            height: 280px;
+            background-image: radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 2;
+            filter: blur(12px);
+        }
 
-DiaVet
-Accueil À propos Fonctionnalités Questionnaire Contact
-En développement · Algérie 🇩🇿
-FR EN AR
+        .leaf-frame-bottom-right {
+            position: absolute;
+            bottom: -30px;
+            right: -30px;
+            width: 320px;
+            height: 320px;
+            background-image: radial-gradient(circle, rgba(6, 182, 212, 0.22) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 2;
+            filter: blur(12px);
+        }
 
+        /* Glassmorphism Cards - Dark Mode */
+        .dark .glass-card-owner {
+            background: linear-gradient(135deg, rgba(6, 25, 52, 0.88) 0%, rgba(3, 15, 34, 0.94) 100%);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 210, 255, 0.35);
+            box-shadow: 0 0 25px rgba(0, 150, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
 
+        .dark .glass-card-vet {
+            background: linear-gradient(135deg, rgba(4, 32, 40, 0.88) 0%, rgba(2, 20, 28, 0.94) 100%);
+            backdrop-filter: blur(16px);
+            border: 1.5px solid rgba(0, 230, 118, 0.5);
+            box-shadow: 0 0 30px rgba(0, 230, 118, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
 
-DiaVet
-L'écosystème numérique vétérinaire
-Une seule plateforme, pour une meilleure santé animale.
-En développement · Algérie
-Parce qu'ils méritent le meilleur ♡
+        .dark .glass-panel-sub {
+            background: linear-gradient(135deg, rgba(7, 24, 48, 0.85) 0%, rgba(3, 14, 30, 0.92) 100%);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 180, 255, 0.25);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
 
-Espace Propriétaire
+        .dark .glass-modal {
+            background: rgba(3, 13, 29, 0.96);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(0, 210, 255, 0.4);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
+        }
 
-Prenez soin de votre animal
-Suivez sa santé, prenez rendez-vous, accédez à des conseils, trouvez des produits et bien plus encore...
-Découvrir
+        /* Glassmorphism Cards - Light Mode */
+        html:not(.dark) .glass-card-owner {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(240, 246, 255, 0.95) 100%);
+            backdrop-filter: blur(16px);
+            border: 1.5px solid rgba(0, 132, 255, 0.35);
+            box-shadow: 0 15px 35px rgba(0, 100, 220, 0.12);
+        }
 
-Carnet de santé
+        html:not(.dark) .glass-card-vet {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(238, 252, 245, 0.95) 100%);
+            backdrop-filter: blur(16px);
+            border: 1.5px solid rgba(0, 200, 100, 0.4);
+            box-shadow: 0 15px 35px rgba(0, 180, 100, 0.12);
+        }
 
-Rendez-vous
+        html:not(.dark) .glass-panel-sub {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 150, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+        }
 
-Urgences
+        html:not(.dark) .glass-modal {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(0, 180, 255, 0.4);
+            box-shadow: 0 25px 60px rgba(15, 23, 42, 0.25);
+        }
 
-Adoption
+        /* Ambient Glow Orbs */
+        .orb {
+            position: absolute;
+            border-radius: 9999px;
+            filter: blur(100px);
+            pointer-events: none;
+            opacity: 0.35;
+        }
 
-Marketplace
+        /* Keyframe Animations */
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.55; transform: scale(1.06); }
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.95); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
 
-Espace Vétérinaire
+        .animate-pulse-glow { animation: pulseGlow 7s ease-in-out infinite; }
+        .animate-pop { animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
-Gérez votre cabinet depuis partout
-Un logiciel complet, accessible sur ordinateur et téléphone à distance, pour simplifier votre quotidien et mieux soigner.
-Découvrir
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #020b18; }
+        ::-webkit-scrollbar-thumb { background: #0284c7; border-radius: 4px; }
+    </style>
+</head>
+<body class="min-h-screen relative selection:bg-cyan-500 selection:text-white transition-colors duration-500">
 
-Dossier patient
+    <!-- Leaf Decorators from corners -->
+    <div class="leaf-frame-top-left"></div>
+    <div class="leaf-frame-bottom-right"></div>
 
-Planning
+    <!-- Ambient Background Glow Orbs -->
+    <div class="orb w-[650px] h-[650px] bg-blue-600/30 -top-32 -left-32 animate-pulse-glow"></div>
+    <div class="orb w-[600px] h-[600px] bg-emerald-500/20 top-[35%] -right-32 animate-pulse-glow" style="animation-delay: 3s;"></div>
+    <div class="orb w-[500px] h-[500px] bg-cyan-500/20 bottom-10 left-20 animate-pulse-glow" style="animation-delay: 5s;"></div>
 
-Ordonnances
+    <div class="relative z-10 flex flex-col min-h-screen max-w-[1440px] mx-auto px-2 sm:px-4 lg:px-6">
 
-Stock & Facturation
+        <!-- NAVBAR (Exact match to mockup image_5.png & image_6.png) -->
+        <header class="sticky top-0 z-50 py-3 backdrop-blur-md dark:bg-[#020b18]/85 bg-white/85 border-b dark:border-cyan-500/20 border-cyan-500/30 transition-colors">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+                
+                <!-- Logo DiaVet -->
+                <div class="flex items-center gap-3 cursor-pointer group" @click="activeTab = 'home'">
+                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-blue-600 via-cyan-400 to-emerald-400 p-[1.5px] shadow-lg shadow-cyan-500/30 group-hover:scale-105 transition duration-300">
+                        <div class="w-full h-full dark:bg-[#030e20] bg-white rounded-[14px] flex items-center justify-center">
+                            <div class="relative flex items-center justify-center">
+                                <i class="fa-solid fa-dog text-cyan-500 text-lg"></i>
+                                <i class="fa-solid fa-plus text-[10px] text-emerald-400 absolute -top-1 -right-2"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-black tracking-tight dark:text-white text-slate-900 flex items-center gap-1">
+                            Dia<span class="text-cyan-500">Vet</span>
+                        </span>
+                    </div>
+                </div>
 
-Accès à distance
+                <!-- Navigation Links -->
+                <nav class="hidden md:flex items-center gap-2 dark:bg-[#05152e]/80 bg-slate-200/80 p-1.5 rounded-full border dark:border-cyan-500/30 border-cyan-500/40 text-xs font-semibold">
+                    <button @click="activeTab = 'home'" :class="{ 'bg-cyan-500 text-slate-950 font-black shadow-md': activeTab === 'home', 'dark:text-slate-300 text-slate-700 hover:text-cyan-500': activeTab !== 'home' }" class="px-5 py-2 rounded-full transition-all">
+                        <span x-text="t('nav_home')">Accueil</span>
+                    </button>
+                    <button @click="activeTab = 'about'" :class="{ 'bg-cyan-500 text-slate-950 font-black shadow-md': activeTab === 'about', 'dark:text-slate-300 text-slate-700 hover:text-cyan-500': activeTab !== 'about' }" class="px-5 py-2 rounded-full transition-all">
+                        <span x-text="t('nav_about')">À propos</span>
+                    </button>
+                    <button @click="activeTab = 'features'" :class="{ 'bg-cyan-500 text-slate-950 font-black shadow-md': activeTab === 'features', 'dark:text-slate-300 text-slate-700 hover:text-cyan-500': activeTab !== 'features' }" class="px-5 py-2 rounded-full transition-all">
+                        <span x-text="t('nav_features')">Fonctionnalités</span>
+                    </button>
+                    <button @click="openQuestionnaireModal()" class="px-5 py-2 rounded-full text-xs font-bold bg-gradient-to-r from-cyan-500 to-emerald-400 text-slate-950 hover:shadow-lg hover:shadow-cyan-500/20 hover:scale-105 transition-all flex items-center gap-1.5">
+                        <i class="fa-solid fa-clipboard-question"></i>
+                        <span x-text="t('nav_questionnaire')">Questionnaire</span>
+                    </button>
+                    <button @click="activeTab = 'contact'" :class="{ 'bg-cyan-500 text-slate-950 font-black shadow-md': activeTab === 'contact', 'dark:text-slate-300 text-slate-700 hover:text-cyan-500': activeTab !== 'contact' }" class="px-5 py-2 rounded-full transition-all">
+                        <span x-text="t('nav_contact')">Contact</span>
+                    </button>
+                </nav>
 
-App Mobile DiaVet
-Deux univers, une même mission
-DiaVet connecte les propriétaires et les vétérinaires dans un écosystème intelligent, pour le bien-être de tous les animaux en Algérie.
-En savoir plus
+                <!-- Right Header Badges & Language Switcher -->
+                <div class="flex items-center gap-3">
+                    <div class="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-full dark:bg-[#051733] bg-slate-200 border dark:border-cyan-500/30 border-cyan-500/40 text-xs font-semibold dark:text-cyan-300 text-cyan-800">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span x-text="t('dev_badge')">En développement · Algérie</span>
+                        <span>🇩🇿</span>
+                    </div>
 
-Technologie moderne
+                    <!-- Multilingual Switcher -->
+                    <div class="flex items-center dark:bg-[#05152e] bg-slate-200 border dark:border-cyan-500/30 border-cyan-500/40 rounded-xl p-1 text-xs font-bold">
+                        <button @click="setLanguage('fr')" :class="{ 'bg-cyan-500 text-slate-950 shadow': lang === 'fr', 'dark:text-slate-400 text-slate-600 hover:text-cyan-500': lang !== 'fr' }" class="px-2.5 py-1 rounded-lg transition">FR</button>
+                        <button @click="setLanguage('en')" :class="{ 'bg-cyan-500 text-slate-950 shadow': lang === 'en', 'dark:text-slate-400 text-slate-600 hover:text-cyan-500': lang !== 'en' }" class="px-2.5 py-1 rounded-lg transition">EN</button>
+                        <button @click="setLanguage('ar')" :class="{ 'bg-cyan-500 text-slate-950 shadow': lang === 'ar', 'dark:text-slate-400 text-slate-600 hover:text-cyan-500': lang !== 'ar' }" class="px-2.5 py-1 rounded-lg transition font-bold">AR</button>
+                    </div>
 
-Sécurité des données
+                    <!-- Dark / Light Theme Toggle -->
+                    <button @click="darkMode = !darkMode" title="Basculer Mode Clair / Sombre" class="p-2.5 rounded-xl dark:bg-[#05152e] bg-slate-200 border dark:border-cyan-500/30 border-cyan-500/40 text-amber-500 hover:text-cyan-500 transition hover:scale-105 shadow">
+                        <i class="fa-solid" :class="darkMode ? 'fa-moon text-cyan-400' : 'fa-sun text-amber-500'"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
 
-Accessible partout
+        <main class="flex-grow py-6 space-y-8">
 
-Pensé pour l'Algérie
+            <!-- TAB 1: ACCUEIL / LANDING (Pixel-perfect replica of image_5.png & image_6.png) -->
+            <section x-show="activeTab === 'home'" x-transition class="space-y-8 max-w-7xl mx-auto">
+                
+                <!-- HERO BANNER SECTION -->
+                <div class="relative rounded-3xl overflow-hidden glass-panel-sub border dark:border-cyan-500/40 border-cyan-500/30 p-8 sm:p-12 shadow-2xl min-h-[460px] flex items-center">
+                    
+                    <!-- Background Visual Image (Dog, Cat, Algiers Skyline) -->
+                    <div class="absolute inset-0 z-0">
+                        <img src="https://images.unsplash.com/photo-1548767797-d8c844163c4c?auto=format&fit=crop&w=1600&q=80" alt="DiaVet Pets & Algiers Skyline" class="w-full h-full object-cover object-center opacity-45 mix-blend-luminosity">
+                        <div class="absolute inset-0 dark:bg-gradient-to-r dark:from-[#020b18] dark:via-[#020b18]/85 dark:to-transparent bg-gradient-to-r from-white via-white/85 to-transparent"></div>
+                        <div class="absolute inset-0 dark:bg-gradient-to-t dark:from-[#020b18] dark:via-transparent dark:to-[#020b18]/50 bg-gradient-to-t from-white via-transparent to-white/50"></div>
+                    </div>
 
-Ensemble pour une santé animale meilleure ♡
-Construisons ensemble l'écosystème vétérinaire de demain en Algérie 🇩🇿
-
-DiaVet En développement · Algérie
-Les fonctionnalités présentées sont la vision actuelle du projet et peuvent évoluer.
-À Propos du Projet
-Une Révolution Numérique pour la Santé Animale
-DiaVet est né d'un constat en Algérie : la nécessité de moderniser et d'interconnecter le secteur vétérinaire pour offrir un meilleur suivi médical aux animaux de compagnie et d'élevage.
-Notre plateforme connecte harmonieusement les propriétaires d'animaux, éleveurs et vétérinaires à travers les 58 wilayas d'Algérie grâce à des outils digitaux intuitifs et sécurisés.
-Nos Modules Majeurs
-Tout ce dont vous avez besoin au même endroit
-E-Carnet de Santé Sécurisé
-Historique complet des vaccinations, traitements, vermifuges et comptes-rendus médicaux accessible par QR Code.
-Logiciel de Gestion de Cabinet
-Solution SaaS complète pour vétérinaires : agenda des rendez-vous, fiches patients, ordonnances électroniques et comptabilité.
-Rejoignez la Liste d'Attente DiaVet 🇩🇿
-Inscrivez votre email pour être parmi les premiers informés du lancement officiel en Algérie.
-Votre Email :
-S'inscrire à l'Accès Anticipé
-Merci ! Votre inscription a bien été enregistrée.
-
-DiaVet
-
-Algérie 🇩🇿
-Qui êtes-vous ?
-Choisissez votre profil pour accéder à la présentation de la vision DiaVet puis à votre questionnaire dédié.
-
-Je suis Propriétaire
-En savoir plus sur l'espace animal & répondre au questionnaire.
-
-Je suis Vétérinaire
-En savoir plus sur le logiciel cabinet & exprimer vos besoins.
-En savoir plus · Notre Vision
-
-Découvrez ce que la plateforme vous apporte avant d'entamer le questionnaire anonyme.
-Un espace conçu pour le bien-être de votre animal :
-	•	E-Carnet de santé : Suivi des vaccins, traitements et rappels.
-	•	Prise de RDV : Réservation simplifiée auprès des vétérinaires proches.
-	•	Urgences 24/7 : Repérage rapide des gardes vétérinaires en Algérie.
-	•	Adoption & Produits : Réseau d'entraide et marketplace.
-Un logiciel clinique complet pour votre pratique :
-	•	Gestion SaaS Cloud : Fiches patients, historiques et ordonnances.
-	•	Planning & RDV : Synchronisation des consultations et urgences.
-	•	Stock & Facturation : Gestion de la pharmacie et comptabilité.
-	•	Accès Mobile & PC : Suivi de votre cabinet où que vous soyez.
-3-5 minutes
-100% Anonyme
-Données protégées
-Lancer le questionnaire
-Espèce & Fiche de l'animal
-Sélectionnez les espèces et remplissez le formulaire.
-
-Fiche d'identité de l'animal
-Nom de l'animal :
-Race de l'animal :
-Âge :
-Poids (kg) :
-Sexe :
-                                        Mâle
-                                        Femelle
-                                    
-Dans quelle Wilaya résidez-vous en Algérie ?
-Pour mieux évaluer la couverture vétérinaire locale.
-                            -- Sélectionnez votre Wilaya --
-                            
+                    <div class="relative z-10 w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                         
+                        <!-- Left Hero Content -->
+                        <div class="lg:col-span-7 space-y-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-cyan-500 to-blue-600 p-[2px] shadow-xl shadow-cyan-500/30">
+                                    <div class="w-full h-full dark:bg-[#030f24] bg-white rounded-[14px] flex items-center justify-center text-cyan-400 text-3xl">
+                                        <i class="fa-solid fa-shield-cat"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h1 class="text-4xl sm:text-5xl font-black dark:text-white text-slate-900 tracking-tight flex items-center gap-2">
+                                        Dia<span class="text-cyan-500">Vet</span>
+                                    </h1>
+                                </div>
+                            </div>
 
+                            <div class="space-y-3">
+                                <h2 class="text-2xl sm:text-3xl font-extrabold dark:text-white text-slate-900 leading-tight" x-text="t('hero_title')">
+                                    L'écosystème numérique vétérinaire
+                                </h2>
+                                <p class="text-sm sm:text-base dark:text-slate-300 text-slate-700 max-w-xl font-normal leading-relaxed" x-text="t('hero_subtitle')">
+                                    Une seule plateforme, pour une meilleure santé animale.
+                                </p>
+                            </div>
 
-Votre Email pour l'accès prioritaire ?
-Une suggestion pour le projet DiaVet ?
-Domaine d'activité & Spécialité Vétérinaire
-Sélectionnez la ou les spécialités exercées au sein de votre cabinet.
+                            <div class="pt-2">
+                                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full dark:bg-[#051e3d] bg-cyan-100 border dark:border-cyan-500/40 border-cyan-400 dark:text-cyan-300 text-cyan-900 text-xs font-bold shadow-lg">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                    <span x-text="t('dev_badge')">En développement · Algérie</span>
+                                </div>
+                            </div>
+                        </div>
 
-Quels sont vos outils actuels de gestion ?
+                        <!-- Right Handwritten Cursive Slogan -->
+                        <div class="lg:col-span-5 flex justify-end items-start h-full">
+                            <div class="text-right pt-4 pr-4">
+                                <p class="font-cursive text-4xl sm:text-5xl text-cyan-500 drop-shadow-[0_4px_10px_rgba(0,210,255,0.5)] rotate-[-4deg]" x-text="t('slogan_top')">
+                                    Parce qu'ils méritent le meilleur ♡
+                                </p>
+                            </div>
+                        </div>
 
-Dans quelle Wilaya est située votre clinique ?
-Sélectionnez la localisation de votre établissement en Algérie.
-                            -- Sélectionnez la Wilaya --
+                    </div>
+                </div>
+
+                <!-- DUAL UNIVERSES SECTION (Propriétaire / Vétérinaire matching image_5.png & image_6.png) -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    
+                    <!-- CARD 1: ESPACE PROPRIÉTAIRE -->
+                    <div class="glass-card-owner p-8 rounded-3xl relative overflow-hidden flex flex-col justify-between group hover:border-cyan-400 transition duration-300">
+                        <div class="space-y-6">
                             
-                        
-Fiche d'Identité Professionnelle
-Remplissez les informations relatives à votre exercice praticien.
-Nom & Prénom du Praticien :
-Nom du Cabinet / Clinique :
-N° d'Agrément / Ordre Vétérinaire :
-Années d'expérience :
-                                        Moins de 2 ans (Jeune diplômé)
-                                        2 à 5 ans
-                                        5 à 10 ans
-                                        Plus de 10 ans
+                            <div class="flex items-center justify-between">
+                                <div class="w-12 h-12 rounded-2xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-500 text-xl shadow-lg">
+                                    <i class="fa-solid fa-paw"></i>
+                                </div>
+                                <span class="px-4 py-1.5 rounded-full dark:bg-cyan-950/80 bg-cyan-100 dark:text-cyan-300 text-cyan-900 border border-cyan-500/40 text-xs font-extrabold tracking-wide uppercase">
+                                    Espace Propriétaire
+                                </span>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-12 gap-6 items-center">
+                                <div class="sm:col-span-5 rounded-2xl overflow-hidden border border-cyan-500/30 h-44 shadow-lg">
+                                    <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=500&q=80" alt="Owner with pet" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                                </div>
+
+                                <div class="sm:col-span-7 space-y-3">
+                                    <h3 class="text-2xl font-black dark:text-white text-slate-900" x-text="t('owner_title')">Prenez soin de votre animal</h3>
+                                    <p class="text-xs dark:text-slate-300 text-slate-600 leading-relaxed" x-text="t('owner_desc')">
+                                        Suivez sa santé, prenez rendez-vous, accédez à des conseils, trouvez des produits et bien plus encore...
+                                    </p>
+                                    <button @click="startQuestionnaireFor('owner')" class="px-6 py-2.5 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-black text-xs hover:shadow-lg hover:shadow-cyan-500/40 transition hover:scale-105 flex items-center gap-2">
+                                        <span x-text="t('discover')">Découvrir</span>
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- 5 Icons Row for Owners (Matching image_5.png) -->
+                        <div class="grid grid-cols-5 gap-2 pt-6 mt-6 border-t border-cyan-500/20 text-center">
+                            <div class="space-y-2">
+                                <div class="w-10 h-10 mx-auto rounded-xl dark:bg-[#03152d] bg-cyan-50 border border-cyan-500/30 flex items-center justify-center text-cyan-500">
+                                    <i class="fa-solid fa-file-lines"></i>
+                                </div>
+                                <p class="text-[10px] dark:text-slate-300 text-slate-700 font-semibold">Carnet de santé</p>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="w-10 h-10 mx-auto rounded-xl dark:bg-[#03152d] bg-cyan-50 border border-cyan-500/30 flex items-center justify-center text-cyan-500">
+                                    <i class="fa-solid fa-calendar-days"></i>
+                                </div>
+                                <p class="text-[10px] dark:text-slate-300 text-slate-700 font-semibold">Rendez-vous</p>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="w-10 h-10 mx-auto rounded-xl dark:bg-[#03152d] bg-cyan-50 border border-cyan-500/30 flex items-center justify-center text-cyan-500">
+                                    <i class="fa-solid fa-hospital"></i>
+                                </div>
+                                <p class="text-[10px] dark:text-slate-300 text-slate-700 font-semibold">Urgences</p>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="w-10 h-10 mx-auto rounded-xl dark:bg-[#03152d] bg-cyan-50 border border-cyan-500/30 flex items-center justify-center text-cyan-500">
+                                    <i class="fa-solid fa-heart"></i>
+                                </div>
+                                <p class="text-[10px] dark:text-slate-300 text-slate-700 font-semibold">Adoption</p>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="w-10 h-10 mx-auto rounded-xl dark:bg-[#03152d] bg-cyan-50 border border-cyan-500/30 flex items-center justify-center text-cyan-500">
+                                    <i class="fa-solid fa-cart-shopping"></i>
+                                </div>
+                                <p class="text-[10px] dark:text-slate-300 text-slate-700 font-semibold">Marketplace</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CARD 2: ESPACE VÉTÉRINAIRE -->
+                    <div class="glass-card-vet p-8 rounded-3xl relative overflow-hidden flex flex-col justify-between group hover:border-emerald-400 transition duration-300">
+                        <div class="space-y-6">
+                            
+                            <div class="flex items-center justify-between">
+                                <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-500 text-xl shadow-lg">
+                                    <i class="fa-solid fa-stethoscope"></i>
+                                </div>
+                                <span class="px-4 py-1.5 rounded-full dark:bg-emerald-950/80 bg-emerald-100 dark:text-emerald-300 text-emerald-900 border border-emerald-500/40 text-xs font-extrabold tracking-wide uppercase">
+                                    Espace Vétérinaire
+                                </span>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-12 gap-6 items-center">
+                                <div class="sm:col-span-5 rounded-2xl overflow-hidden border border-emerald-500/30 h-44 shadow-lg">
+                                    <img src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=600&q=80" alt="Cabinet Vétérinaire - Praticien en consultation" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                                </div>
+
+                                <div class="sm:col-span-7 space-y-3">
+                                    <h3 class="text-2xl font-black dark:text-white text-slate-900" x-text="t('vet_title')">Gérez votre cabinet depuis partout</h3>
+                                    <p class="text-xs dark:text-slate-300 text-slate-600 leading-relaxed" x-text="t('vet_desc')">
+                                        Un logiciel complet, accessible sur ordinateur et téléphone à distance, pour simplifier votre quotidien et mieux soigner.
+                                    </p>
+                                    <button @click="startQuestionnaireFor('vet')" class="px-6 py-2.5 rounded-full bg-gradient-to-r from-emerald-600 to-teal-400 text-slate-950 font-black text-xs hover:shadow-lg hover:shadow-emerald-500/40 transition hover:scale-105 flex items-center gap-2">
+                                        <span x-text="t('discover')">Découvrir</span>
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- 5 Icons Row for Vets (Matching image_6.png) -->
+                        <div class="grid grid-cols-5 gap-2 pt-6 mt-6 border-t border-emerald-500/20 text-center">
+                            <div class="space-y-2">
+                                <div class="w-10 h-10 mx-auto rounded-xl dark:bg-[#02181d] bg-emerald-50 border border-emerald-500/30 flex items-center justify-center text-emerald-500">
+                                    <i class="fa-solid fa-folder-open"></i>
+                                </div>
+                                <p class="text-[10px] dark:text-slate-300 text-slate-700 font-semibold">Dossier patient</p>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="w-10 h-10 mx-auto rounded-xl dark:bg-[#02181d] bg-emerald-50 border border-emerald-500/30 flex items-center justify-center text-emerald-500">
+                                    <i class="fa-solid fa-calendar-check"></i>
+                                </div>
+                                <p class="text-[10px] dark:text-slate-300 text-slate-700 font-semibold">Planning</p>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="w-10 h-10 mx-auto rounded-xl dark:bg-[#02181d] bg-emerald-50 border border-emerald-500/30 flex items-center justify-center text-emerald-500">
+                                    <i class="fa-solid fa-pills"></i>
+                                </div>
+                                <p class="text-[10px] dark:text-slate-300 text-slate-700 font-semibold">Ordonnances</p>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="w-10 h-10 mx-auto rounded-xl dark:bg-[#02181d] bg-emerald-50 border border-emerald-500/30 flex items-center justify-center text-emerald-500">
+                                    <i class="fa-solid fa-boxes-stacked"></i>
+                                </div>
+                                <p class="text-[10px] dark:text-slate-300 text-slate-700 font-semibold">Stock & Facturation</p>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="w-10 h-10 mx-auto rounded-xl dark:bg-[#02181d] bg-emerald-50 border border-emerald-500/30 flex items-center justify-center text-emerald-500">
+                                    <i class="fa-solid fa-cloud"></i>
+                                </div>
+                                <p class="text-[10px] dark:text-slate-300 text-slate-700 font-semibold">Accès à distance</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- THIRD ROW: 2 CARDS (Deux univers, une même mission & 4 Piliers) -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    
+                    <!-- Left Card: Deux univers, une même mission -->
+                    <div class="lg:col-span-6 glass-panel-sub p-8 rounded-3xl flex flex-col sm:flex-row items-center gap-6">
+                        <div class="w-full sm:w-1/2 flex justify-center">
+                            <div class="relative w-44 h-48 rounded-2xl overflow-hidden border border-cyan-500/30 shadow-xl">
+                                <img src="https://images.unsplash.com/photo-1512428559087-560fa5ceab42?auto=format&fit=crop&w=400&q=80" alt="Mobile App DiaVet" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-[#020b18] via-transparent to-transparent"></div>
+                                <span class="absolute bottom-2 left-3 text-[10px] font-extrabold text-cyan-300">App Mobile DiaVet</span>
+                            </div>
+                        </div>
+
+                        <div class="w-full sm:w-1/2 space-y-3">
+                            <h3 class="text-xl font-bold dark:text-white text-slate-900">Deux univers, une même mission</h3>
+                            <p class="text-xs dark:text-slate-300 text-slate-600 leading-relaxed">
+                                DiaVet connecte les propriétaires et les vétérinaires dans un écosystème intelligent, pour le bien-être de tous les animaux en Algérie.
+                            </p>
+                            <button @click="openEnSavoirPlusVision()" class="px-5 py-2 rounded-full dark:bg-[#051a38] bg-cyan-100 border border-cyan-500/30 text-xs font-bold dark:text-cyan-300 text-cyan-900 hover:border-cyan-400 transition flex items-center gap-2 shadow">
+                                <span x-text="t('learn_more')">En savoir plus</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right Card: 4 Pillars -->
+                    <div class="lg:col-span-6 glass-panel-sub p-8 rounded-3xl flex items-center">
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center w-full">
+                            
+                            <div class="space-y-3 p-3 rounded-2xl dark:bg-[#03152e]/80 bg-slate-100 border border-cyan-500/20 shadow-sm">
+                                <div class="w-12 h-12 mx-auto rounded-xl bg-cyan-500/20 text-cyan-500 flex items-center justify-center text-xl">
+                                    <i class="fa-solid fa-cloud"></i>
+                                </div>
+                                <p class="text-xs font-bold dark:text-slate-200 text-slate-800">Technologie moderne</p>
+                            </div>
+
+                            <div class="space-y-3 p-3 rounded-2xl dark:bg-[#03152e]/80 bg-slate-100 border border-cyan-500/20 shadow-sm">
+                                <div class="w-12 h-12 mx-auto rounded-xl bg-cyan-500/20 text-cyan-500 flex items-center justify-center text-xl">
+                                    <i class="fa-solid fa-shield-halved"></i>
+                                </div>
+                                <p class="text-xs font-bold dark:text-slate-200 text-slate-800">Sécurité des données</p>
+                            </div>
+
+                            <div class="space-y-3 p-3 rounded-2xl dark:bg-[#03152e]/80 bg-slate-100 border border-cyan-500/20 shadow-sm">
+                                <div class="w-12 h-12 mx-auto rounded-xl bg-cyan-500/20 text-cyan-500 flex items-center justify-center text-xl">
+                                    <i class="fa-solid fa-mobile-screen"></i>
+                                </div>
+                                <p class="text-xs font-bold dark:text-slate-200 text-slate-800">Accessible partout</p>
+                            </div>
+
+                            <div class="space-y-3 p-3 rounded-2xl dark:bg-[#03152e]/80 bg-slate-100 border border-cyan-500/20 shadow-sm">
+                                <div class="w-12 h-12 mx-auto rounded-xl bg-cyan-500/20 text-cyan-500 flex items-center justify-center text-xl">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                </div>
+                                <p class="text-xs font-bold dark:text-slate-200 text-slate-800">Pensé pour l'Algérie</p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- BOTTOM BANNER SLOGAN WITH ALGIERS PANORAMA (Exact copy of image_5.png) -->
+                <div class="relative rounded-3xl overflow-hidden glass-panel-sub border border-cyan-500/30 p-8 sm:p-12 shadow-2xl min-h-[260px] flex items-center justify-between">
+                    
+                    <!-- Panoramic background -->
+                    <div class="absolute inset-0 z-0">
+                        <img src="https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?auto=format&fit=crop&w=1600&q=80" alt="Algiers Panorama Skyline" class="w-full h-full object-cover opacity-35 mix-blend-luminosity">
+                        <div class="absolute inset-0 dark:bg-gradient-to-r dark:from-[#020b18] dark:via-[#020b18]/80 dark:to-transparent bg-gradient-to-r from-white via-white/80 to-transparent"></div>
+                    </div>
+
+                    <div class="relative z-10 w-full flex flex-col md:flex-row items-center justify-between gap-8">
+                        <div class="space-y-2">
+                            <p class="font-cursive text-4xl sm:text-5xl text-cyan-500 drop-shadow-[0_4px_12px_rgba(0,210,255,0.6)]" x-text="t('slogan_bottom')">
+                                Ensemble pour une santé animale meilleure ♡
+                            </p>
+                            <p class="text-xs dark:text-slate-400 text-slate-600">Construisons ensemble l'écosystème vétérinaire de demain en Algérie 🇩🇿</p>
+                        </div>
+
+                        <!-- Right Card overlay -->
+                        <div class="p-5 rounded-2xl dark:bg-[#03132a]/90 bg-white/90 border border-cyan-500/30 max-w-sm backdrop-blur shadow-md">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-7 h-7 rounded-lg bg-cyan-500/20 text-cyan-500 flex items-center justify-center font-bold text-xs">
+                                    <i class="fa-solid fa-dog"></i>
+                                </div>
+                                <span class="font-extrabold dark:text-white text-slate-900 text-sm">DiaVet</span>
+                                <span class="text-[10px] text-emerald-400 bg-emerald-950/80 px-2.5 py-0.5 rounded-full font-bold border border-emerald-500/30" x-text="t('dev_badge')">En développement · Algérie</span>
+                            </div>
+                            <p class="text-[11px] dark:text-slate-300 text-slate-600 leading-relaxed">
+                                Les fonctionnalités présentées sont la vision actuelle du projet et peuvent évoluer.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- TAB 2: À PROPOS -->
+            <section x-show="activeTab === 'about'" x-transition class="max-w-5xl mx-auto py-10 space-y-6">
+                <div class="text-center space-y-3">
+                    <span class="px-4 py-1.5 rounded-full dark:bg-cyan-950 bg-cyan-100 text-cyan-500 border border-cyan-500/40 text-xs font-bold uppercase">À Propos du Projet</span>
+                    <h2 class="text-3xl font-black dark:text-white text-slate-900">Une Révolution Numérique pour la Santé Animale</h2>
+                </div>
+
+                <div class="glass-panel-sub p-8 rounded-3xl space-y-6 text-sm dark:text-slate-300 text-slate-700 leading-relaxed">
+                    <p>
+                        <strong>DiaVet</strong> est né d'un constat en Algérie : la nécessité de moderniser et d'interconnecter le secteur vétérinaire pour offrir un meilleur suivi médical aux animaux de compagnie et d'élevage.
+                    </p>
+                    <p>
+                        Notre plateforme connecte harmonieusement les propriétaires d'animaux, éleveurs et vétérinaires à travers les 58 wilayas d'Algérie grâce à des outils digitaux intuitifs et sécurisés.
+                    </p>
+                </div>
+            </section>
+
+            <!-- TAB 3: FONCTIONNALITÉS -->
+            <section x-show="activeTab === 'features'" x-transition class="max-w-6xl mx-auto py-10 space-y-6">
+                <div class="text-center space-y-3">
+                    <span class="px-4 py-1.5 rounded-full dark:bg-emerald-950 bg-emerald-100 text-emerald-500 border border-emerald-500/40 text-xs font-bold uppercase">Nos Modules Majeurs</span>
+                    <h2 class="text-3xl font-black dark:text-white text-slate-900">Tout ce dont vous avez besoin au même endroit</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="glass-panel-sub p-6 rounded-2xl space-y-4">
+                        <i class="fa-solid fa-address-card text-3xl text-cyan-500"></i>
+                        <h3 class="text-lg font-bold dark:text-white text-slate-900">E-Carnet de Santé Sécurisé</h3>
+                        <p class="text-xs dark:text-slate-300 text-slate-600 leading-relaxed">Historique complet des vaccinations, traitements, vermifuges et comptes-rendus médicaux accessible par QR Code.</p>
+                    </div>
+
+                    <div class="glass-panel-sub p-6 rounded-2xl space-y-4">
+                        <i class="fa-solid fa-laptop-medical text-3xl text-emerald-500"></i>
+                        <h3 class="text-lg font-bold dark:text-white text-slate-900">Logiciel de Gestion de Cabinet</h3>
+                        <p class="text-xs dark:text-slate-300 text-slate-600 leading-relaxed">Solution SaaS complète pour vétérinaires : agenda des rendez-vous, fiches patients, ordonnances électroniques et comptabilité.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: CONTACT -->
+            <section x-show="activeTab === 'contact'" x-transition class="max-w-4xl mx-auto py-10">
+                <div class="glass-panel-sub p-8 sm:p-12 rounded-3xl space-y-6 text-center">
+                    <h2 class="text-3xl font-black dark:text-white text-slate-900">Rejoignez la Liste d'Attente DiaVet 🇩🇿</h2>
+                    <p class="text-xs dark:text-slate-300 text-slate-600 max-w-lg mx-auto">Inscrivez votre email pour être parmi les premiers informés du lancement officiel en Algérie.</p>
+
+                    <form @submit.prevent="submitEarlyAccess()" class="max-w-md mx-auto space-y-4 text-left">
+                        <div>
+                            <label class="block text-xs font-bold dark:text-slate-300 text-slate-700 mb-1">Votre Email :</label>
+                            <input type="email" required x-model="userEmail" placeholder="nom@exemple.com" class="w-full dark:bg-[#03132a] bg-white border border-cyan-500/30 rounded-xl p-3.5 text-xs dark:text-white text-slate-900 focus:border-cyan-400 outline-none shadow-sm">
+                        </div>
+                        <button type="submit" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-bold text-xs hover:shadow-lg transition">S'inscrire à l'Accès Anticipé</button>
+                    </form>
+
+                    <div x-show="submittedEarlyAccess" class="p-4 rounded-xl bg-emerald-950 border border-emerald-500/40 text-emerald-300 text-xs font-bold">
+                        Merci ! Votre inscription a bien été enregistrée.
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- EXTENDED QUESTIONNAIRE MODAL -->
+        <div x-show="questionnaireOpen" x-transition.opacity class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-2xl overflow-y-auto">
+            
+            <div class="w-full max-w-2xl glass-modal rounded-3xl overflow-hidden shadow-2xl relative border border-cyan-500/40 flex flex-col min-h-[620px] justify-between p-6 sm:p-8">
+                
+                <!-- Modal Navigation Header -->
+                <div>
+                    <div class="flex items-center justify-between pb-4 border-b border-cyan-500/20">
+                        <button @click="prevStep()" class="dark:text-slate-400 text-slate-600 hover:text-cyan-500 transition flex items-center gap-2 text-xs font-bold">
+                            <i class="fa-solid fa-arrow-left"></i>
+                            <span x-text="qStep === 0 ? t('close') : t('back')"></span>
+                        </button>
+
+                        <div class="flex items-center gap-2">
+                            <div class="w-7 h-7 rounded-lg bg-cyan-500/20 text-cyan-500 flex items-center justify-center font-bold text-xs">
+                                <i class="fa-solid fa-dog"></i>
+                            </div>
+                            <span class="font-extrabold dark:text-white text-slate-900 text-sm">DiaVet</span>
+                        </div>
+
+                        <!-- Progress Bar & Counter -->
+                        <div x-show="qStep >= 1 && !qCompleted" class="flex items-center gap-3">
+                            <div class="w-28 h-2 dark:bg-[#03152e] bg-slate-200 rounded-full overflow-hidden border border-cyan-500/20">
+                                <div class="h-full bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 transition-all duration-300" :style="'width: ' + (qStep <= 1 ? 5 : (((qStep - 1) / 14) * 100)) + '%'"></div>
+                            </div>
+                            <span class="text-xs font-black text-cyan-500 tracking-wider" x-text="qStep <= 1 ? 'Vision' : (qStep - 1) + '/14'"></span>
+                        </div>
+
+                        <span x-show="qStep === 0" class="px-2.5 py-1 rounded-full dark:bg-cyan-950 bg-cyan-100 text-cyan-500 border border-cyan-500/30 text-[10px] font-bold">Algérie 🇩🇿</span>
+                    </div>
+                </div>
+
+                <!-- QUESTIONNAIRE STEPS CONTENT -->
+                <div class="py-6 flex-grow">
+                    
+                    <!-- STEP 0: PROFILE SELECTOR ("Qui êtes-vous ?") -->
+                    <div x-show="qStep === 0" class="space-y-6">
+                        <div class="text-left">
+                            <h3 class="text-2xl font-black dark:text-white text-slate-900" x-text="t('who_are_you')">Qui êtes-vous ?</h3>
+                            <p class="text-xs dark:text-slate-300 text-slate-600 mt-1">Choisissez votre profil pour accéder à la présentation de la vision DiaVet puis à votre questionnaire dédié.</p>
+                        </div>
+
+                        <div class="space-y-4">
+                            <!-- Card Owner -->
+                            <div @click="selectProfile('owner')" class="p-5 rounded-2xl dark:bg-[#03142e] bg-white border border-cyan-500/30 hover:border-cyan-400 cursor-pointer transition flex items-center justify-between group shadow-md">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-14 h-14 rounded-2xl overflow-hidden border border-cyan-500/40">
+                                        <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=200&q=80" class="w-full h-full object-cover">
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold dark:text-white text-slate-900 text-sm">Je suis Propriétaire</h4>
+                                        <p class="text-[11px] dark:text-slate-400 text-slate-500">En savoir plus sur l'espace animal & répondre au questionnaire.</p>
+                                    </div>
+                                </div>
+                                <i class="fa-solid fa-arrow-right dark:text-slate-400 text-slate-500 group-hover:text-cyan-500 transition"></i>
+                            </div>
+
+                            <!-- Card Vet -->
+                            <div @click="selectProfile('vet')" class="p-5 rounded-2xl dark:bg-[#021820] bg-white border border-emerald-500/30 hover:border-emerald-400 cursor-pointer transition flex items-center justify-between group shadow-md">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-14 h-14 rounded-2xl overflow-hidden border border-emerald-500/40">
+                                        <img src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=200&q=80" class="w-full h-full object-cover">
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold dark:text-white text-slate-900 text-sm">Je suis Vétérinaire</h4>
+                                        <p class="text-[11px] dark:text-slate-400 text-slate-500">En savoir plus sur le logiciel cabinet & exprimer vos besoins.</p>
+                                    </div>
+                                </div>
+                                <i class="fa-solid fa-arrow-right dark:text-slate-400 text-slate-500 group-hover:text-emerald-500 transition"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 1: EN SAVOIR PLUS & NOTRE VISION (Placé juste avant le questionnaire) -->
+                    <div x-show="qStep === 1" class="space-y-5 animate-pop">
+                        <div class="text-left space-y-1.5">
+                            <span class="px-3 py-1 rounded-full dark:bg-cyan-950/80 bg-cyan-100 text-cyan-500 border border-cyan-500/30 text-[10px] font-extrabold uppercase tracking-wider inline-block">
+                                En savoir plus · Notre Vision
+                            </span>
+                            <h3 class="text-2xl font-black dark:text-white text-slate-900" x-text="qProfile === 'owner' ? 'DiaVet pour les Propriétaires' : 'DiaVet pour les Vétérinaires'"></h3>
+                            <p class="text-xs dark:text-slate-300 text-slate-600">Découvrez ce que la plateforme vous apporte avant d'entamer le questionnaire anonyme.</p>
+                        </div>
+
+                        <!-- Vision Card Owner -->
+                        <div x-show="qProfile === 'owner'" class="p-5 rounded-2xl dark:bg-[#03142e] bg-slate-50 border border-cyan-500/30 space-y-3 text-xs">
+                            <h4 class="font-bold text-cyan-500 flex items-center gap-2">
+                                <i class="fa-solid fa-paw"></i> <span>Un espace conçu pour le bien-être de votre animal :</span>
+                            </h4>
+                            <ul class="space-y-2 dark:text-slate-300 text-slate-700 text-[11px]">
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-cyan-500"></i> <strong>E-Carnet de santé :</strong> Suivi des vaccins, traitements et rappels.</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-cyan-500"></i> <strong>Prise de RDV :</strong> Réservation simplifiée auprès des vétérinaires proches.</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-cyan-500"></i> <strong>Urgences 24/7 :</strong> Repérage rapide des gardes vétérinaires en Algérie.</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-cyan-500"></i> <strong>Adoption & Produits :</strong> Réseau d'entraide et marketplace.</li>
+                            </ul>
+                        </div>
+
+                        <!-- Vision Card Vet -->
+                        <div x-show="qProfile === 'vet'" class="p-5 rounded-2xl dark:bg-[#021820] bg-slate-50 border border-emerald-500/30 space-y-3 text-xs">
+                            <h4 class="font-bold text-emerald-500 flex items-center gap-2">
+                                <i class="fa-solid fa-stethoscope"></i> <span>Un logiciel clinique complet pour votre pratique :</span>
+                            </h4>
+                            <ul class="space-y-2 dark:text-slate-300 text-slate-700 text-[11px]">
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-500"></i> <strong>Gestion SaaS Cloud :</strong> Fiches patients, historiques et ordonnances.</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-500"></i> <strong>Planning & RDV :</strong> Synchronisation des consultations et urgences.</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-500"></i> <strong>Stock & Facturation :</strong> Gestion de la pharmacie et comptabilité.</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-500"></i> <strong>Accès Mobile & PC :</strong> Suivi de votre cabinet où que vous soyez.</li>
+                            </ul>
+                        </div>
+
+                        <!-- Fast Metrics -->
+                        <div class="grid grid-cols-3 gap-2 text-center text-[10px]">
+                            <div class="p-2.5 rounded-xl dark:bg-[#031124] bg-slate-100 border border-cyan-500/20 dark:text-slate-300 text-slate-700">
+                                <i class="fa-solid fa-clock text-cyan-500 text-xs mb-1 block"></i>
+                                <span>3-5 minutes</span>
+                            </div>
+                            <div class="p-2.5 rounded-xl dark:bg-[#031124] bg-slate-100 border border-cyan-500/20 dark:text-slate-300 text-slate-700">
+                                <i class="fa-solid fa-user-secret text-cyan-500 text-xs mb-1 block"></i>
+                                <span>100% Anonyme</span>
+                            </div>
+                            <div class="p-2.5 rounded-xl dark:bg-[#031124] bg-slate-100 border border-cyan-500/20 dark:text-slate-300 text-slate-700">
+                                <i class="fa-solid fa-shield-halved text-cyan-500 text-xs mb-1 block"></i>
+                                <span>Données protégées</span>
+                            </div>
+                        </div>
+
+                        <button @click="qStep = 2" class="w-full py-4 rounded-xl bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 text-slate-950 font-black text-xs hover:shadow-lg transition flex items-center justify-center gap-2">
+                            <span x-text="t('start_questionnaire')">Lancer le questionnaire</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+
+                    <!-- OWNER QUESTIONS (STEPS 2-15) -->
+                    <div x-show="qStep === 2 && qProfile === 'owner'" class="space-y-4 animate-pop">
+                        <div>
+                            <h3 class="text-xl font-bold dark:text-white text-slate-900">Espèce & Fiche de l'animal</h3>
+                            <p class="text-xs dark:text-slate-400 text-slate-600 mt-1">Sélectionnez les espèces et remplissez le formulaire.</p>
+                        </div>
+
+                        <!-- Species Selector -->
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                            <template x-for="animal in animalOptions" :key="animal.id">
+                                <div @click="toggleAnimal(animal.id)" 
+                                     :class="selectedAnimals.includes(animal.id) ? 'ring-2 ring-cyan-400 border-cyan-400 scale-[1.02] shadow-lg' : 'border-cyan-500/20 hover:border-cyan-400/50'"
+                                     class="relative rounded-2xl border dark:bg-[#03152e] bg-white overflow-hidden cursor-pointer transition-all duration-300 group shadow-sm">
                                     
+                                    <div class="h-20 w-full overflow-hidden relative">
+                                        <img :src="animal.image" :alt="animal.label['fr']" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                                        <div class="absolute inset-0 dark:bg-gradient-to-t dark:from-[#020b18] dark:via-transparent dark:to-transparent"></div>
+                                        
+                                        <div x-show="selectedAnimals.includes(animal.id)" x-transition class="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-cyan-400 text-slate-950 flex items-center justify-center text-[10px] font-black">
+                                            <i class="fa-solid fa-check"></i>
+                                        </div>
+                                    </div>
 
+                                    <div class="p-2 text-center flex items-center justify-center gap-1.5">
+                                        <i :class="animal.icon" class="text-cyan-500 text-xs"></i>
+                                        <span class="text-[11px] font-bold dark:text-slate-200 text-slate-800" x-text="animal.label['fr']"></span>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
 
-Numéro de téléphone pro pour la version Bêta ?
-Remarques ou besoins spécifiques ?
+                        <!-- Detailed Pet Form -->
+                        <div class="p-3.5 rounded-2xl dark:bg-[#03142e] bg-slate-50 border border-cyan-500/30 space-y-3 text-xs">
+                            <h4 class="font-bold text-cyan-500 flex items-center gap-2 text-xs">
+                                <i class="fa-solid fa-id-card"></i> <span>Fiche d'identité de l'animal</span>
+                            </h4>
 
-Merci pour votre participation !
-Vos réponses sont précieuses et nous aident à construire une solution qui fera la différence dans la vie des animaux et de leurs soignants en Algérie 🇩🇿.
-Ensemble pour leur bien-être ♡
-Retour à l'accueil
-Précédent
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                                <div>
+                                    <label class="block dark:text-slate-300 text-slate-700 text-[10px] font-semibold mb-1">Nom de l'animal :</label>
+                                    <input type="text" x-model="petName" placeholder="Ex: Max, Bella, Milo..." class="w-full dark:bg-[#020d1f] bg-white border border-cyan-500/30 rounded-xl p-2 text-xs dark:text-white text-slate-900 focus:border-cyan-400 outline-none">
+                                </div>
+                                <div>
+                                    <label class="block dark:text-slate-300 text-slate-700 text-[10px] font-semibold mb-1">Race de l'animal :</label>
+                                    <input type="text" x-model="petBreed" placeholder="Ex: Berger Allemand..." class="w-full dark:bg-[#020d1f] bg-white border border-cyan-500/30 rounded-xl p-2 text-xs dark:text-white text-slate-900 focus:border-cyan-400 outline-none">
+                                </div>
+                            </div>
 
-DiaVet Algérie
-L'Écosystème Numérique Vétérinaire Spécialisé 🇩🇿
-Couverture Nationale dans les 58 Wilayas
-Notre Mission & Vision
-Une plateforme unique pour la santé animale
-DiaVet est la première solution digitale globale pensée exclusivement pour transformer et moderniser le secteur vétérinaire en Algérie. Notre mission est d'unifier sous un même toit technologique tous les acteurs du bien-être animal : propriétaires de mascottes, éleveurs, cliniques et vétérinaires praticiens.
-Pour les Propriétaires & Éleveurs
-	•	E-Carnet de Santé : Centralisation de l'historique médical et vaccins via QR Code.
-	•	Prise de Rendez-vous : Réservation auprès des cabinets les plus proches.
-	•	Urgences & Gardes 24/7 : Détection des cliniques actives.
-Pour les Vétérinaires & Cliniques
-	•	Logiciel Cloud SaaS : Gestion des dossiers patients, planning et stock.
-	•	Ordonnances Électroniques : Édition rapide et conformité des soins.
-	•	Rappels SMS Automatisés : Respect des vaccins et rappels.
-DiaVet Algérie © 2026 Tous droits réservés.
-À propos Questionnaire Contact
+                            <div class="grid grid-cols-3 gap-2.5">
+                                <div>
+                                    <label class="block dark:text-slate-300 text-slate-700 text-[10px] font-semibold mb-1">Âge :</label>
+                                    <input type="text" x-model="petAge" placeholder="Ex: 2 ans" class="w-full dark:bg-[#020d1f] bg-white border border-cyan-500/30 rounded-xl p-2 text-xs dark:text-white text-slate-900 focus:border-cyan-400 outline-none">
+                                </div>
+                                <div>
+                                    <label class="block dark:text-slate-300 text-slate-700 text-[10px] font-semibold mb-1">Poids (kg) :</label>
+                                    <input type="text" x-model="petWeight" placeholder="Ex: 12 kg" class="w-full dark:bg-[#020d1f] bg-white border border-cyan-500/30 rounded-xl p-2 text-xs dark:text-white text-slate-900 focus:border-cyan-400 outline-none">
+                                </div>
+                                <div>
+                                    <label class="block dark:text-slate-300 text-slate-700 text-[10px] font-semibold mb-1">Sexe :</label>
+                                    <select x-model="petGender" class="w-full dark:bg-[#020d1f] bg-white border border-cyan-500/30 rounded-xl p-2 text-xs dark:text-white text-slate-900 focus:border-cyan-400 outline-none">
+                                        <option value="Mâle">Mâle</option>
+                                        <option value="Femelle">Femelle</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- OWNER STEP 3: Wilaya Selection -->
+                    <div x-show="qStep === 3 && qProfile === 'owner'" class="space-y-5 animate-pop">
+                        <div>
+                            <h3 class="text-xl font-bold dark:text-white text-slate-900">Dans quelle Wilaya résidez-vous en Algérie ?</h3>
+                            <p class="text-xs dark:text-slate-400 text-slate-600 mt-1">Pour mieux évaluer la couverture vétérinaire locale.</p>
+                        </div>
+
+                        <select x-model="selectedWilaya" class="w-full dark:bg-[#03142e] bg-white border border-cyan-500/30 rounded-xl p-3.5 text-xs dark:text-white text-slate-900 focus:border-cyan-400 outline-none">
+                            <option value="">-- Sélectionnez votre Wilaya --</option>
+                            <template x-for="w in wilayas" :key="w">
+                                <option :value="w" x-text="w"></option>
+                            </template>
+                        </select>
+                    </div>
+
+                    <!-- OWNER STEPS 4-13 (Standard Option Pickers) -->
+                    <div x-show="qStep >= 4 && qStep <= 13 && qProfile === 'owner'" class="space-y-5 animate-pop">
+                        <div>
+                            <h3 class="text-xl font-bold dark:text-white text-slate-900" x-text="getOwnerQuestionTitle(qStep)"></h3>
+                        </div>
+
+                        <div class="space-y-2">
+                            <template x-for="opt in getOwnerQuestionOptions(qStep)" :key="opt">
+                                <button @click="setOwnerAnswer(qStep, opt)" :class="getOwnerAnswer(qStep) === opt ? 'dark:bg-cyan-950/80 bg-cyan-100 border-cyan-400 text-cyan-600 font-bold' : 'dark:bg-[#03142e] bg-white border-cyan-500/20 dark:text-slate-300 text-slate-700'" class="w-full p-3.5 rounded-xl border flex items-center justify-between text-xs transition shadow-sm">
+                                    <span x-text="opt"></span>
+                                    <i x-show="getOwnerAnswer(qStep) === opt" class="fa-solid fa-circle-check text-cyan-500"></i>
+                                </button>
+                            </template>
+                        </div>
+                    </div>
+
+                    <div x-show="qStep === 14 && qProfile === 'owner'" class="space-y-5 animate-pop">
+                        <div>
+                            <h3 class="text-xl font-bold dark:text-white text-slate-900">Votre Email pour l'accès prioritaire ?</h3>
+                        </div>
+                        <input type="email" x-model="ownerNotificationEmail" placeholder="votre.email@domaine.com" class="w-full dark:bg-[#03142e] bg-white border border-cyan-500/30 rounded-xl p-3.5 text-xs dark:text-white text-slate-900 focus:border-cyan-400 outline-none">
+                    </div>
+
+                    <div x-show="qStep === 15 && qProfile === 'owner'" class="space-y-5 animate-pop">
+                        <div>
+                            <h3 class="text-xl font-bold dark:text-white text-slate-900">Une suggestion pour le projet DiaVet ?</h3>
+                        </div>
+                        <textarea x-model="ownerFeedback" rows="4" placeholder="Vos remarques..." class="w-full dark:bg-[#03142e] bg-white border border-cyan-500/30 rounded-xl p-3.5 text-xs dark:text-white text-slate-900 focus:border-cyan-400 outline-none"></textarea>
+                    </div>
+
+                    <!-- VETERINAIRE STEPS (STEPS 2-15) -->
+                    <!-- STEP 2 VET: Specialty Cards with Photos -->
+                    <div x-show="qStep === 2 && qProfile === 'vet'" class="space-y-4 animate-pop">
+                        <div>
+                            <h3 class="text-xl font-bold dark:text-white text-slate-900">Domaine d'activité & Spécialité Vétérinaire</h3>
+                            <p class="text-xs dark:text-slate-400 text-slate-600 mt-1">Sélectionnez la ou les spécialités exercées au sein de votre cabinet.</p>
+                        </div>
+
+                        <!-- Specialty Image Cards -->
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                            <template x-for="spec in vetSpecialties" :key="spec.id">
+                                <div @click="toggleVetSpecialty(spec.id)" 
+                                     :class="selectedVetSpecialties.includes(spec.id) ? 'ring-2 ring-emerald-400 border-emerald-400 scale-[1.02] shadow-lg shadow-emerald-500/20' : 'border-emerald-500/20 hover:border-emerald-400/50'"
+                                     class="relative rounded-2xl border dark:bg-[#021820] bg-white overflow-hidden cursor-pointer transition-all duration-300 group shadow-sm">
+                                    
+                                    <div class="h-20 w-full overflow-hidden relative">
+                                        <img :src="spec.image" :alt="spec.label" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                                        <div class="absolute inset-0 dark:bg-gradient-to-t dark:from-[#020b18] dark:via-transparent dark:to-transparent"></div>
+                                        
+                                        <div x-show="selectedVetSpecialties.includes(spec.id)" x-transition class="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-emerald-400 text-slate-950 flex items-center justify-center text-[10px] font-black">
+                                            <i class="fa-solid fa-check"></i>
+                                        </div>
+                                    </div>
+
+                                    <div class="p-2 text-center flex items-center justify-center gap-1.5">
+                                        <i :class="spec.icon" class="text-emerald-500 text-xs"></i>
+                                        <span class="text-[11px] font-bold dark:text-slate-200 text-slate-800" x-text="spec.label"></span>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+
+                        <!-- Current Management Tools Selector -->
+                        <div class="p-3.5 rounded-2xl dark:bg-[#021820] bg-slate-50 border border-emerald-500/30 space-y-2 text-xs">
+                            <h4 class="font-bold text-emerald-500 flex items-center gap-2 text-xs">
+                                <i class="fa-solid fa-laptop-code"></i> <span>Quels sont vos outils actuels de gestion ?</span>
+                            </h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <template x-for="tool in vetToolsOptions" :key="tool.id">
+                                    <button @click="toggleVetTool(tool.id)" :class="selectedVetTools.includes(tool.id) ? 'dark:bg-emerald-950/80 bg-emerald-100 border-emerald-400 text-emerald-600 font-bold' : 'dark:bg-[#011016] bg-white border-emerald-500/20 dark:text-slate-300 text-slate-700'" class="p-2.5 rounded-xl border flex items-center justify-between text-xs transition shadow-sm">
+                                        <span x-text="tool.label"></span>
+                                        <i x-show="selectedVetTools.includes(tool.id)" class="fa-solid fa-square-check text-emerald-500"></i>
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div x-show="qStep === 3 && qProfile === 'vet'" class="space-y-5 animate-pop">
+                        <div>
+                            <h3 class="text-xl font-bold dark:text-white text-slate-900">Dans quelle Wilaya est située votre clinique ?</h3>
+                            <p class="text-xs dark:text-slate-400 text-slate-600 mt-1">Sélectionnez la localisation de votre établissement en Algérie.</p>
+                        </div>
+                        <select x-model="selectedVetWilaya" class="w-full dark:bg-[#021820] bg-white border border-emerald-500/30 rounded-xl p-3.5 text-xs dark:text-white text-slate-900 focus:border-emerald-400 outline-none">
+                            <option value="">-- Sélectionnez la Wilaya --</option>
+                            <template x-for="w in wilayas" :key="w">
+                                <option :value="w" x-text="w"></option>
+                            </template>
+                        </select>
+                    </div>
+
+                    <!-- STEP 4 VET: Complete Practitioner & Clinic Form -->
+                    <div x-show="qStep === 4 && qProfile === 'vet'" class="space-y-4 animate-pop">
+                        <div>
+                            <h3 class="text-xl font-bold dark:text-white text-slate-900">Fiche d'Identité Professionnelle</h3>
+                            <p class="text-xs dark:text-slate-400 text-slate-600 mt-1">Remplissez les informations relatives à votre exercice praticien.</p>
+                        </div>
+                        <div class="p-4 rounded-2xl dark:bg-[#021820] bg-slate-50 border border-emerald-500/30 space-y-3 text-xs">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block dark:text-slate-300 text-slate-700 text-[10px] font-semibold mb-1">Nom & Prénom du Praticien :</label>
+                                    <input type="text" x-model="vetName" placeholder="Dr. Amine Benali" class="w-full dark:bg-[#011016] bg-white border border-emerald-500/30 rounded-xl p-2.5 text-xs dark:text-white text-slate-900 focus:border-emerald-400 outline-none">
+                                </div>
+                                <div>
+                                    <label class="block dark:text-slate-300 text-slate-700 text-[10px] font-semibold mb-1">Nom du Cabinet / Clinique :</label>
+                                    <input type="text" x-model="clinicName" placeholder="Clinique Vétérinaire El Bahdja" class="w-full dark:bg-[#011016] bg-white border border-emerald-500/30 rounded-xl p-2.5 text-xs dark:text-white text-slate-900 focus:border-emerald-400 outline-none">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block dark:text-slate-300 text-slate-700 text-[10px] font-semibold mb-1">N° d'Agrément / Ordre Vétérinaire :</label>
+                                    <input type="text" x-model="vetLicenseNumber" placeholder="Ex: 16/2018-VET" class="w-full dark:bg-[#011016] bg-white border border-emerald-500/30 rounded-xl p-2.5 text-xs dark:text-white text-slate-900 focus:border-emerald-400 outline-none">
+                                </div>
+                                <div>
+                                    <label class="block dark:text-slate-300 text-slate-700 text-[10px] font-semibold mb-1">Années d'expérience :</label>
+                                    <select x-model="vetExperience" class="w-full dark:bg-[#011016] bg-white border border-emerald-500/30 rounded-xl p-2.5 text-xs dark:text-white text-slate-900 focus:border-emerald-400 outline-none">
+                                        <option value="Moins de 2 ans">Moins de 2 ans (Jeune diplômé)</option>
+                                        <option value="2 à 5 ans">2 à 5 ans</option>
+                                        <option value="5 à 10 ans">5 à 10 ans</option>
+                                        <option value="Plus de 10 ans">Plus de 10 ans</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div x-show="qStep >= 5 && qStep <= 13 && qProfile === 'vet'" class="space-y-5 animate-pop">
+                        <div>
+                            <h3 class="text-xl font-bold dark:text-white text-slate-900" x-text="getVetQuestionTitle(qStep)"></h3>
+                        </div>
+                        <div class="space-y-2">
+                            <template x-for="opt in getVetQuestionOptions(qStep)" :key="opt">
+                                <button @click="setVetAnswer(qStep, opt)" :class="getVetAnswer(qStep) === opt ? 'dark:bg-emerald-950/80 bg-emerald-100 border-emerald-400 text-emerald-600 font-bold' : 'dark:bg-[#021820] bg-white border-emerald-500/20 dark:text-slate-300 text-slate-700'" class="w-full p-3.5 rounded-xl border flex items-center justify-between text-xs transition shadow-sm">
+                                    <span x-text="opt"></span>
+                                    <i x-show="getVetAnswer(qStep) === opt" class="fa-solid fa-circle-check text-emerald-500"></i>
+                                </button>
+                            </template>
+                        </div>
+                    </div>
+
+                    <div x-show="qStep === 14 && qProfile === 'vet'" class="space-y-5 animate-pop">
+                        <div>
+                            <h3 class="text-xl font-bold dark:text-white text-slate-900">Numéro de téléphone pro pour la version Bêta ?</h3>
+                        </div>
+                        <input type="text" x-model="vetPhone" placeholder="0550..." class="w-full dark:bg-[#021820] bg-white border border-emerald-500/30 rounded-xl p-3.5 text-xs dark:text-white text-slate-900 focus:border-emerald-400 outline-none">
+                    </div>
+
+                    <div x-show="qStep === 15 && qProfile === 'vet'" class="space-y-5 animate-pop">
+                        <div>
+                            <h3 class="text-xl font-bold dark:text-white text-slate-900">Remarques ou besoins spécifiques ?</h3>
+                        </div>
+                        <textarea x-model="vetFeedback" rows="4" placeholder="Votre message..." class="w-full dark:bg-[#021820] bg-white border border-emerald-500/30 rounded-xl p-3.5 text-xs dark:text-white text-slate-900 focus:border-emerald-400 outline-none"></textarea>
+                    </div>
+
+                    <!-- CONFIRMATION STEP -->
+                    <div x-show="qCompleted" class="text-center space-y-6 py-4 animate-pop">
+                        <div class="w-20 h-20 mx-auto rounded-full bg-emerald-500/20 text-emerald-500 border border-emerald-400/40 flex items-center justify-center text-4xl shadow-xl">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+
+                        <div class="space-y-2">
+                            <h3 class="text-2xl font-black dark:text-white text-slate-900">Merci pour votre participation !</h3>
+                            <p class="text-xs dark:text-slate-300 text-slate-600 max-w-md mx-auto">Vos réponses sont précieuses et nous aident à construire une solution qui fera la différence dans la vie des animaux et de leurs soignants en Algérie 🇩🇿.</p>
+                        </div>
+
+                        <div class="py-2">
+                            <p class="font-cursive text-3xl sm:text-4xl text-cyan-500 drop-shadow">Ensemble pour leur bien-être ♡</p>
+                        </div>
+
+                        <button @click="closeQuestionnaire()" class="px-8 py-3.5 rounded-xl bg-cyan-500 text-slate-950 font-black text-xs hover:bg-cyan-400 transition shadow-lg">
+                            <i class="fa-solid fa-house mr-1.5"></i> Retour à l'accueil
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- Modal Bottom Controls -->
+                <div x-show="qStep >= 2 && !qCompleted" class="pt-4 border-t border-cyan-500/20 flex items-center justify-between">
+                    <button @click="prevStep()" class="text-xs dark:text-slate-400 text-slate-600 hover:text-cyan-500 font-bold transition">
+                        <i class="fa-solid fa-chevron-left mr-1"></i> <span x-text="t('back')">Précédent</span>
+                    </button>
+
+                    <button @click="nextStep()" class="px-8 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 via-cyan-500 to-emerald-400 text-slate-950 font-black text-xs hover:shadow-lg transition flex items-center gap-2">
+                        <span x-text="qStep === 15 ? t('submit') : t('next')"></span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- SECTION DESCRIPTION TOTALE DE DIAVET ALGÉRIE -->
+        <section class="max-w-7xl mx-auto py-12 border-t border-cyan-500/20">
+            <div class="glass-panel-sub p-8 sm:p-12 rounded-3xl space-y-8">
+                
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-cyan-500/20">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-blue-600 via-cyan-400 to-emerald-400 p-[1.5px] shadow-lg shadow-cyan-500/30">
+                            <div class="w-full h-full dark:bg-[#030f24] bg-white rounded-[14px] flex items-center justify-center">
+                                <i class="fa-solid fa-shield-dog text-2xl text-cyan-500"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl sm:text-3xl font-black dark:text-white text-slate-900">DiaVet Algérie</h2>
+                            <p class="text-xs font-bold text-cyan-500 uppercase tracking-widest">L'Écosystème Numérique Vétérinaire Spécialisé 🇩🇿</p>
+                        </div>
+                    </div>
+                    
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full dark:bg-[#03142e] bg-slate-100 border border-cyan-500/30 text-xs dark:text-cyan-300 text-cyan-800 font-semibold shadow-sm">
+                        <i class="fa-solid fa-map-location-dot text-emerald-500"></i>
+                        <span>Couverture Nationale dans les 58 Wilayas</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-2 text-cyan-500 font-extrabold text-sm uppercase">
+                            <i class="fa-solid fa-bullseye"></i>
+                            <span>Notre Mission & Vision</span>
+                        </div>
+                        <h3 class="text-base font-bold dark:text-white text-slate-900">Une plateforme unique pour la santé animale</h3>
+                        <p class="text-xs dark:text-slate-300 text-slate-600 leading-relaxed">
+                            <strong>DiaVet</strong> est la première solution digitale globale pensée exclusivement pour transformer et moderniser le secteur vétérinaire en Algérie. Notre mission est d'unifier sous un même toit technologique tous les acteurs du bien-être animal : propriétaires de mascottes, éleveurs, cliniques et vétérinaires praticiens.
+                        </p>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-2 text-cyan-500 font-extrabold text-sm uppercase">
+                            <i class="fa-solid fa-paw"></i>
+                            <span>Pour les Propriétaires & Éleveurs</span>
+                        </div>
+                        <ul class="space-y-2 text-xs dark:text-slate-300 text-slate-600">
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-circle-check text-cyan-500 mt-0.5"></i>
+                                <span><strong>E-Carnet de Santé :</strong> Centralisation de l'historique médical et vaccins via QR Code.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-circle-check text-cyan-500 mt-0.5"></i>
+                                <span><strong>Prise de Rendez-vous :</strong> Réservation auprès des cabinets les plus proches.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-circle-check text-cyan-500 mt-0.5"></i>
+                                <span><strong>Urgences & Gardes 24/7 :</strong> Détection des cliniques actives.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-2 text-emerald-500 font-extrabold text-sm uppercase">
+                            <i class="fa-solid fa-user-doctor"></i>
+                            <span>Pour les Vétérinaires & Cliniques</span>
+                        </div>
+                        <ul class="space-y-2 text-xs dark:text-slate-300 text-slate-600">
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-circle-check text-emerald-500 mt-0.5"></i>
+                                <span><strong>Logiciel Cloud SaaS :</strong> Gestion des dossiers patients, planning et stock.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-circle-check text-emerald-500 mt-0.5"></i>
+                                <span><strong>Ordonnances Électroniques :</strong> Édition rapide et conformité des soins.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i class="fa-solid fa-circle-check text-emerald-500 mt-0.5"></i>
+                                <span><strong>Rappels SMS Automatisés :</strong> Respect des vaccins et rappels.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="border-t border-cyan-500/20 py-6 text-xs dark:text-slate-400 text-slate-600">
+            <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-2">
+                    <span class="font-bold dark:text-white text-slate-900">DiaVet Algérie</span>
+                    <span>© 2026 Tous droits réservés.</span>
+                </div>
+                
+                <div class="flex items-center gap-6 text-[11px]">
+                    <button @click="activeTab = 'about'" class="hover:text-cyan-500">À propos</button>
+                    <button @click="openQuestionnaireModal()" class="hover:text-cyan-500">Questionnaire</button>
+                    <button @click="activeTab = 'contact'" class="hover:text-cyan-500">Contact</button>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- Alpine App Script -->
+    <script>
+        function diavetApp() {
+            return {
+                darkMode: true,
+                lang: 'fr',
+                activeTab: 'home',
+                userEmail: '',
+                submittedEarlyAccess: false,
+
+                // Questionnaire State
+                questionnaireOpen: false,
+                qProfile: 'owner',
+                qStep: 0,
+                qCompleted: false,
+
+                // Pet Profile
+                petName: 'Max',
+                petBreed: 'Berger Allemand',
+                petAge: '2 ans',
+                petGender: 'Mâle',
+                petWeight: '28 kg',
+                selectedAnimals: ['dog', 'cat'],
+                selectedWilaya: '16 - Alger',
+
+                // Owner Answers
+                ownerAnswers: {},
+                ownerNotificationEmail: '',
+                ownerFeedback: '',
+
+                // Vet Profile & Specialties
+                selectedVetSpecialties: ['canine', 'rurale'],
+                selectedVetTools: ['dossier_papier'],
+                selectedVetWilaya: '16 - Alger',
+                vetName: 'Dr. Amine Benali',
+                clinicName: 'Clinique El Bahdja',
+                vetLicenseNumber: '16/2019-VET',
+                vetExperience: '5 à 10 ans',
+                vetAnswers: {},
+                vetPhone: '',
+                vetFeedback: '',
+
+                vetSpecialties: [
+                    { id: 'canine', label: 'Canine & Féline', icon: 'fa-solid fa-dog', image: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=400&q=80' },
+                    { id: 'rurale', label: 'Rurale & Élevage', icon: 'fa-solid fa-cow', image: 'https://images.unsplash.com/photo-1500595046743-cd271d694d30?auto=format&fit=crop&w=400&q=80' },
+                    { id: 'equine', label: 'Équine', icon: 'fa-solid fa-horse', image: 'https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?auto=format&fit=crop&w=400&q=80' },
+                    { id: 'nac', label: 'NAC & Exotiques', icon: 'fa-solid fa-otter', image: 'https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?auto=format&fit=crop&w=400&q=80' }
+                ],
+
+                // Lists
+                wilayas: [
+                    "1 - Adrar", "2 - Chlef", "3 - Laghouat", "4 - Oum El Bouaghi", "5 - Batna", "6 - Béjaïa", "7 - Biskra", "8 - Béchar", "9 - Blida", "10 - Bouira",
+                    "11 - Tamanrasset", "12 - Tébessa", "13 - Tlemcen", "14 - Tiaret", "15 - Tizi Ouzou", "16 - Alger", "17 - Djelfa", "18 - Jijel", "19 - Sétif", "20 - Saïda",
+                    "21 - Skikda", "22 - Sidi Bel Abbès", "23 - Annaba", "24 - Guelma", "25 - Constantine", "26 - Médéa", "27 - Mostaganem", "28 - M'Sila", "29 - Mascara", "30 - Ouargla",
+                    "31 - Oran", "32 - El Bayadh", "33 - Illizi", "34 - Bordj Bou Arreridj", "35 - Boumerdès", "36 - El Tarf", "37 - Tindouf", "38 - Tissemsilt", "39 - El Oued", "40 - Khenchela",
+                    "41 - Souk Ahras", "42 - Tipaza", "43 - Mila", "44 - Aïn Defla", "45 - Naâma", "46 - Aïn Témouchent", "47 - Ghardaïa", "48 - Relizane", "49 - El M'Ghair", "50 - El Meniaa",
+                    "51 - Ouled Djellal", "52 - Bordj Baji Mokhtar", "53 - Béni Abbès", "54 - Timimoun", "55 - Touggourt", "56 - Djanet", "57 - In Salah", "58 - In Guezzam"
+                ],
+
+                animalOptions: [
+                    { id: 'dog', label: { fr: 'Chien' }, icon: 'fa-solid fa-dog', image: 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=300&q=80' },
+                    { id: 'cat', label: { fr: 'Chat' }, icon: 'fa-solid fa-cat', image: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=300&q=80' },
+                    { id: 'bird', label: { fr: 'Oiseau' }, icon: 'fa-solid fa-dove', image: 'https://images.unsplash.com/photo-1552728089-57bdde30beb3?auto=format&fit=crop&w=300&q=80' },
+                    { id: 'rodent', label: { fr: 'Rongeur' }, icon: 'fa-solid fa-otter', image: 'https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?auto=format&fit=crop&w=300&q=80' },
+                    { id: 'reptile', label: { fr: 'Reptile' }, icon: 'fa-solid fa-frog', image: 'https://images.unsplash.com/photo-1563409236302-8442b5e6417f?auto=format&fit=crop&w=300&q=80' },
+                    { id: 'other', label: { fr: 'Autre' }, icon: 'fa-solid fa-paw', image: 'https://images.unsplash.com/photo-1548767797-d8c844163c4c?auto=format&fit=crop&w=300&q=80' }
+                ],
+
+                vetToolsOptions: [
+                    { id: 'dossier_papier', label: 'Dossiers & Fiches papier' },
+                    { id: 'logiciel', label: 'Logiciel de gestion local PC' },
+                    { id: 'excel', label: 'Fichiers Excel / Registre manuel' },
+                    { id: 'messaging', label: 'WhatsApp / Viber pour RDV' }
+                ],
+
+                // Translations Dictionary
+                i18n: {
+                    page_title: { fr: "DiaVet Algérie - L'écosystème numérique vétérinaire", en: "DiaVet Algeria - The digital veterinary ecosystem", ar: "ديافيت الجزائر - النظام البيئي الرقمي البيطري" },
+                    nav_home: { fr: "Accueil", en: "Home", ar: "الرئيسية" },
+                    nav_about: { fr: "À propos", en: "About", ar: "من نحن" },
+                    nav_features: { fr: "Fonctionnalités", en: "Features", ar: "المميزات" },
+                    nav_questionnaire: { fr: "Questionnaire", en: "Questionnaire", ar: "الاستبيان" },
+                    nav_contact: { fr: "Contact", en: "Contact", ar: "اتصل بنا" },
+                    dev_badge: { fr: "En développement · Algérie", en: "In development · Algeria", ar: "قيد التطوير · الجزائر" },
+                    hero_title: { fr: "L'écosystème numérique vétérinaire", en: "The digital veterinary ecosystem", ar: "النظام البيئي الرقمي البيطري" },
+                    hero_subtitle: { fr: "Une seule plateforme, pour une meilleure santé animale.", en: "One platform, for better animal health.", ar: "منصة واحدة، لصحة حيوانية أفضل." },
+                    slogan_top: { fr: "Parce qu'ils méritent le meilleur ♡", en: "Because they deserve the best ♡", ar: "لأنهم يستحقون الأفضل ♡" },
+                    slogan_bottom: { fr: "Ensemble pour une santé animale meilleure ♡", en: "Together for better animal health ♡", ar: "معاً من أجل صحة حيوانية أفضل ♡" },
+                    owner_title: { fr: "Prenez soin de votre animal", en: "Take care of your pet", ar: "اعتني بحيوانك الأليف" },
+                    owner_desc: { fr: "Suivez sa santé, prenez rendez-vous, accédez à des conseils, trouvez des produits et bien plus encore...", en: "Track health, book appointments, access advice, find products and more...", ar: "تتبع صحته، احجز مواعيد، احصل على نصائح، واستكشف المنتجات والمزيد..." },
+                    vet_title: { fr: "Gérez votre cabinet depuis partout", en: "Manage your clinic from anywhere", ar: "أدر عيادتك من أي مكان" },
+                    vet_desc: { fr: "Un logiciel complet, accessible sur ordinateur et téléphone à distance, pour simplifier votre quotidien et mieux soigner.", en: "Complete software accessible on PC & phone to simplify your daily work and treat better.", ar: "برنامج كامل وسهل الاستخدام عبر الكمبيوتر والهاتف لإدارة عيادتك ورعاية أفضل." },
+                    discover: { fr: "Découvrir", en: "Discover", ar: "إكتشف" },
+                    learn_more: { fr: "En savoir plus", en: "Learn more", ar: "إعرف المزيد" },
+                    who_are_you: { fr: "Qui êtes-vous ?", en: "Who are you?", ar: "من أنت؟" },
+                    close: { fr: "Fermer", en: "Close", ar: "إغلاق" },
+                    back: { fr: "Retour", en: "Back", ar: "رجوع" },
+                    next: { fr: "Suivant", en: "Next", ar: "التالي" },
+                    submit: { fr: "Terminer & Envoyer", en: "Submit", ar: "إرسال" },
+                    start_questionnaire: { fr: "Lancer le questionnaire", en: "Start Questionnaire", ar: "بدء الاستبيان" }
+                },
+
+                t(key) {
+                    if (this.i18n[key] && this.i18n[key][this.lang]) {
+                        return this.i18n[key][this.lang];
+                    }
+                    return key;
+                },
+
+                setLanguage(l) {
+                    this.lang = l;
+                },
+
+                openQuestionnaireModal() {
+                    this.questionnaireOpen = true;
+                    this.qStep = 0;
+                    this.qCompleted = false;
+                },
+
+                openEnSavoirPlusVision() {
+                    this.qProfile = 'owner';
+                    this.questionnaireOpen = true;
+                    this.qStep = 1;
+                },
+
+                selectProfile(profile) {
+                    this.qProfile = profile;
+                    this.qStep = 1;
+                },
+
+                startQuestionnaireFor(profile) {
+                    this.qProfile = profile;
+                    this.questionnaireOpen = true;
+                    this.qStep = 1;
+                },
+
+                toggleAnimal(id) {
+                    if (this.selectedAnimals.includes(id)) {
+                        this.selectedAnimals = this.selectedAnimals.filter(item => item !== id);
+                    } else {
+                        this.selectedAnimals.push(id);
+                    }
+                },
+
+                toggleVetSpecialty(id) {
+                    if (this.selectedVetSpecialties.includes(id)) {
+                        this.selectedVetSpecialties = this.selectedVetSpecialties.filter(item => item !== id);
+                    } else {
+                        this.selectedVetSpecialties.push(id);
+                    }
+                },
+
+                toggleVetTool(id) {
+                    if (this.selectedVetTools.includes(id)) {
+                        this.selectedVetTools = this.selectedVetTools.filter(item => item !== id);
+                    } else {
+                        this.selectedVetTools.push(id);
+                    }
+                },
+
+                // Owner Questions Mapping
+                getOwnerQuestionTitle(step) {
+                    const titles = {
+                        4: "Quelle fonction est prioritaire pour vous ?",
+                        5: "À quelle fréquence vous rendez-vous chez le vétérinaire ?",
+                        6: "Avez-vous des difficultés à trouver un vétérinaire de garde ?",
+                        7: "Souhaitez-vous un E-Carnet de santé QR Code ?",
+                        8: "Souhaitez-vous des rappels automatiques de vaccins ?",
+                        9: "Quel est votre budget annuel estimé (DZD) ?",
+                        10: "Comment préférez-vous réserver vos RDV ?",
+                        11: "Intéressé par la livraison de croquettes ?",
+                        12: "Que pensez-vous de la téléconsultation ?",
+                        13: "Comment déplacez-vous votre animal ?"
+                    };
+                    return titles[step] || "Question";
+                },
+
+                getOwnerQuestionOptions(step) {
+                    const options = {
+                        4: ['Carnet de santé numérique', 'Prise de RDV en ligne', 'Urgences & Gardes 24/7', 'Adoption & Entraide', 'Boutique Produits'],
+                        5: ['Plusieurs fois par mois', '1 à 2 fois par an', 'Seulement en urgence', 'Rarement / Jamais'],
+                        6: ['Oui, très souvent', 'Parfois', 'Non, jamais'],
+                        7: ['Oui, totalement', 'Oui avec option papier', 'Pas pour le moment'],
+                        8: ['Oui, rappels automatiques', 'Non, pas besoin'],
+                        9: ['Moins de 20 000 DZD', '20 000 - 50 000 DZD', '50 000 - 100 000 DZD', 'Plus de 100 000 DZD'],
+                        10: ['Application Mobile', 'Appel téléphonique direct', 'WhatsApp / Viber', 'Sans RDV direct'],
+                        11: ['Oui régulièrement', 'Moyennement', 'Non'],
+                        12: ['Excellente idée', 'Utile pour conseils simples', 'Pas intéressé'],
+                        13: ['Voiture personnelle', 'Taxi / VTC', 'À pied / Transport en commun', 'Visite à domicile uniquement']
+                    };
+                    return options[step] || ['Option 1', 'Option 2'];
+                },
+
+                setOwnerAnswer(step, val) { this.ownerAnswers[step] = val; },
+                getOwnerAnswer(step) { return this.ownerAnswers[step]; },
+
+                // Vet Questions Mapping
+                getVetQuestionTitle(step) {
+                    const titles = {
+                        5: "Combien de consultations par jour en moyenne ?",
+                        6: "Quel est votre plus grand défi quotidien ?",
+                        7: "Seriez-vous intéressé par un logiciel SaaS cloud ?",
+                        8: "Besoin de gestion de stock et d'ordonnances ?",
+                        9: "Prêt à proposer la téléconsultation ?",
+                        10: "Souhaitez-vous automatiser les rappels par SMS ?",
+                        11: "Combien de personnes travaillent dans le cabinet ?",
+                        12: "Souhaitez-vous figurer sur l'annuaire géolocalisé ?",
+                        13: "Quel tarif mensuel serait acceptable (DZD) ?"
+                    };
+                    return titles[step] || "Question Vétérinaire";
+                },
+
+                getVetQuestionOptions(step) {
+                    const options = {
+                        5: ['Moins de 5 consultations', '5 à 15 consultations', '15 à 30 consultations', 'Plus de 30 consultations'],
+                        6: ['Rappels de vaccins', 'Suivi des dossiers médicaux', 'Gestion de la pharmacie & stock', 'Organisation des urgences'],
+                        7: ['Oui, très intéressé', 'Moyennement', 'Non'],
+                        8: ['Oui, indispensable', 'Non, optionnel'],
+                        9: ['Oui pour suivis simples', 'Non, présence physique obligatoire'],
+                        10: ['Oui, excellente idée', 'Non, gestion manuelle'],
+                        11: ['Seul', '2 à 4 personnes', '5 personnes et plus'],
+                        12: ['Oui totalement', 'Non'],
+                        13: ['Moins de 3000 DZD/mois', '3000 - 5000 DZD/mois', '5000 - 8000 DZD/mois', 'Plus de 8000 DZD/mois']
+                    };
+                    return options[step] || ['Option 1', 'Option 2'];
+                },
+
+                setVetAnswer(step, val) { this.vetAnswers[step] = val; },
+                getVetAnswer(step) { return this.vetAnswers[step]; },
+
+                nextStep() {
+                    if (this.qStep < 15) {
+                        this.qStep++;
+                    } else {
+                        this.qCompleted = true;
+                    }
+                },
+
+                prevStep() {
+                    if (this.qCompleted) {
+                        this.qCompleted = false;
+                    } else if (this.qStep > 0) {
+                        this.qStep--;
+                    } else {
+                        this.questionnaireOpen = false;
+                    }
+                },
+
+                closeQuestionnaire() {
+                    this.questionnaireOpen = false;
+                    this.qStep = 0;
+                    this.qCompleted = false;
+                },
+
+                submitEarlyAccess() {
+                    this.submittedEarlyAccess = true;
+                    setTimeout(() => { this.userEmail = ''; }, 3000);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
