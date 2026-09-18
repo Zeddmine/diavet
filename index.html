@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="fr" class="h-full dark" x-data="diavetApp()" :class="{ 'dark': darkMode }" :dir="lang === 'ar' ? 'rtl' : 'ltr'">
+<html lang="fr" class="dark" x-data="diavetApp()" :class="{ 'dark': darkMode }" :dir="lang === 'ar' ? 'rtl' : 'ltr'">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title x-text="t('page_title')">DiaVet Algérie - L'écosystème numérique vétérinaire</title>
 
-    <!-- Web App & PWA Icons (Embedded High-Res SVG Icon for Home Screen & Favicon) -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%230052cc'/%3E%3Cstop offset='50%25' stop-color='%2300d2ff'/%3E%3Cstop offset='100%25' stop-color='%2300e676'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='128' fill='%23030e20'/%3E%3Crect x='16' y='16' width='480' height='480' rx='112' fill='none' stroke='url(%23grad)' stroke-width='16'/%3E%3Cpath d='M210 130 C150 130 110 170 110 230 C110 280 135 320 180 340 L180 370 C180 380 190 390 200 390 L220 390 C230 390 240 380 240 370 L240 340 C285 320 310 280 310 230 C310 170 270 130 210 130 Z' fill='none' stroke='%2300d2ff' stroke-width='20'/%3E%3Cpath d='M330 210 A 50 50 0 0 1 380 260 A 50 50 0 0 1 330 310 A 50 50 0 0 1 280 260 A 50 50 0 0 1 330 210 Z' fill='%2300e676' opacity='0.85'/%3E%3Cpath d='M210 170 L210 250 M170 210 L250 210' stroke='%23ffffff' stroke-width='24' stroke-linecap='round'/%3E%3C/svg%3E">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%230052cc'/%3E%3Cstop offset='50%25' stop-color='%2300d2ff'/%3E%3Cstop offset='100%25' stop-color='%2300e676'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='128' fill='%23030e20'/%3E%3Crect x='16' y='16' width='480' height='480' rx='112' fill='none' stroke='url(%23grad)' stroke-width='16'/%3E%3Cpath d='M210 170 L210 250 M170 210 L250 210' stroke='%2300d2ff' stroke-width='24' stroke-linecap='round'/%3E%3C/svg%3E">
-    
+    <!-- Embedded High-Res SVG Icon for PWA & Mobile Web App -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%230052cc'/%3E%3Cstop offset='50%25' stop-color='%2300d2ff'/%3E%3Cstop offset='100%25' stop-color='%2300e676'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='128' fill='%23020b18'/%3E%3Crect x='16' y='16' width='480' height='480' rx='112' fill='none' stroke='url(%23grad)' stroke-width='16'/%3E%3Cpath d='M210 130 C150 130 110 170 110 230 C110 280 135 320 180 340 L180 370 C180 380 190 390 200 390 L220 390 C230 390 240 380 240 370 L240 340 C285 320 310 280 310 230 C310 170 270 130 210 130 Z' fill='none' stroke='%2300d2ff' stroke-width='20'/%3E%3Cpath d='M330 210 A 50 50 0 0 1 380 260 A 50 50 0 0 1 330 310 A 50 50 0 0 1 280 260 A 50 50 0 0 1 330 210 Z' fill='%2300e676' opacity='0.85'/%3E%3Cpath d='M210 170 L210 250 M170 210 L250 210' stroke='%23ffffff' stroke-width='24' stroke-linecap='round'/%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%230052cc'/%3E%3Cstop offset='50%25' stop-color='%2300d2ff'/%3E%3Cstop offset='100%25' stop-color='%2300e676'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='128' fill='%23020b18'/%3E%3Cpath d='M210 170 L210 250 M170 210 L250 210' stroke='%2300d2ff' stroke-width='24' stroke-linecap='round'/%3E%3C/svg%3E">
+
     <meta name="theme-color" content="#020b18">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="DiaVet Algérie">
 
-    <!-- Tailwind CSS -->
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -36,111 +36,115 @@
             }
         }
     </script>
-    <!-- Alpine.js -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <!-- Font Awesome Icons -->
+
+    <!-- Font Awesome Icons & Google Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Caveat:wght@600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
+
+    <!-- CRITICAL FALLBACK STYLES (Prevents Unstyled Text Wall Before Alpine Hydration) -->
     <style>
-        /* Base styles with Light and Dark Mode compatibility */
-        body {
+        [x-cloak] { display: none !important; }
+
+        html {
+            background-color: #020b18;
+            color: #ffffff;
             font-family: 'Inter', 'Cairo', sans-serif;
-            transition: background-color 0.4s ease, color 0.4s ease;
-            overflow-x: hidden;
         }
 
-        /* Dark Mode Specific Backgrounds */
-        .dark body {
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
             background-color: #020b18;
             color: #f1f5f9;
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* Light Mode Specific Backgrounds */
         html:not(.dark) body {
             background-color: #f0f4f9;
             color: #0f172a;
         }
 
-        /* Ambient Framing Leaves (Matching mockup image_5.png) */
+        /* Ambient Framing Leaves */
         .leaf-frame-top-left {
-            position: absolute;
-            top: -20px;
-            left: -30px;
-            width: 280px;
-            height: 280px;
-            background-image: radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, transparent 70%);
+            position: fixed;
+            top: -40px;
+            left: -40px;
+            width: 300px;
+            height: 300px;
+            background-radial: circle, rgba(16, 185, 129, 0.2) 0%, transparent 70%;
+            background-image: radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, transparent 75%);
             pointer-events: none;
             z-index: 2;
-            filter: blur(12px);
+            filter: blur(20px);
         }
 
         .leaf-frame-bottom-right {
-            position: absolute;
-            bottom: -30px;
-            right: -30px;
+            position: fixed;
+            bottom: -40px;
+            right: -40px;
             width: 320px;
             height: 320px;
-            background-image: radial-gradient(circle, rgba(6, 182, 212, 0.22) 0%, transparent 70%);
+            background-image: radial-gradient(circle, rgba(6, 182, 212, 0.25) 0%, transparent 75%);
             pointer-events: none;
             z-index: 2;
-            filter: blur(12px);
+            filter: blur(20px);
         }
 
         /* Glassmorphism Cards - Dark Mode */
         .dark .glass-card-owner {
-            background: linear-gradient(135deg, rgba(6, 25, 52, 0.88) 0%, rgba(3, 15, 34, 0.94) 100%);
+            background: linear-gradient(135deg, rgba(6, 25, 52, 0.92) 0%, rgba(3, 15, 34, 0.96) 100%);
             backdrop-filter: blur(16px);
-            border: 1px solid rgba(0, 210, 255, 0.35);
-            box-shadow: 0 0 25px rgba(0, 150, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 210, 255, 0.4);
+            box-shadow: 0 0 30px rgba(0, 150, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
 
         .dark .glass-card-vet {
-            background: linear-gradient(135deg, rgba(4, 32, 40, 0.88) 0%, rgba(2, 20, 28, 0.94) 100%);
+            background: linear-gradient(135deg, rgba(4, 32, 40, 0.92) 0%, rgba(2, 20, 28, 0.96) 100%);
             backdrop-filter: blur(16px);
             border: 1.5px solid rgba(0, 230, 118, 0.5);
-            box-shadow: 0 0 30px rgba(0, 230, 118, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 35px rgba(0, 230, 118, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
 
         .dark .glass-panel-sub {
-            background: linear-gradient(135deg, rgba(7, 24, 48, 0.85) 0%, rgba(3, 14, 30, 0.92) 100%);
+            background: linear-gradient(135deg, rgba(7, 24, 48, 0.9) 0%, rgba(3, 14, 30, 0.95) 100%);
             backdrop-filter: blur(16px);
-            border: 1px solid rgba(0, 180, 255, 0.25);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(0, 180, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         }
 
         .dark .glass-modal {
-            background: rgba(3, 13, 29, 0.96);
+            background: rgba(2, 11, 24, 0.98);
             backdrop-filter: blur(25px);
             border: 1px solid rgba(0, 210, 255, 0.4);
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
         }
 
         /* Glassmorphism Cards - Light Mode */
         html:not(.dark) .glass-card-owner {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(240, 246, 255, 0.95) 100%);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 246, 255, 0.98) 100%);
             backdrop-filter: blur(16px);
-            border: 1.5px solid rgba(0, 132, 255, 0.35);
-            box-shadow: 0 15px 35px rgba(0, 100, 220, 0.12);
+            border: 1.5px solid rgba(0, 132, 255, 0.4);
+            box-shadow: 0 15px 35px rgba(0, 100, 220, 0.15);
         }
 
         html:not(.dark) .glass-card-vet {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(238, 252, 245, 0.95) 100%);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(238, 252, 245, 0.98) 100%);
             backdrop-filter: blur(16px);
-            border: 1.5px solid rgba(0, 200, 100, 0.4);
-            box-shadow: 0 15px 35px rgba(0, 180, 100, 0.12);
+            border: 1.5px solid rgba(0, 200, 100, 0.45);
+            box-shadow: 0 15px 35px rgba(0, 180, 100, 0.15);
         }
 
         html:not(.dark) .glass-panel-sub {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.94);
             backdrop-filter: blur(16px);
-            border: 1px solid rgba(0, 150, 255, 0.2);
+            border: 1px solid rgba(0, 150, 255, 0.25);
             box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
         }
 
         html:not(.dark) .glass-modal {
-            background: rgba(255, 255, 255, 0.98);
+            background: rgba(255, 255, 255, 0.99);
             backdrop-filter: blur(25px);
             border: 1px solid rgba(0, 180, 255, 0.4);
             box-shadow: 0 25px 60px rgba(15, 23, 42, 0.25);
@@ -155,26 +159,27 @@
             opacity: 0.35;
         }
 
-        /* Keyframe Animations */
         @keyframes pulseGlow {
             0%, 100% { opacity: 0.3; transform: scale(1); }
             50% { opacity: 0.55; transform: scale(1.06); }
         }
         @keyframes popIn {
-            0% { transform: scale(0.95); opacity: 0; }
+            0% { transform: scale(0.96); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
 
         .animate-pulse-glow { animation: pulseGlow 7s ease-in-out infinite; }
         .animate-pop { animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
-        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #020b18; }
         ::-webkit-scrollbar-thumb { background: #0284c7; border-radius: 4px; }
     </style>
+
+    <!-- Alpine.js (Defer) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
-<body class="min-h-screen relative selection:bg-cyan-500 selection:text-white transition-colors duration-500">
+<body class="min-h-screen relative selection:bg-cyan-500 selection:text-white transition-colors duration-300">
 
     <!-- Leaf Decorators from corners -->
     <div class="leaf-frame-top-left"></div>
@@ -187,8 +192,8 @@
 
     <div class="relative z-10 flex flex-col min-h-screen max-w-[1440px] mx-auto px-2 sm:px-4 lg:px-6">
 
-        <!-- NAVBAR (Exact match to mockup image_5.png & image_6.png) -->
-        <header class="sticky top-0 z-50 py-3 backdrop-blur-md dark:bg-[#020b18]/85 bg-white/85 border-b dark:border-cyan-500/20 border-cyan-500/30 transition-colors">
+        <!-- NAVBAR (Identical to mockup image_5.png) -->
+        <header class="sticky top-0 z-50 py-3 backdrop-blur-md dark:bg-[#020b18]/90 bg-white/90 border-b dark:border-cyan-500/20 border-cyan-500/30 transition-colors">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
                 
                 <!-- Logo DiaVet -->
@@ -228,7 +233,7 @@
                     </button>
                 </nav>
 
-                <!-- Right Header Badges & Language Switcher -->
+                <!-- Right Header Badges, Lang Switcher & Dark/Light Toggle -->
                 <div class="flex items-center gap-3">
                     <div class="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-full dark:bg-[#051733] bg-slate-200 border dark:border-cyan-500/30 border-cyan-500/40 text-xs font-semibold dark:text-cyan-300 text-cyan-800">
                         <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
@@ -244,7 +249,7 @@
                     </div>
 
                     <!-- Dark / Light Theme Toggle -->
-                    <button @click="darkMode = !darkMode" title="Basculer Mode Clair / Sombre" class="p-2.5 rounded-xl dark:bg-[#05152e] bg-slate-200 border dark:border-cyan-500/30 border-cyan-500/40 text-amber-500 hover:text-cyan-500 transition hover:scale-105 shadow">
+                    <button @click="toggleDarkMode()" title="Basculer Mode Clair / Sombre" class="p-2.5 rounded-xl dark:bg-[#05152e] bg-slate-200 border dark:border-cyan-500/30 border-cyan-500/40 text-amber-500 hover:text-cyan-500 transition hover:scale-105 shadow">
                         <i class="fa-solid" :class="darkMode ? 'fa-moon text-cyan-400' : 'fa-sun text-amber-500'"></i>
                     </button>
                 </div>
@@ -253,15 +258,15 @@
 
         <main class="flex-grow py-6 space-y-8">
 
-            <!-- TAB 1: ACCUEIL / LANDING (Pixel-perfect replica of image_5.png & image_6.png) -->
+            <!-- TAB 1: ACCUEIL / LANDING (Matching image_5.png & image_6.png) -->
             <section x-show="activeTab === 'home'" x-transition class="space-y-8 max-w-7xl mx-auto">
                 
                 <!-- HERO BANNER SECTION -->
                 <div class="relative rounded-3xl overflow-hidden glass-panel-sub border dark:border-cyan-500/40 border-cyan-500/30 p-8 sm:p-12 shadow-2xl min-h-[460px] flex items-center">
                     
-                    <!-- Background Visual Image (Dog, Cat, Algiers Skyline) -->
+                    <!-- Background Visual Image -->
                     <div class="absolute inset-0 z-0">
-                        <img src="https://images.unsplash.com/photo-1548767797-d8c844163c4c?auto=format&fit=crop&w=1600&q=80" alt="DiaVet Pets & Algiers Skyline" class="w-full h-full object-cover object-center opacity-45 mix-blend-luminosity">
+                        <img src="https://images.unsplash.com/photo-1548767797-d8c844163c4c?auto=format&fit=crop&w=1600&q=80" alt="DiaVet Pets & Algiers Skyline" class="w-full h-full object-cover object-center opacity-40 mix-blend-luminosity">
                         <div class="absolute inset-0 dark:bg-gradient-to-r dark:from-[#020b18] dark:via-[#020b18]/85 dark:to-transparent bg-gradient-to-r from-white via-white/85 to-transparent"></div>
                         <div class="absolute inset-0 dark:bg-gradient-to-t dark:from-[#020b18] dark:via-transparent dark:to-[#020b18]/50 bg-gradient-to-t from-white via-transparent to-white/50"></div>
                     </div>
@@ -292,7 +297,11 @@
                                 </p>
                             </div>
 
-                            <div class="pt-2">
+                            <div class="pt-2 flex items-center gap-4 flex-wrap">
+                                <button @click="openQuestionnaireModal()" class="px-6 py-3 rounded-full bg-gradient-to-r from-cyan-500 to-emerald-400 text-slate-950 font-extrabold text-xs hover:shadow-lg hover:shadow-cyan-500/30 hover:scale-105 transition flex items-center gap-2">
+                                    <i class="fa-solid fa-clipboard-question"></i>
+                                    <span x-text="t('start_questionnaire')">Répondre au questionnaire</span>
+                                </button>
                                 <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full dark:bg-[#051e3d] bg-cyan-100 border dark:border-cyan-500/40 border-cyan-400 dark:text-cyan-300 text-cyan-900 text-xs font-bold shadow-lg">
                                     <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
                                     <span x-text="t('dev_badge')">En développement · Algérie</span>
@@ -516,7 +525,6 @@
                 <!-- BOTTOM BANNER SLOGAN WITH ALGIERS PANORAMA (Exact copy of image_5.png) -->
                 <div class="relative rounded-3xl overflow-hidden glass-panel-sub border border-cyan-500/30 p-8 sm:p-12 shadow-2xl min-h-[260px] flex items-center justify-between">
                     
-                    <!-- Panoramic background -->
                     <div class="absolute inset-0 z-0">
                         <img src="https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?auto=format&fit=crop&w=1600&q=80" alt="Algiers Panorama Skyline" class="w-full h-full object-cover opacity-35 mix-blend-luminosity">
                         <div class="absolute inset-0 dark:bg-gradient-to-r dark:from-[#020b18] dark:via-[#020b18]/80 dark:to-transparent bg-gradient-to-r from-white via-white/80 to-transparent"></div>
@@ -550,7 +558,7 @@
             </section>
 
             <!-- TAB 2: À PROPOS -->
-            <section x-show="activeTab === 'about'" x-transition class="max-w-5xl mx-auto py-10 space-y-6">
+            <section x-show="activeTab === 'about'" x-cloak class="max-w-5xl mx-auto py-10 space-y-6">
                 <div class="text-center space-y-3">
                     <span class="px-4 py-1.5 rounded-full dark:bg-cyan-950 bg-cyan-100 text-cyan-500 border border-cyan-500/40 text-xs font-bold uppercase">À Propos du Projet</span>
                     <h2 class="text-3xl font-black dark:text-white text-slate-900">Une Révolution Numérique pour la Santé Animale</h2>
@@ -567,7 +575,7 @@
             </section>
 
             <!-- TAB 3: FONCTIONNALITÉS -->
-            <section x-show="activeTab === 'features'" x-transition class="max-w-6xl mx-auto py-10 space-y-6">
+            <section x-show="activeTab === 'features'" x-cloak class="max-w-6xl mx-auto py-10 space-y-6">
                 <div class="text-center space-y-3">
                     <span class="px-4 py-1.5 rounded-full dark:bg-emerald-950 bg-emerald-100 text-emerald-500 border border-emerald-500/40 text-xs font-bold uppercase">Nos Modules Majeurs</span>
                     <h2 class="text-3xl font-black dark:text-white text-slate-900">Tout ce dont vous avez besoin au même endroit</h2>
@@ -589,7 +597,7 @@
             </section>
 
             <!-- TAB 4: CONTACT -->
-            <section x-show="activeTab === 'contact'" x-transition class="max-w-4xl mx-auto py-10">
+            <section x-show="activeTab === 'contact'" x-cloak class="max-w-4xl mx-auto py-10">
                 <div class="glass-panel-sub p-8 sm:p-12 rounded-3xl space-y-6 text-center">
                     <h2 class="text-3xl font-black dark:text-white text-slate-900">Rejoignez la Liste d'Attente DiaVet 🇩🇿</h2>
                     <p class="text-xs dark:text-slate-300 text-slate-600 max-w-lg mx-auto">Inscrivez votre email pour être parmi les premiers informés du lancement officiel en Algérie.</p>
@@ -602,7 +610,7 @@
                         <button type="submit" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-bold text-xs hover:shadow-lg transition">S'inscrire à l'Accès Anticipé</button>
                     </form>
 
-                    <div x-show="submittedEarlyAccess" class="p-4 rounded-xl bg-emerald-950 border border-emerald-500/40 text-emerald-300 text-xs font-bold">
+                    <div x-show="submittedEarlyAccess" x-cloak class="p-4 rounded-xl bg-emerald-950 border border-emerald-500/40 text-emerald-300 text-xs font-bold">
                         Merci ! Votre inscription a bien été enregistrée.
                     </div>
                 </div>
@@ -611,9 +619,9 @@
         </main>
 
         <!-- EXTENDED QUESTIONNAIRE MODAL -->
-        <div x-show="questionnaireOpen" x-transition.opacity class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-2xl overflow-y-auto">
+        <div x-show="questionnaireOpen" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-2xl overflow-y-auto">
             
-            <div class="w-full max-w-2xl glass-modal rounded-3xl overflow-hidden shadow-2xl relative border border-cyan-500/40 flex flex-col min-h-[620px] justify-between p-6 sm:p-8">
+            <div class="w-full max-w-2xl glass-modal rounded-3xl overflow-hidden shadow-2xl relative border border-cyan-500/40 flex flex-col min-h-[620px] justify-between p-6 sm:p-8 my-auto">
                 
                 <!-- Modal Navigation Header -->
                 <div>
@@ -1117,7 +1125,7 @@
 
     </div>
 
-    <!-- Alpine App Script -->
+    <!-- Alpine App State Logic Script -->
     <script>
         function diavetApp() {
             return {
@@ -1166,7 +1174,7 @@
                     { id: 'nac', label: 'NAC & Exotiques', icon: 'fa-solid fa-otter', image: 'https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?auto=format&fit=crop&w=400&q=80' }
                 ],
 
-                // Lists
+                // 58 Wilayas List
                 wilayas: [
                     "1 - Adrar", "2 - Chlef", "3 - Laghouat", "4 - Oum El Bouaghi", "5 - Batna", "6 - Béjaïa", "7 - Biskra", "8 - Béchar", "9 - Blida", "10 - Bouira",
                     "11 - Tamanrasset", "12 - Tébessa", "13 - Tlemcen", "14 - Tiaret", "15 - Tizi Ouzou", "16 - Alger", "17 - Djelfa", "18 - Jijel", "19 - Sétif", "20 - Saïda",
@@ -1228,6 +1236,15 @@
 
                 setLanguage(l) {
                     this.lang = l;
+                },
+
+                toggleDarkMode() {
+                    this.darkMode = !this.darkMode;
+                    if (this.darkMode) {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
                 },
 
                 openQuestionnaireModal() {
